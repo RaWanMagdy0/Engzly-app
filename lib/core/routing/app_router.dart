@@ -1,21 +1,54 @@
-import 'package:engzly/core/routing/route_name.dart';
-import 'package:engzly/features/auth/ui/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
-class AppRoutes {
-  static Route<dynamic> onGenerateRoute(RouteSettings setting) {
-    switch (setting.name) {
-      case RouteName.login:
-        return _handleMaterialPageRoute(widget: LoginScreen());
+class AppRouter {
+  static Route? generateRoute(RouteSettings settings) {
+    final arguments = settings.arguments;
+    switch (settings.name) {
+      //----------- Auth Screens -----------
+      // case Routes.loginScreen:
+      //   return _createPageTransition(
+      //     child: BlocProvider<LoginCubit>(
+      //       create: (context) => getIt<LoginCubit>(),
+      //       child: const LoginScreen(),
+      //     ),
+      //     transitionType: PageTransitionType.fade,
+      //   );
 
       default:
-        return _handleMaterialPageRoute(widget: const Scaffold());
+        return null;
     }
   }
 
-  static MaterialPageRoute<dynamic> _handleMaterialPageRoute({
-    required Widget widget,
+  static PageRouteBuilder _createPageTransition({
+    required Widget child,
+    PageTransitionType transitionType = PageTransitionType.slide,
   }) {
-    return MaterialPageRoute(builder: (context) => widget);
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => child,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const curve = Curves.easeInOut;
+
+        if (transitionType == PageTransitionType.slide) {
+          final slideTween = Tween(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).chain(CurveTween(curve: curve));
+          final slideAnimation = animation.drive(slideTween);
+          return SlideTransition(position: slideAnimation, child: child);
+        }
+
+        if (transitionType == PageTransitionType.fade) {
+          return FadeTransition(opacity: animation, child: child);
+        }
+
+        if (transitionType == PageTransitionType.scale) {
+          return ScaleTransition(scale: animation, child: child);
+        }
+
+        return child;
+      },
+    );
   }
 }
+
+enum PageTransitionType { slide, fade, scale }
