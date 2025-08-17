@@ -1,9 +1,21 @@
+import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/features/auth/ui/login/login_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../features/onBoarding/onboarding_screen.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
-    final arguments = settings.arguments;
+    //  final arguments = settings.arguments;
     switch (settings.name) {
+      //----------- OnboardingScreen Screens -----------
+      case RouteName.onBoarding:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+
+      //----------- login Screen -----------
+      case RouteName.login:
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
+
       //----------- Auth Screens -----------
       // case Routes.loginScreen:
       //   return _createPageTransition(
@@ -18,8 +30,8 @@ class AppRouter {
         return null;
     }
   }
-
-  static PageRouteBuilder _createPageTransition({
+/**********
+ *   static PageRouteBuilder _createPageTransition({
     required Widget child,
     PageTransitionType transitionType = PageTransitionType.slide,
   }) {
@@ -49,6 +61,8 @@ class AppRouter {
       },
     );
   }
+ */
+
 }
 
 enum PageTransitionType { slide, fade, scale }

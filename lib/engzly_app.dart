@@ -1,6 +1,10 @@
+import 'package:engzly/core/routing/app_router.dart';
+import 'package:engzly/core/theming/app_theme.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'core/routing/route_name.dart';
 
 class EngzlyApp extends StatelessWidget {
   const EngzlyApp({super.key});
@@ -15,8 +19,10 @@ class EngzlyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Engzly',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+          theme: AppTheme.appTheme,
           home: const HomeScreen(),
+          initialRoute: RouteName.onBoarding,
+          onGenerateRoute: AppRouter.generateRoute,
         );
       },
     );

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData appTheme = ThemeData(
-    scaffoldBackgroundColor: AppColors.kWhite,
+    scaffoldBackgroundColor: ColorsManager.white,
     appBarTheme: AppBarTheme(
       centerTitle: false,
       elevation: 0.0,
-      backgroundColor: AppColors.kWhite,
+      backgroundColor: ColorsManager.white,
       titleTextStyle: AppFonts.font20BlackWeight700,
     ),
   );
