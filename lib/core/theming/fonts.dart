@@ -23,4 +23,9 @@ class AppFonts {
     color: ColorsManager.white,
     fontWeight: FontWeight.w700,
   );
+  static TextStyle font12BWhiteWeight500 = TextStyle(
+    fontSize: 12.sp,
+    color: ColorsManager.white,
+    fontWeight: FontWeight.w500,
+  );
 }

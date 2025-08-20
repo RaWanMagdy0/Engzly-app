@@ -21,7 +21,7 @@ class EngzlyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.appTheme,
           home: const HomeScreen(),
-          initialRoute: RouteName.onBoarding,
+          initialRoute: RouteName.homeLayout,
           onGenerateRoute: AppRouter.generateRoute,
         );
       },

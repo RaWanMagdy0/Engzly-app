@@ -1,5 +1,6 @@
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/features/auth/ui/login/login_screen.dart';
+import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/onBoarding/onboarding_screen.dart';
@@ -15,6 +16,8 @@ class AppRouter {
       //----------- login Screen -----------
       case RouteName.login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
+      case RouteName.homeLayout:
+        return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
 
       //----------- Auth Screens -----------
       // case Routes.loginScreen:
@@ -30,7 +33,7 @@ class AppRouter {
         return null;
     }
   }
-/**********
+  /**********
  *   static PageRouteBuilder _createPageTransition({
     required Widget child,
     PageTransitionType transitionType = PageTransitionType.slide,
@@ -62,7 +65,6 @@ class AppRouter {
     );
   }
  */
-
 }
 
 enum PageTransitionType { slide, fade, scale }
