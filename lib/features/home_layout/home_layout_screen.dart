@@ -1,10 +1,9 @@
 import 'package:engzly/features/history/history.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/offers/offers.dart';
-import 'package:engzly/features/profile/profile.dart';
+import 'package:engzly/features/profile/main_profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar_v2/motion-tab-controller.dart';
-
 import 'widgets/motion_tab_bar_widget.dart';
 
 class HomeLayoutScreen extends StatefulWidget {
@@ -30,7 +29,6 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen>
     _motionTabBarController.addListener(() {
       setState(() {});
     });
-
     _screens = const [
       HomeScreen(),
       HistoryScreen(),
