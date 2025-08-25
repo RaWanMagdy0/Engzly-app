@@ -28,4 +28,20 @@ class AppFonts {
     color: ColorsManager.white,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle font14BOrangeWeight400 = TextStyle(
+    fontSize: 14.sp,
+    color: ColorsManager.orange,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle font13BlackWeight500 = TextStyle(
+    fontSize: 13.sp,
+    color: ColorsManager.black,
+    fontWeight: FontWeight.w500,
+  );
+
+  static TextStyle font12BlackWeight400 = TextStyle(
+    fontSize: 12.sp,
+    color: ColorsManager.black,
+    fontWeight: FontWeight.w400,
+  );
 }

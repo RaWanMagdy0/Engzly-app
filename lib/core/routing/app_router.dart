@@ -1,8 +1,11 @@
+import 'package:engzly/core/di/di.dart' show getIt;
 import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/features/auth/logic/cubit.dart';
 import 'package:engzly/features/auth/ui/login/login_screen.dart';
+import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
 import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/onBoarding/onboarding_screen.dart';
 
 class AppRouter {
@@ -15,7 +18,17 @@ class AppRouter {
 
       //----------- login Screen -----------
       case RouteName.login:
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create: (context) => getIt<LoginCubit>(),
+                child: LogInScreen(),
+              ),
+        );
+
+      case RouteName.signUp:
+        return MaterialPageRoute(builder: (_) => const SignUpPage());
+
       case RouteName.homeLayout:
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
 
@@ -33,6 +46,7 @@ class AppRouter {
         return null;
     }
   }
+
   /**********
  *   static PageRouteBuilder _createPageTransition({
     required Widget child,

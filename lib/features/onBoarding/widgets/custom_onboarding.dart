@@ -1,6 +1,6 @@
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
-import 'package:engzly/core/widgets/custom_botton.dart';
+import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/features/onBoarding/widgets/onboarding_content.dart';
 import 'package:engzly/features/onBoarding/widgets/image_widget.dart';
 import 'package:engzly/features/onBoarding/widgets/indicator.dart';

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'api_error_model.dart';
 
@@ -11,21 +12,22 @@ class ApiErrorHandler {
           return ApiErrorModel(message: "Request to the server was cancelled");
         case DioExceptionType.connectionTimeout:
           return ApiErrorModel(message: "Connection timeout with the server");
-        case DioExceptionType.unknown:
-          return ApiErrorModel(
-            message:
-                "Connection to the server failed due to internet connection",
-          );
         case DioExceptionType.receiveTimeout:
           return ApiErrorModel(
             message: "Receive timeout in connection with the server",
           );
-        case DioExceptionType.badResponse:
-          return _handleError(error.response?.data);
         case DioExceptionType.sendTimeout:
           return ApiErrorModel(
             message: "Send timeout in connection with the server",
           );
+        case DioExceptionType.badResponse:
+          final statusCode = error.response?.statusCode;
+          return _handleError(error.response?.data, statusCode: statusCode);
+        case DioExceptionType.unknown:
+          if (error.error is SocketException) {
+            return ApiErrorModel(message: "No Internet connection");
+          }
+          return ApiErrorModel(message: "Unexpected error occurred");
         default:
           return ApiErrorModel(message: "Something went wrong");
       }
@@ -35,9 +37,19 @@ class ApiErrorHandler {
   }
 }
 
-ApiErrorModel _handleError(dynamic data) {
-  if (data is Map<String, dynamic> && data.containsKey("message")) {
-    return ApiErrorModel(message: data["message"] as String);
+ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
+  if (data is Map<String, dynamic>) {
+    final message = data["message"] ??
+        data["error"] ??
+        data["errors"]?.toString() ??
+        "Unknown error occurred";
+    return ApiErrorModel(
+      code: statusCode ?? -1,
+      message: message,
+    );
   }
-  return ApiErrorModel(message: "Unknown error occurred");
+  return ApiErrorModel(
+    code: statusCode ?? -1,
+    message: "Unknown error occurred",
+  );
 }
