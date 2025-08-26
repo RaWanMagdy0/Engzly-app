@@ -2,6 +2,10 @@
 
 part of 'register_request_body.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
 RegisterRequestBody _$RegisterRequestBodyFromJson(Map<String, dynamic> json) =>
     RegisterRequestBody(
       fullName: json['fullName'] as String,

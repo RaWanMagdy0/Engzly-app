@@ -2,10 +2,6 @@
 
 part of 'confirm_email_response_model.dart';
 
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
 ConfirmEmailResponseModel _$ConfirmEmailResponseModelFromJson(
         Map<String, dynamic> json) =>
     ConfirmEmailResponseModel(

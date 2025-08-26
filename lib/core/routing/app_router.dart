@@ -2,8 +2,9 @@ import 'package:engzly/core/di/di.dart' show getIt;
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
-import 'package:engzly/features/auth/ui/forgot_password/email_verification_widget/email_verification.dart';
-import 'package:engzly/features/auth/ui/forgot_password/forget_password/forget_password_screen.dart';
+import 'package:engzly/features/auth/ui/forgot_password/email_verification_screen.dart';
+import 'package:engzly/features/auth/ui/forgot_password/forget_password_screen.dart';
+import 'package:engzly/features/auth/ui/forgot_password/reset_password_screen.dart';
 import 'package:engzly/features/auth/ui/login/login_screen.dart';
 import 'package:engzly/features/auth/ui/sign_up/widgets/email_confirmation.dart';
 import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
@@ -43,10 +44,14 @@ class AppRouter {
             child: EmailConfirmation(),
           ),
         );
+
       case RouteName.forgetPassword:
-        return MaterialPageRoute(builder: (_) => const ForgetPassword());
+        return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
       case RouteName.emailVerification:
-        return MaterialPageRoute(builder: (_) => const EmailVerification());
+        return MaterialPageRoute(
+            builder: (_) => const EmailVerificationScreen());
+      case RouteName.resetPassword:
+        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
 
       case RouteName.homeLayout:
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());

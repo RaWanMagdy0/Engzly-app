@@ -12,7 +12,7 @@ class PinCodeFile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PinCodeTextField(
       appContext: (context),
-      length: 4,
+      length: 6,
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(10),
@@ -24,15 +24,14 @@ class PinCodeFile extends StatelessWidget {
         activeFillColor: ColorsManager.white,
         selectedColor: ColorsManager.orange,
       ),
-      animationDuration: const Duration(milliseconds: 200),
+      //  animationDuration: const Duration(milliseconds: 200),
       keyboardType: TextInputType.phone,
       enabled: true,
       onCompleted: (value) {
-        if (value.length == 4) {
+        if (value.length == 6) {
           onCodeCompleted(value);
         }
       },
     );
   }
 }
-

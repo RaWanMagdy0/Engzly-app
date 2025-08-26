@@ -2,6 +2,10 @@
 
 part of 'register_response_model.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
 RegisterResponseModel _$RegisterResponseModelFromJson(
         Map<String, dynamic> json) =>
     RegisterResponseModel(

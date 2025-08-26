@@ -42,12 +42,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
         () => _i1060.AuthApiManager(gh<_i361.Dio>()));
+    gh.factory<_i133.ConfirmEmailRepo>(
+        () => _i133.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i869.LoginRepo>(
         () => _i869.LoginRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i871.RegisterRepo>(
         () => _i871.RegisterRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i133.ConfirmEmailRepo>(
-        () => _i133.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i302.LoginCubit>(() => _i302.LoginCubit(gh<_i869.LoginRepo>()));
     gh.factory<_i690.RegisterCubit>(() => _i690.RegisterCubit(
           gh<_i871.RegisterRepo>(),
