@@ -1,32 +1,25 @@
-/******** 
-
+import 'package:engzly/features/auth/ui/forgot_password/email_verification_widget/widget/email_verification_widget.dart'
+    show EmailVerificationWidget;
+import 'package:engzly/features/auth/ui/forgot_password/reset_password_widget/reset_password_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../reset_password_widget/reset_password_widget.dart';
-import 'widget/email_verification_widget.dart';
-
 
 class EmailVerification extends StatefulWidget {
-  static const String routeName = "PasswordVerification";
-
-  const EmailVerification({
-    super.key,
-  });
+  const EmailVerification({super.key});
   @override
   State<EmailVerification> createState() => _EmailVerificationState();
 }
 
 class _EmailVerificationState extends State<EmailVerification> {
-  var viewModel = getIt.get<ForgetPasswordCubit>();
   List<Widget> page = [];
+
+  // var viewModel = getIt.get<ForgetPasswordCubit>();
   @override
   void initState() {
     super.initState();
-    viewModel = context.read<ForgetPasswordCubit>();
+    //  viewModel = context.read<ForgetPasswordCubit>();
     page = [
       EmailVerificationWidget(
-        viewModel: viewModel,
+        // viewModel: viewModel,
       ),
       ResetPasswordViewBody(),
     ];
@@ -34,17 +27,16 @@ class _EmailVerificationState extends State<EmailVerification> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ForgetPasswordCubit, ForgotPasswordStates>(
-      bloc: viewModel,
-      listener: (context, state) => _handleStateChange(state),
-      child: Scaffold(
-          body: PageView(
-              controller: viewModel.pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: page)),
+    return Scaffold(
+      body: PageView(
+     //   controller: pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: page,
+      ),
     );
   }
 
+  /********** 
   dynamic _handleStateChange(ForgotPasswordStates state) {
     if (state is VerifyEmailCodeSuccessState) {
       Navigator.pop(context);
@@ -78,5 +70,5 @@ class _EmailVerificationState extends State<EmailVerification> {
       );
     }
   }
+  */
 }
-*/

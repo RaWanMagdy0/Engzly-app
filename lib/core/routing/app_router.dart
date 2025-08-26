@@ -1,7 +1,11 @@
 import 'package:engzly/core/di/di.dart' show getIt;
 import 'package:engzly/core/routing/route_name.dart';
-import 'package:engzly/features/auth/logic/cubit.dart';
+import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
+import 'package:engzly/features/auth/ui/forgot_password/email_verification_widget/email_verification.dart';
+import 'package:engzly/features/auth/ui/forgot_password/forget_password/forget_password_screen.dart';
 import 'package:engzly/features/auth/ui/login/login_screen.dart';
+import 'package:engzly/features/auth/ui/sign_up/widgets/email_confirmation.dart';
 import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
 import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +23,30 @@ class AppRouter {
       //----------- login Screen -----------
       case RouteName.login:
         return MaterialPageRoute(
-          builder:
-              (context) => BlocProvider(
-                create: (context) => getIt<LoginCubit>(),
-                child: LogInScreen(),
-              ),
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<LoginCubit>(),
+            child: LogInScreen(),
+          ),
         );
 
       case RouteName.signUp:
-        return MaterialPageRoute(builder: (_) => const SignUpPage());
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<RegisterCubit>(),
+            child: SignUpPage(),
+          ),
+        );
+      case RouteName.emailConfirmation:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<RegisterCubit>(),
+            child: EmailConfirmation(),
+          ),
+        );
+      case RouteName.forgetPassword:
+        return MaterialPageRoute(builder: (_) => const ForgetPassword());
+      case RouteName.emailVerification:
+        return MaterialPageRoute(builder: (_) => const EmailVerification());
 
       case RouteName.homeLayout:
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());

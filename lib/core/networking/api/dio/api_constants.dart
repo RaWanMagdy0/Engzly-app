@@ -2,7 +2,9 @@ class ApiConstants {
   static const String baseUrl = "http://engezly.runasp.net/api/";
   // --------------------  auth  -----------------
   static const String login = "Auth/login";
-  static const String register = "auth/register";
+  static const String register = "Auth/Register";
+  static const String confirmEmail = "Auth/confirm-email";
+
   static const String resendOtp = "auth/resend-otp";
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String verifyEmail = "auth/verify-email";

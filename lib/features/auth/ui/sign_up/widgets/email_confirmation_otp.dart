@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class PinCodeFile extends StatelessWidget {
+class EmailConfirmationOtp extends StatelessWidget {
   final Function(String) onCodeCompleted;
 
-  const PinCodeFile({super.key, required this.onCodeCompleted});
+  const EmailConfirmationOtp({super.key, required this.onCodeCompleted});
 
   @override
   Widget build(BuildContext context) {
     return PinCodeTextField(
       appContext: (context),
-      length: 4,
+      length: 6,
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(10),
@@ -24,15 +24,14 @@ class PinCodeFile extends StatelessWidget {
         activeFillColor: ColorsManager.white,
         selectedColor: ColorsManager.orange,
       ),
-      animationDuration: const Duration(milliseconds: 200),
+      //  animationDuration: const Duration(milliseconds: 200),
       keyboardType: TextInputType.phone,
       enabled: true,
       onCompleted: (value) {
-        if (value.length == 4) {
+        if (value.length == 6) {
           onCodeCompleted(value);
         }
       },
     );
   }
 }
-

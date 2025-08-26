@@ -1,5 +1,11 @@
+import 'package:engzly/core/helper/functions/validators/validators.dart';
+import 'package:engzly/core/shared_widgets/custom_botton.dart';
+import 'package:engzly/core/shared_widgets/custom_text_form_field.dart';
+import 'package:engzly/core/theming/colors.dart';
+import 'package:engzly/core/theming/fonts.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/*********** 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
 
@@ -8,81 +14,65 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  late final ForgetPasswordCubit viewModel;
+  /******** 
+ * //  late final ForgetPasswordCubit viewModel;
+
 
   @override
   void initState() {
     super.initState();
     viewModel = context.read<ForgetPasswordCubit>();
   }
-
+*/
   @override
   Widget build(BuildContext context) {
-    final local = S.of(context);
-    return BlocListener<ForgetPasswordCubit, ForgotPasswordStates>(
-        bloc: viewModel,
-        listener: (context, state) => _handelStateChange(state),
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios_outlined),
-                    Text(local.passwordAppBarTitle,
-                        style: AppFonts.font20BlackWeight500),
-                  ],
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Text(
-                  local.forgetPasswordScreenTitle,
-                  style: AppFonts.font20BlackWeight500,
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Text(local.forgetPasswordScreenDescription,
-                    textAlign: TextAlign.center,
-                    style: AppFonts.font14GreyWeight400),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    key: viewModel.formKey,
-                    child: CustomTextFormField(
-                      hintText: local.emailHintText,
-                      labelText: local.emailLabelText,
-                      validator: (value) => Validators.validateEmail(value),
-                      keyBordType: TextInputType.text,
-                      controller: viewModel.emailController,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 130.w, vertical: 13.h),
-                        backgroundColor: AppColors.kPink,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.r))),
-                    onPressed: () => viewModel.submitForgotPassword(),
-                    child: Text(local.confirmTitle,
-                        style: AppFonts.font15WhiteWeight500))
-              ],
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 120),
+        child: Column(
+          children: [
+            Text("Forget Password", style: AppFonts.font36BlackWeight700),
+            10.verticalSpace,
+            Text(
+              "Enter your email address to reset password.",
+              textAlign: TextAlign.center,
+              style: AppFonts.font16BlackWeight400.copyWith(
+                fontSize: 24.sp,
+                color: ColorsManager.black.withValues(alpha: 0.5),
+              ),
             ),
-          ),
-        ));
+            20.verticalSpace,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                //key: viewModel.formKey,
+                child: CustomTextFormField(
+                  hintText: "Enter your email",
+                  labelText: "Email Address",
+                  keyBordType: TextInputType.text,
+                  validator: (value) => Validators.validateEmail(value),
+                  //controller: viewModel.emailController,
+                ),
+              ),
+            ),
+            25.verticalSpace,
+            CustomButton(
+              onPressed: () {},
+              color: ColorsManager.orange,
+              text: "Reset Password",
+              textStyle: AppFonts.font14BWhiteWeight700,
+              height: 55.h,
+              width: 300.w,
+              borderRadius: 16.r,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
+  /**********
   dynamic _handelStateChange(ForgotPasswordStates state) {
     if (state is ForgotPasswordSuccessState) {
       AppDialogs.showSuccessDialog(
@@ -101,5 +91,5 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       );
     }
   }
+   */
 }
-*/

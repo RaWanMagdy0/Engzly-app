@@ -18,7 +18,8 @@ class Validators {
       return ("Email is required");
     }
     var regex = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+      r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    );
 
     if (!regex.hasMatch(value!)) {
       return 'Invalid email address';
@@ -32,7 +33,8 @@ class Validators {
     }
 
     var regex = RegExp(
-        r"(?=^.{8,}$)(?=.*[!@#$%^&*]+)(?![.\\n])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$");
+      r"(?=^.{8,}$)(?=.*[!@#$%^&*]+)(?![.\\n])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$",
+    );
 
     if (!regex.hasMatch(value!)) {
       return 'Must contains A-Z, a-z, @-#-&.. , 1-9';
@@ -61,12 +63,10 @@ class Validators {
       return 'Phone Number is required';
     }
 
-    var regex = RegExp(
-      r"^\+201[0125]\d{8}$",
-    );
+    var regex = RegExp(r"01[0125]\d{8}$");
 
     if (!regex.hasMatch(value!)) {
-      return "Must be 11 digits starting with (+20)";
+      return "Must be 11 digits ";
     }
 
     return null;

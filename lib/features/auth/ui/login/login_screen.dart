@@ -2,8 +2,8 @@ import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
-import 'package:engzly/features/auth/logic/cubit.dart';
-import 'package:engzly/features/auth/logic/states.dart';
+import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/login_cubit/states.dart';
 import 'package:engzly/features/auth/ui/login/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,6 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) => _handelStateChange(state),
-
       builder: (context, state) {
         return Scaffold(
           body: SingleChildScrollView(
@@ -86,9 +85,9 @@ class _LogInScreenState extends State<LogInScreen> {
 
                         if (_formKey.currentState!.validate()) {
                           context.read<LoginCubit>().login(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              );
                         }
                       },
                       color: ColorsManager.orange,
@@ -144,9 +143,9 @@ class _LogInScreenState extends State<LogInScreen> {
           )
           .closed
           .then((_) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(context, RouteName.homeLayout);
-          });
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, RouteName.homeLayout);
+      });
     } else if (state is LoginError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

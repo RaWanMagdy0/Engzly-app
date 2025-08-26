@@ -1,64 +1,48 @@
-/******** 
-
+import 'package:engzly/core/theming/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'pin_code_file.dart';
 
-
 class EmailVerificationWidget extends StatelessWidget {
-  final ForgetPasswordCubit viewModel;
-  const EmailVerificationWidget({super.key, required this.viewModel});
+  const EmailVerificationWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 120),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(Icons.arrow_back_ios_outlined),
-              SizedBox(
-                width: 10.w,
-              ),
+              Text("OTP verification", style: AppFonts.font20BlackWeight700),
+              10.verticalSpace,
               Text(
-                AppStrings.passwordAppBarTitle,
-                style: AppFonts.font20BlackWeight400,
+                "Please check your email",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
               ),
-            ],
-          ),
-          SizedBox(
-            height: 20.h,
-          ),
-          Text(AppStrings.emailVerificationScreenTitle,
-              style: AppFonts.font18BlackWeight500),
-          SizedBox(
-            height: 10.h,
-          ),
-          Text(
-            AppStrings.emailVerificationScreenDescription,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          SizedBox(
-            height: 30.h,
-          ),
-          PinCodeFile(
-            onCodeCompleted: (resetCode) {
-              viewModel.verifyResetCode(resetCode: resetCode);
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                AppStrings.didnotReceiveCode,
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400),
+              30.verticalSpace,
+              PinCodeFile(
+                onCodeCompleted: (rsetCode) {
+                },
               ),
-              ValueListenableBuilder<bool>(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Code Sent. Resend Code in 00:00",
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+
+                  /******* 
+               * 
+               * ValueListenableBuilder<bool>(
                 valueListenable: viewModel.isResendButtonEnabled,
                 builder: (context, isEnabled, child) {
                   return InkWell(
@@ -81,6 +65,9 @@ class EmailVerificationWidget extends StatelessWidget {
                   );
                 },
               ),
+              */
+                ],
+              ),
             ],
           ),
         ],
@@ -88,4 +75,3 @@ class EmailVerificationWidget extends StatelessWidget {
     );
   }
 }
-*/
