@@ -136,8 +136,8 @@ class _LogInScreenState extends State<LogInScreen> {
     if (state is LoginSuccess) {
       ScaffoldMessenger.of(context)
           .showSnackBar(
-            const SnackBar(
-              content: Text("Login Successfully "),
+            SnackBar(
+              content: Text(state.message),
               backgroundColor: Colors.green,
               duration: Duration(seconds: 2),
             ),
@@ -150,7 +150,7 @@ class _LogInScreenState extends State<LogInScreen> {
     } else if (state is LoginError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("state.message"),
+          content: Text(state.error),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 2),
         ),
