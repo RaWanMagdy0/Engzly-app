@@ -1,5 +1,8 @@
 import 'package:engzly/core/di/di.dart' show getIt;
 import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/features/auth/logic/forget_password/forget_pass_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/forget_password/reset_pass_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/forget_password/verify_email/cubit.dart';
 import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
 import 'package:engzly/features/auth/ui/forgot_password/email_verification_screen.dart';
@@ -46,13 +49,27 @@ class AppRouter {
         );
 
       case RouteName.forgetPassword:
-        return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ForgetPasswordCubit>(),
+            child: ForgetPasswordScreen(),
+          ),
+        );
       case RouteName.emailVerification:
         return MaterialPageRoute(
-            builder: (_) => const EmailVerificationScreen());
-      case RouteName.resetPassword:
-        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<VerifyEmailCubit>(),
+            child: EmailVerificationScreen(),
+          ),
+        );
 
+      case RouteName.resetPassword:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ResetPasswordCubit>(),
+            child: ResetPasswordScreen(),
+          ),
+        );
       case RouteName.homeLayout:
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
 

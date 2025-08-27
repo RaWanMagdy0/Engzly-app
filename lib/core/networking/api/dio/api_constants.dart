@@ -5,11 +5,11 @@ class ApiConstants {
   static const String register = "Auth/Register";
   static const String confirmEmail = "Auth/confirm-email";
 
-  static const String resendOtp = "auth/resend-otp";
+  static const String forgetPassword = "Auth/ForgetPassword";
+  static const String verifiEmail = "Auth/ForgetPassVerfication";
+  static const String resetPassword = "Auth/ForgetPasschange";
+
   static const String resendResetOtp = "auth/resend-reset-otp";
-  static const String verifyEmail = "auth/verify-email";
-  static const String forgetPassword = "auth/forgot-password";
-  static const String resetPassword = "auth/reset-password";
   static const String refreshToken = "auth/refresh-token";
   // --------------------  profile  -----------------
   static const String fetchUserInfo = "users/me";

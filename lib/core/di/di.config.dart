@@ -14,9 +14,22 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/auth/data/auth_api/auth_api_manager.dart' as _i1060;
-import '../../features/auth/data/repo/confirm_email_repo.dart' as _i133;
+import '../../features/auth/data/repo/forget_password/forget_password_repo.dart'
+    as _i896;
+import '../../features/auth/data/repo/forget_password/reset_password_repo.dart'
+    as _i688;
+import '../../features/auth/data/repo/forget_password/verify_email_repo.dart'
+    as _i78;
 import '../../features/auth/data/repo/login_repo.dart' as _i869;
-import '../../features/auth/data/repo/register_repo.dart' as _i871;
+import '../../features/auth/data/repo/register/confirm_email_repo.dart'
+    as _i834;
+import '../../features/auth/data/repo/register/register_repo.dart' as _i109;
+import '../../features/auth/logic/forget_password/forget_pass_cubit/cubit.dart'
+    as _i13;
+import '../../features/auth/logic/forget_password/reset_pass_cubit/cubit.dart'
+    as _i1003;
+import '../../features/auth/logic/forget_password/verify_email/cubit.dart'
+    as _i854;
 import '../../features/auth/logic/login_cubit/cubit.dart' as _i302;
 import '../../features/auth/logic/register_cubit/cubit.dart' as _i690;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
@@ -42,17 +55,29 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
         () => _i1060.AuthApiManager(gh<_i361.Dio>()));
-    gh.factory<_i133.ConfirmEmailRepo>(
-        () => _i133.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i869.LoginRepo>(
         () => _i869.LoginRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i871.RegisterRepo>(
-        () => _i871.RegisterRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i896.ForgetPasswordRepo>(
+        () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i834.ConfirmEmailRepo>(
+        () => _i834.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i109.RegisterRepo>(
+        () => _i109.RegisterRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i78.VerifyEmailRepo>(
+        () => _i78.VerifyEmailRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i688.ResetPasswordRepo>(
+        () => _i688.ResetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i302.LoginCubit>(() => _i302.LoginCubit(gh<_i869.LoginRepo>()));
+    gh.factory<_i1003.ResetPasswordCubit>(
+        () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
     gh.factory<_i690.RegisterCubit>(() => _i690.RegisterCubit(
-          gh<_i871.RegisterRepo>(),
-          gh<_i133.ConfirmEmailRepo>(),
+          gh<_i109.RegisterRepo>(),
+          gh<_i834.ConfirmEmailRepo>(),
         ));
+    gh.factory<_i854.VerifyEmailCubit>(
+        () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
+    gh.factory<_i13.ForgetPasswordCubit>(
+        () => _i13.ForgetPasswordCubit(gh<_i896.ForgetPasswordRepo>()));
     return this;
   }
 }

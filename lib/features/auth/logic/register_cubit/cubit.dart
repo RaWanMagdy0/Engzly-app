@@ -8,8 +8,8 @@ import 'package:engzly/features/auth/data/models/signup/register_request_body.da
 import 'package:engzly/features/auth/data/models/signup/register_response_model.dart';
 import 'package:engzly/features/auth/data/models/confirm_email/confirm_email_request_body.dart';
 import 'package:engzly/features/auth/data/models/confirm_email/confirm_email_response_model.dart';
-import 'package:engzly/features/auth/data/repo/register_repo.dart';
-import 'package:engzly/features/auth/data/repo/confirm_email_repo.dart';
+import 'package:engzly/features/auth/data/repo/register/register_repo.dart';
+import 'package:engzly/features/auth/data/repo/register/confirm_email_repo.dart';
 import 'package:engzly/features/auth/logic/register_cubit/states.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

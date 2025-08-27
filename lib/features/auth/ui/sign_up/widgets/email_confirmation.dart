@@ -123,6 +123,7 @@ class _EmailConfirmationState extends State<EmailConfirmation> {
             ),
             if (state is RegisterLoading)
               CircularProgressIndicator(
+                
                 color: ColorsManager.orange,
               )
           ],
