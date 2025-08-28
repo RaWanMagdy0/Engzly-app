@@ -55,18 +55,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
         () => _i1060.AuthApiManager(gh<_i361.Dio>()));
-    gh.factory<_i869.LoginRepo>(
-        () => _i869.LoginRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i688.ResetPasswordRepo>(
+        () => _i688.ResetPasswordRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i78.VerifyEmailRepo>(
+        () => _i78.VerifyEmailRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i869.LoginRepo>(
+        () => _i869.LoginRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i834.ConfirmEmailRepo>(
         () => _i834.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i109.RegisterRepo>(
         () => _i109.RegisterRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i78.VerifyEmailRepo>(
-        () => _i78.VerifyEmailRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i688.ResetPasswordRepo>(
-        () => _i688.ResetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i302.LoginCubit>(() => _i302.LoginCubit(gh<_i869.LoginRepo>()));
     gh.factory<_i1003.ResetPasswordCubit>(
         () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
