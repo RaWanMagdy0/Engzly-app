@@ -20,6 +20,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isRemember = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,12 @@ class _LogInScreenState extends State<LogInScreen> {
                         Row(
                           children: [
                             Checkbox(
-                              value: false,
+                              value: _isRemember,
                               activeColor: ColorsManager.orange,
                               onChanged: (value) {
-                                setState(() {});
+                                setState(() {
+                                  _isRemember = value ?? false;
+                                });
                               },
                             ),
                             Text(
@@ -66,7 +69,8 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                      Navigator.pushNamed(context, RouteName.forgetPassword);
+                            Navigator.pushNamed(
+                                context, RouteName.forgetPassword);
                           },
                           child: Text(
                             "Forget Password?",
@@ -85,9 +89,9 @@ class _LogInScreenState extends State<LogInScreen> {
 
                         if (_formKey.currentState!.validate()) {
                           context.read<LoginCubit>().login(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              );
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              rememberMe: _isRemember);
                         }
                       },
                       color: ColorsManager.orange,
@@ -149,7 +153,7 @@ class _LogInScreenState extends State<LogInScreen> {
     } else if (state is LoginError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("state.message"),
+          content: Text(state.error),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 2),
         ),
