@@ -122,8 +122,15 @@ class _EmailConfirmationState extends State<EmailConfirmation> {
               ),
             ),
             if (state is RegisterLoading)
-              CircularProgressIndicator(
-                color: ColorsManager.orange,
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
               )
           ],
         );
@@ -136,12 +143,16 @@ class _EmailConfirmationState extends State<EmailConfirmation> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(state.message),
+          backgroundColor: Colors.green,
         ),
       );
       Navigator.pushReplacementNamed(context, RouteName.login);
     } else if (state is ConfirmEmailError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.error)),
+        SnackBar(
+          content: Text(state.error),
+          backgroundColor: Colors.red,
+        ),
       );
     } else if (state is ResendSuccessState) {
       ScaffoldMessenger.of(context).showSnackBar(

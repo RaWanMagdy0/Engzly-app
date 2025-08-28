@@ -47,6 +47,11 @@ ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
       code: statusCode ?? -1,
       message: message,
     );
+  } else if (data is String) {
+    return ApiErrorModel(
+      code: statusCode ?? -1,
+      message: data,
+    );
   }
   return ApiErrorModel(
     code: statusCode ?? -1,
