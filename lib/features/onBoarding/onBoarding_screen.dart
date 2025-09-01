@@ -1,11 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/features/onBoarding/widgets/custom_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../core/theming/images.dart';
 
 class OnboardingScreen extends StatefulWidget {

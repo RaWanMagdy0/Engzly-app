@@ -9,4 +9,7 @@ class RouteName {
 
   static const String onBoarding = "onBoardingScreen";
   static const String homeLayout = "homeLayout";
+  static const String editProfile = "editProfile";
+  static const String profile = "profile";
+  static const String changePassword = "changePassword";
 }

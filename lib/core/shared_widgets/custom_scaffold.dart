@@ -5,13 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// A reusable Scaffold layout with a custom AppBar and a white container for the main content.
 
 class CustomScaffoldScreen extends StatelessWidget {
+  final Widget child; // Main content of the screen inside the white container
   final Widget title; // Widget shown in the AppBar center (Text, Row, ..)
-  final String leadingIcon; // Path of the left icon (back arrow/category)
-  final String notificationIcon;
+  final Widget leadingIcon; // Left icon widget (SvgPicture, Image, ..)
+  final Widget notificationIcon; // Right icon widget
   final VoidCallback? onLeadingTap;
   final VoidCallback? onNotificationTap;
   final bool showNotificationDot;
-  final Widget child; // Main content of the screen inside the white container
 
   const CustomScaffoldScreen({
     super.key,
@@ -29,12 +29,12 @@ class CustomScaffoldScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
-        title: title, // Pass title widget to AppBar
+        title: title,
         leadingIcon: leadingIcon,
         notificationIcon: notificationIcon,
         onLeadingTap: onLeadingTap,
         onNotificationTap: onNotificationTap,
-        showNotificationDot: showNotificationDot, // Show or hide red dot
+        showNotificationDot: showNotificationDot,
       ),
       body: Container(
         width: double.infinity,
@@ -45,7 +45,7 @@ class CustomScaffoldScreen extends StatelessWidget {
             topRight: Radius.circular(40.r),
           ),
         ),
-        child: child, // Place the screen content here
+        child: child,
       ),
     );
   }

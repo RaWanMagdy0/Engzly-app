@@ -27,12 +27,10 @@ class _MotionTabBarWidgetState extends State<MotionTabBarWidget> {
         Icons.local_activity,
         Icons.person,
       ],
-
-      tabBarHeight: 70.h,
-      tabSize: 60.w,
+      tabBarHeight: 55.h,
+      tabSize: 50.w,
       tabIconSize: 28.sp,
       tabIconSelectedSize: 28.sp,
-
       tabSelectedColor: ColorsManager.white,
       tabIconSelectedColor: ColorsManager.orange,
       tabIconColor: ColorsManager.white,

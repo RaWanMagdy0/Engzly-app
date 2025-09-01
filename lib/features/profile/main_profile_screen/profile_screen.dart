@@ -7,6 +7,7 @@ import 'package:engzly/features/profile/main_profile_screen/widgets/user_data_wi
 import 'package:flutter/material.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -18,8 +19,10 @@ class ProfileScreen extends StatelessWidget {
         "Profile ",
         style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
       ),
-      leadingIcon: AppImages.categoryIcon,
-      notificationIcon: AppImages.notificationIcon,
+      leadingIcon:
+          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
+      notificationIcon:
+          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
       onLeadingTap: () {},
       onNotificationTap: () {},
       showNotificationDot: true,

@@ -1,3 +1,4 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
@@ -17,8 +18,6 @@ class UserDataWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 80.w,
-            height: 80.h,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.transparent, width: 2.w),
               borderRadius: BorderRadius.circular(15.r),
@@ -41,10 +40,11 @@ class UserDataWidget extends StatelessWidget {
             "rawan.magdy.fahmy@gmail.com ",
             style: AppFonts.font14BOrangeWeight400,
           ),
-          10.verticalSpace,
           CustomButton(
             text: "Edit",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, RouteName.editProfile);
+            },
             width: 100.w,
             height: 40.h,
             backgroundColor: ColorsManager.white,
