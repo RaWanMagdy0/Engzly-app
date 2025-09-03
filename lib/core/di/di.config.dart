@@ -32,6 +32,10 @@ import '../../features/auth/logic/forget_password/verify_email/cubit.dart'
     as _i854;
 import '../../features/auth/logic/login_cubit/cubit.dart' as _i302;
 import '../../features/auth/logic/register_cubit/cubit.dart' as _i690;
+import '../../features/profile/data/profile_api/profile_api_manager.dart'
+    as _i113;
+import '../../features/profile/data/repo/change_password_repo.dart' as _i602;
+import '../../features/profile/logic/cubit.dart' as _i773;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
 import '../helper/local/app_provider.dart' as _i44;
 import '../networking/api/dio/dio_factory.dart' as _i777;
@@ -55,6 +59,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
         () => _i1060.AuthApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i113.ProfileApiManager>(
+        () => _i113.ProfileApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(
@@ -74,10 +80,14 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i109.RegisterRepo>(),
           gh<_i834.ConfirmEmailRepo>(),
         ));
+    gh.factory<_i602.ChangePasswordRepo>(
+        () => _i602.ChangePasswordRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i854.VerifyEmailCubit>(
         () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(
         () => _i13.ForgetPasswordCubit(gh<_i896.ForgetPasswordRepo>()));
+    gh.factory<_i773.ProfileCubit>(
+        () => _i773.ProfileCubit(gh<_i602.ChangePasswordRepo>()));
     return this;
   }
 }

@@ -3,7 +3,7 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
-import 'package:engzly/features/profile/edit_profile_screen/widgets/edit_profile_form.dart';
+import 'package:engzly/features/profile/ui/edit_profile_screen/widgets/edit_profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';

@@ -9,6 +9,9 @@ class ApiConstants {
   static const String verifiEmail = "Auth/ForgetPassVerfication";
   static const String resetPassword = "Auth/ForgetPasschange";
 
+  static const String changePassword = "User/ChangePassword";
+
+
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "auth/refresh-token";
   // --------------------  profile  -----------------
