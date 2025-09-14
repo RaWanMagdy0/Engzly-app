@@ -78,11 +78,21 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
 
       case RouteName.editProfile:
-        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
-          case RouteName.profile:
-        return MaterialPageRoute(builder: (_) => const ProfileScreen());
-        
-        case RouteName.changePassword:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: EditProfileScreen(),
+          ),
+        );
+      case RouteName.profile:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: ProfileScreen(),
+          ),
+        );
+
+      case RouteName.changePassword:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<ProfileCubit>(),
