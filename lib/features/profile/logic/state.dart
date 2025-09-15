@@ -41,8 +41,18 @@ class UpdateUserDataError extends ProfileState {
   final String error;
   UpdateUserDataError(this.error);
 }
+
 class ProfileImagePicked extends ProfileState {}
 
+class SelectLocationSuccess extends ProfileState {
+final String message; 
+  SelectLocationSuccess(this.message);
+}
+
+class SelectLocationError extends ProfileState {
+  final String error;
+  SelectLocationError(this.error);
+}
 
 
 

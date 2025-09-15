@@ -35,6 +35,7 @@ import '../../features/profile/data/profile_api/profile_api_manager.dart'
     as _i113;
 import '../../features/profile/data/repo/change_password_repo.dart' as _i602;
 import '../../features/profile/data/repo/get_user_data_repo.dart' as _i374;
+import '../../features/profile/data/repo/location_repo.dart' as _i807;
 import '../../features/profile/data/repo/update_user_data_repo.dart' as _i89;
 import '../../features/profile/logic/cubit.dart' as _i773;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
@@ -87,6 +88,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i374.GetUserDataRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i89.UpdateUserDataRepo>(
         () => _i89.UpdateUserDataRepo(gh<_i113.ProfileApiManager>()));
+    gh.factory<_i807.LocationRepo>(
+        () => _i807.LocationRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i854.VerifyEmailCubit>(
         () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(
@@ -95,6 +98,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i602.ChangePasswordRepo>(),
           gh<_i374.GetUserDataRepo>(),
           gh<_i89.UpdateUserDataRepo>(),
+          gh<_i807.LocationRepo>(),
         ));
     return this;
   }

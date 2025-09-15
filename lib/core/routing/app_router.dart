@@ -15,6 +15,8 @@ import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/change_password/change_password_screen.dart';
 import 'package:engzly/features/profile/ui/edit_profile_screen/edit_profile_screen.dart';
+import 'package:engzly/features/profile/ui/location/add_location/add_location_screen.dart';
+import 'package:engzly/features/profile/ui/location/my_location/my_location.dart' show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +79,16 @@ class AppRouter {
       case RouteName.homeLayout:
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
 
+      case RouteName.myLocation:
+        return MaterialPageRoute(builder: (_) => const MyLocation());
+
+      case RouteName.addLocation:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: AddLocationScreen(),
+          ),
+        );
       case RouteName.editProfile:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

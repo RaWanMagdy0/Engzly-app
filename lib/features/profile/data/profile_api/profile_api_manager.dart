@@ -1,8 +1,9 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 //import 'package:http_parser/http_parser.dart';
 
 import 'package:engzly/core/networking/api/api_constants.dart';
+import 'package:engzly/features/profile/data/models/address/add_location_request_body.dart';
+import 'package:engzly/features/profile/data/models/address/add_location_response_model.dart';
 import 'package:engzly/features/profile/data/models/change_password_models/change_password_request_body.dart';
 import 'package:engzly/features/profile/data/models/change_password_models/change_password_response_model.dart';
 import 'package:engzly/features/profile/data/models/main_profile_models/get_user_data_response_model.dart';
@@ -29,5 +30,11 @@ abstract class ProfileApiManager {
   Future<String> updateUserData(
     @Header("Authorization") String token,
     @Body() FormData body,
+  );
+
+  @POST(ApiConstants.selectLocation)
+  Future<AddLocationResponseModel> selectLocation(
+    @Header("Authorization") String token,
+    @Body() AddLocationRequestBody selectLocationRequestBody,
   );
 }
