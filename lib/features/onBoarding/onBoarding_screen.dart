@@ -3,6 +3,7 @@ import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/features/onBoarding/widgets/custom_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/theming/images.dart';
 
@@ -38,24 +39,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
   ];
 
-  void _nextPage() async {
+  void _nextPage() {
     if (_currentPage < pages.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isFirstTime', false);
-
       Navigator.pushReplacementNamed(context, RouteName.login);
     }
   }
 
-  void _skipOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isFirstTime', false);
-
+  void _skipOnboarding() {
     Navigator.pushReplacementNamed(context, RouteName.login);
   }
 

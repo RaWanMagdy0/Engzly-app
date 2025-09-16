@@ -20,10 +20,7 @@ class LoginRepo {
         loginRequestModel.email,
         loginRequestModel.password,
       );
-      final token = response.token;
-      if (token != null && token.isNotEmpty) {
-        await TokenManager.setToken(token: token);
-      }
+      await TokenManager.setToken(token: response.token!);
       return response;
     });
   }
