@@ -1,4 +1,3 @@
-import 'package:engzly/core/helper/local/secure_storage.dart';
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/features/auth/data/models/login/login_request_model.dart';
 import 'package:engzly/features/auth/data/models/login/login_response_model.dart';
@@ -12,11 +11,8 @@ class LoginCubit extends BaseViewModel<LoginState> {
   final LoginRepo _loginRepo;
 
   LoginCubit(this._loginRepo) : super(LoginInitial());
-  Future<void> login({
-    required String email,
-    required String password,
-    required bool rememberMe,
-  }) async {
+
+  Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
 
     final loginRequest = LoginRequestModel(email: email, password: password);
@@ -26,20 +22,19 @@ class LoginCubit extends BaseViewModel<LoginState> {
     if (result is Success<LoginResponseModel>) {
       final response = result.data;
 
-      final token = response?.token;
-      if (rememberMe && token != null && token.isNotEmpty) {
-        await SecureStorageFactory.writeData(
-          key: 'token',
-          value: token,
-        );
-      } else {
-        await SecureStorageFactory.deleteData(key: 'token');
-      }
+      /***** 
+       await SecureStorageFactory.writeData(
+        key: 'token',
+        value: response?.token ?? "",
+      ); 
+      */
 
       emit(LoginSuccess(response?.username ?? "Logged in successfully"));
     } else if (result is Fail) {
       final failResult = result as Fail;
+
       final errorMessage = getErrorMessageFromException(failResult.exception);
+
       emit(LoginError(errorMessage));
     }
   }

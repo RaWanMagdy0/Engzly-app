@@ -32,8 +32,6 @@ dependencies:
   get_it: ^8.2.0
   pinput: ^5.0.1
   pin_code_fields: ^8.0.1
-  flutter_native_splash: ^2.4.0
-
 
 
 dev_dependencies:
@@ -44,14 +42,6 @@ dev_dependencies:
   injectable_generator: ^2.6.2
   retrofit_generator: ^9.1.4
   json_serializable: ^6.8.0
-  flutter_launcher_icons: ^0.13.1
-
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/icons/house_icon.png"
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/icons/house_icon.png"
 
 flutter:
   generate: true
