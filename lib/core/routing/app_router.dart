@@ -1,9 +1,122 @@
+import 'package:engzly/core/di/di.dart' show getIt;
+import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/features/auth/logic/forget_password/forget_pass_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/forget_password/reset_pass_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/forget_password/verify_email/cubit.dart';
+import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
+import 'package:engzly/features/auth/ui/forgot_password/email_verification_screen.dart';
+import 'package:engzly/features/auth/ui/forgot_password/forget_password_screen.dart';
+import 'package:engzly/features/auth/ui/forgot_password/reset_password_screen.dart';
+import 'package:engzly/features/auth/ui/login/login_screen.dart';
+import 'package:engzly/features/auth/ui/sign_up/widgets/email_confirmation.dart';
+import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
+import 'package:engzly/features/home_layout/home_layout_screen.dart';
+import 'package:engzly/features/profile/logic/cubit.dart';
+import 'package:engzly/features/profile/ui/change_password/change_password_screen.dart';
+import 'package:engzly/features/profile/ui/edit_profile_screen/edit_profile_screen.dart';
+import 'package:engzly/features/profile/ui/location/add_location/add_location_screen.dart';
+import 'package:engzly/features/profile/ui/location/my_location/my_location.dart'
+    show MyLocation;
+import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../features/onBoarding/onboarding_screen.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
-    final arguments = settings.arguments;
+    //  final arguments = settings.arguments;
     switch (settings.name) {
+      //----------- OnboardingScreen Screens -----------
+      case RouteName.onBoarding:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+
+      //----------- login Screen -----------
+      case RouteName.login:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<LoginCubit>(),
+            child: LogInScreen(),
+          ),
+        );
+
+      case RouteName.signUp:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<RegisterCubit>(),
+            child: SignUpPage(),
+          ),
+        );
+      case RouteName.emailConfirmation:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<RegisterCubit>(),
+            child: EmailConfirmation(),
+          ),
+        );
+
+      case RouteName.forgetPassword:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ForgetPasswordCubit>(),
+            child: ForgetPasswordScreen(),
+          ),
+        );
+      case RouteName.emailVerification:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<VerifyEmailCubit>(),
+            child: EmailVerificationScreen(),
+          ),
+        );
+
+      case RouteName.resetPassword:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ResetPasswordCubit>(),
+            child: ResetPasswordScreen(),
+          ),
+        );
+      case RouteName.homeLayout:
+        return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
+
+      case RouteName.myLocation:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>()..getLocations(),
+            child: MyLocation(),
+          ),
+        );
+      case RouteName.addLocation:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: AddLocationScreen(),
+          ),
+        );
+      case RouteName.editProfile:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: EditProfileScreen(),
+          ),
+        );
+      case RouteName.profile:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: ProfileScreen(),
+          ),
+        );
+
+      case RouteName.changePassword:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>(),
+            child: ChangePasswordScreen(),
+          ),
+        );
+
       //----------- Auth Screens -----------
       // case Routes.loginScreen:
       //   return _createPageTransition(
@@ -19,7 +132,8 @@ class AppRouter {
     }
   }
 
-  static PageRouteBuilder _createPageTransition({
+  /**********
+ *   static PageRouteBuilder _createPageTransition({
     required Widget child,
     PageTransitionType transitionType = PageTransitionType.slide,
   }) {
@@ -49,6 +163,7 @@ class AppRouter {
       },
     );
   }
+ */
 }
 
 enum PageTransitionType { slide, fade, scale }
