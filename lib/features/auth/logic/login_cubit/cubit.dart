@@ -1,4 +1,5 @@
 import 'package:engzly/core/helper/local/secure_storage.dart';
+import 'package:engzly/core/helper/local/token_manger.dart';
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/features/auth/data/models/login/login_request_model.dart';
 import 'package:engzly/features/auth/data/models/login/login_response_model.dart';
@@ -27,13 +28,21 @@ class LoginCubit extends BaseViewModel<LoginState> {
       final response = result.data;
 
       final token = response?.token;
+      await TokenManager.setToken(token: response?.token);
+      await TokenManager.setRefreshToken(token: response?.refreshToken);
+
       if (rememberMe && token != null && token.isNotEmpty) {
         await SecureStorageFactory.writeData(
           key: 'token',
           value: token,
         );
+        await SecureStorageFactory.writeData(
+          key: 'refreshToken',
+          value: response?.refreshToken ?? "",
+        );
       } else {
         await SecureStorageFactory.deleteData(key: 'token');
+        await SecureStorageFactory.deleteData(key: 'refreshToken');
       }
 
       emit(LoginSuccess(response?.username ?? "Logged in successfully"));

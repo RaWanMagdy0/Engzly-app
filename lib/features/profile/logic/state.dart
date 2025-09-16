@@ -1,3 +1,4 @@
+import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/profile/data/models/main_profile_models/get_user_data_response_model.dart';
 
 abstract class ProfileState {}
@@ -52,6 +53,19 @@ final String message;
 class SelectLocationError extends ProfileState {
   final String error;
   SelectLocationError(this.error);
+}
+
+
+class GetLocationsLoading extends ProfileState {}
+
+class GetLocationsSuccess extends ProfileState {
+  final List<LocationModel> locations;
+  GetLocationsSuccess(this.locations);
+}
+
+class GetLocationsError extends ProfileState {
+  final String message;
+  GetLocationsError(this.message);
 }
 
 

@@ -30,7 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     viewModel = context.read<ProfileCubit>();
-    viewModel.getUserData();
+    if (viewModel.state is! UserDataSuccess) {
+      viewModel.getUserData();
+    }
   }
 
   @override

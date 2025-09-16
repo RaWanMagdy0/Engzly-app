@@ -14,6 +14,7 @@ class ApiConstants {
   static const String changePassword = "User/ChangePassword";
 
   static const String selectLocation = "User/addLocation";
+  static const String getLocations = "User/UserLocations";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

@@ -37,7 +37,7 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen>
       HistoryScreen(),
       OffersScreen(),
       BlocProvider(
-        create: (context) => getIt<ProfileCubit>()..getUserData(),
+        create: (context) => getIt<ProfileCubit>(),
         child: ProfileScreen(),
       ),
     ];
@@ -52,9 +52,8 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _motionTabBarController,
+      body: IndexedStack(
+        index: _motionTabBarController.index,
         children: _screens,
       ),
       bottomNavigationBar: MotionTabBarWidget(
