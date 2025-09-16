@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'api_error_model.dart';
 
-class ApiErrorHandler {
+class ApiErrorHclass ApiErrorHandler {
   static ApiErrorModel handle(dynamic error) {
     if (error is DioException) {
       switch (error.type) {
@@ -46,6 +46,11 @@ ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
     return ApiErrorModel(
       code: statusCode ?? -1,
       message: message,
+    );
+  } else if (data is String) {
+    return ApiErrorModel(
+      code: statusCode ?? -1,
+      message: data,
     );
   }
   return ApiErrorModel(

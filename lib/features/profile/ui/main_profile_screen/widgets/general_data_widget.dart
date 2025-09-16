@@ -1,3 +1,4 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +24,7 @@ class GeneralDataWidget extends StatelessWidget {
             ),
           ),
           Column(
-            children: const [
+            children: [
               ListTile(
                 leading: Icon(Icons.payment, color: Colors.black54),
                 title: Text(
@@ -38,8 +39,10 @@ class GeneralDataWidget extends StatelessWidget {
                 ),
               ),
               Divider(),
-
               ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.myLocation);
+                },
                 leading: Icon(Icons.location_on, color: Colors.black54),
                 title: Text(
                   "Locations",
@@ -53,7 +56,6 @@ class GeneralDataWidget extends StatelessWidget {
                 ),
               ),
               Divider(),
-
               ListTile(
                 leading: Icon(Icons.camera_alt, color: Colors.black54),
                 title: Text(
@@ -68,7 +70,6 @@ class GeneralDataWidget extends StatelessWidget {
                 ),
               ),
               Divider(),
-
               ListTile(
                 leading: Icon(Icons.share, color: Colors.black54),
                 title: Text(

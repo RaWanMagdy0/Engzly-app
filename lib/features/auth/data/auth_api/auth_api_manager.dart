@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:engzly/core/networking/api/dio/api_constants.dart';
+import 'package:engzly/core/networking/api/api_constants.dart';
 import 'package:engzly/features/auth/data/models/confirm_email/confirm_email_request_body.dart';
 import 'package:engzly/features/auth/data/models/confirm_email/confirm_email_response_model.dart';
 import 'package:engzly/features/auth/data/models/forget_password/forget_password_request_body.dart';
