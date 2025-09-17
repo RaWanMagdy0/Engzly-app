@@ -2,6 +2,10 @@
 
 part of 'confirm_email_request_body.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
 ConfirmEmailRequestBody _$ConfirmEmailRequestBodyFromJson(
         Map<String, dynamic> json) =>
     ConfirmEmailRequestBody(
