@@ -4,7 +4,6 @@ import 'package:engzly/features/onBoarding/widgets/custom_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/theming/images.dart';
 
 class OnboardingScreen extends StatefulWidget {

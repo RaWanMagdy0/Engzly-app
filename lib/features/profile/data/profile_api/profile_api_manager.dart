@@ -7,7 +7,6 @@ import 'package:engzly/features/profile/data/models/address/add_location_respons
 import 'package:engzly/features/profile/data/models/change_password_models/change_password_request_body.dart';
 import 'package:engzly/features/profile/data/models/change_password_models/change_password_response_model.dart';
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
-import 'package:engzly/features/profile/data/models/get_address/locations_response_model.dart';
 import 'package:engzly/features/profile/data/models/main_profile_models/get_user_data_response_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
