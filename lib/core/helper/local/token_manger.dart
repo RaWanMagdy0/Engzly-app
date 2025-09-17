@@ -4,8 +4,9 @@ class TokenManager {
   static const String tokenKey = "token";
   static const String refreshKey = "refreshToken";
 
-  static Future<void> setToken({required String token}) async {
-    return await SecureStorageFactory.writeData(key: tokenKey, value: token);
+  static Future<void> setToken({required String? token}) async {
+    return await SecureStorageFactory.writeData(
+        key: tokenKey, value: token ?? "");
   }
 
   static Future<String?> getToken() async {
