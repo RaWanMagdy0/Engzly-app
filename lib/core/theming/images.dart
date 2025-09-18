@@ -15,4 +15,7 @@ abstract class AppImages {
 
   static const String notificationIcon = "assets/icons/notification_icon.png";
   static const String categoryIcon = "assets/icons/category_icon.svg";
+
+    static const String hand = "assets/images/hand.png";
+
 }

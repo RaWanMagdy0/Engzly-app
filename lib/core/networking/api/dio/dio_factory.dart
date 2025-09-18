@@ -80,17 +80,24 @@ class DioFactory {
 
   Future<String?> _refreshToken(Dio dio) async {
     try {
+      final access = await TokenManager.getToken();
       final refresh = await TokenManager.getRefreshToken();
-      if (refresh == null || refresh.isEmpty) return null;
+
+      if (refresh == null ||
+          refresh.isEmpty ||
+          access == null ||
+          access.isEmpty) {
+        return null;
+      }
 
       final response = await dio.post(
         ApiConstants.refreshToken,
         data: {
+          "accessToken": access,
           "refreshToken": refresh,
         },
       );
 
-      // ✅ اتأكد إن المفاتيح دي مطابقة للـ backend
       final newAccessToken = response.data?["accessToken"];
       final newRefreshToken = response.data?["refreshToken"];
 

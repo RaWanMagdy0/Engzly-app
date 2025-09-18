@@ -9,12 +9,21 @@ class ApiConstants {
   static const String verifiEmail = "Auth/ForgetPassVerfication";
   static const String resetPassword = "Auth/ForgetPasschange";
 
+  // --------------------  User  -----------------
+
+
   static const String getUserData = "User/GetUserDataForEdit";
   static const String updateUserData = "User/Put User data for Update";
   static const String changePassword = "User/ChangePassword";
 
   static const String selectLocation = "User/addLocation";
   static const String getLocations = "User/UserLocations";
+
+  // --------------------  Home  -----------------
+
+  static const String getOffers = "Home/GetOffer&News";
+    static const String getservice = "Home/GetOtherServices";
+
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

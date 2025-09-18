@@ -44,4 +44,10 @@ class AppFonts {
     color: ColorsManager.black,
     fontWeight: FontWeight.w400,
   );
+
+   static TextStyle font24greykWeight400 = TextStyle(
+    fontSize: 24.sp,
+    color: ColorsManager.black.withValues(alpha: 0.5),
+    fontWeight: FontWeight.w400,
+  );
 }
