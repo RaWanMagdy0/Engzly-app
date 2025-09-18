@@ -1,5 +1,6 @@
 import 'package:engzly/core/di/di.dart';
 import 'package:engzly/features/history/history.dart';
+import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/offers/offers.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
@@ -33,7 +34,10 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen>
       setState(() {});
     });
     _screens = [
-      HomeScreen(),
+      BlocProvider(
+        create: (context) => getIt<HomeCubit>(),
+        child: HomeScreen(),
+      ),
       HistoryScreen(),
       OffersScreen(),
       BlocProvider(

@@ -11,9 +11,9 @@ class RouteName {
   static const String homeLayout = "homeLayout";
   static const String editProfile = "editProfile";
   static const String profile = "profile";
+  static const String homeScreen = "homeScreen";
+
   static const String changePassword = "changePassword";
-    static const String addLocation = "addLocation";
-        static const String myLocation = "myLocation";
-
-
+  static const String addLocation = "addLocation";
+  static const String myLocation = "myLocation";
 }

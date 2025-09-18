@@ -11,6 +11,8 @@ import 'package:engzly/features/auth/ui/forgot_password/reset_password_screen.da
 import 'package:engzly/features/auth/ui/login/login_screen.dart';
 import 'package:engzly/features/auth/ui/sign_up/widgets/email_confirmation.dart';
 import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
+import 'package:engzly/features/home/logic/cubit.dart';
+import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/change_password/change_password_screen.dart';
@@ -77,21 +79,27 @@ class AppRouter {
             child: ResetPasswordScreen(),
           ),
         );
+
+      //----------- Main Screen -----------
+
       case RouteName.homeLayout:
         return MaterialPageRoute(builder: (_) => const HomeLayoutScreen());
 
-      case RouteName.myLocation:
+      case RouteName.homeScreen:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => getIt<ProfileCubit>()..getLocations(),
-            child: MyLocation(),
+            create: (context) => getIt<HomeCubit>(),
+            child: HomeScreen(),
           ),
         );
-      case RouteName.addLocation:
+
+      //----------- profile Screens -----------
+
+      case RouteName.profile:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<ProfileCubit>(),
-            child: AddLocationScreen(),
+            child: ProfileScreen(),
           ),
         );
       case RouteName.editProfile:
@@ -101,14 +109,20 @@ class AppRouter {
             child: EditProfileScreen(),
           ),
         );
-      case RouteName.profile:
+      case RouteName.addLocation:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<ProfileCubit>(),
-            child: ProfileScreen(),
+            child: AddLocationScreen(),
           ),
         );
-
+      case RouteName.myLocation:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<ProfileCubit>()..getLocations(),
+            child: MyLocation(),
+          ),
+        );
       case RouteName.changePassword:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -116,16 +130,6 @@ class AppRouter {
             child: ChangePasswordScreen(),
           ),
         );
-
-      //----------- Auth Screens -----------
-      // case Routes.loginScreen:
-      //   return _createPageTransition(
-      //     child: BlocProvider<LoginCubit>(
-      //       create: (context) => getIt<LoginCubit>(),
-      //       child: const LoginScreen(),
-      //     ),
-      //     transitionType: PageTransitionType.fade,
-      //   );
 
       default:
         return null;
