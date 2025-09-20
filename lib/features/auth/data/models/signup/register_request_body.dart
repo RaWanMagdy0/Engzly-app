@@ -7,8 +7,6 @@ class RegisterRequestBody {
   final String fullName;
   final String email;
   final String address;
-  final int zipCode;
-  final String state;
   final String password;
   final String confirmPassword;
   final String phoneNumber;
@@ -17,8 +15,6 @@ class RegisterRequestBody {
     required this.fullName,
     required this.email,
     required this.address,
-    required this.zipCode,
-    required this.state,
     required this.password,
     required this.confirmPassword,
     required this.phoneNumber,

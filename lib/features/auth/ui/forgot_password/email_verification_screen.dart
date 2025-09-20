@@ -1,3 +1,4 @@
+import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -42,92 +43,95 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               Scaffold(
                 body: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      120.verticalSpace,
-                      Text(
-                        "Email Verification",
-                        style: AppFonts.font36BlackWeight700.copyWith(
-                          fontWeight: FontWeight.w500,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        120.verticalSpace,
+                        Text(
+                          "Email Verification",
+                          style: AppFonts.font36BlackWeight700.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      10.verticalSpace,
-                      Text(
-                        "Please check your email:\n \"${viewModel.appProvider.email}\" to reset Your password.",
-                        textAlign: TextAlign.center,
-                        style: AppFonts.font12BlackWeight400.copyWith(
-                          color: ColorsManager.black.withValues(alpha: 0.5),
-                          fontSize: 21.sp,
+                        10.verticalSpace,
+                        Text(
+                          "Please check your email:\n \"${viewModel.appProvider.email}\" to reset Your password.",
+                          textAlign: TextAlign.center,
+                          style: AppFonts.font12BlackWeight400.copyWith(
+                            color: ColorsManager.black.withValues(alpha: 0.5),
+                            fontSize: 21.sp,
+                          ),
                         ),
-                      ),
-                      20.verticalSpace,
-                      PinCodeFile(
-                        onCodeCompleted: (code) {
-                          otpCode = code;
-                        },
-                      ),
-                      20.verticalSpace,
-                      CustomButton(
-                        onPressed: () {
-                          if (otpCode.isNotEmpty) {
-                            viewModel.verifyEmail(verficationCode: otpCode);
-                          }
-                        },
-                        text: "Confirm",
-                        textStyle: AppFonts.font14BWhiteWeight700,
-                        color: ColorsManager.orange,
-                        height: 50.h,
-                        width: 290.w,
-                        borderRadius: 16.r,
-                      ),
-                      10.verticalSpace,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Code Sent. Resend Code in ",
-                            style: AppFonts.font14BOrangeWeight400.copyWith(
-                              color: ColorsManager.black,
+                        20.verticalSpace,
+                        PinCodeFile(
+                          onCodeCompleted: (code) {
+                            otpCode = code;
+                          },
+                        ),
+                        20.verticalSpace,
+                        CustomButton(
+                          onPressed: () {
+                            if (otpCode.isNotEmpty) {
+                              viewModel.verifyEmail(verficationCode: otpCode);
+                            }
+                          },
+                          text: "Confirm",
+                          textStyle: AppFonts.font14BWhiteWeight700,
+                          color: ColorsManager.orange,
+                          height: 50.h,
+                          width: 290.w,
+                          borderRadius: 16.r,
+                        ),
+                        10.verticalSpace,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Code Sent. Resend Code in ",
+                              style: AppFonts.font14BOrangeWeight400.copyWith(
+                                color: ColorsManager.black,
+                              ),
                             ),
-                          ),
-                          ValueListenableBuilder<bool>(
-                            valueListenable: viewModel.isResendButtonEnabled,
-                            builder: (context, isEnabled, child) {
-                              return InkWell(
-                                onTap: isEnabled
-                                    ? () {
-                                        viewModel.startResendTimer();
-                                      }
-                                    : null,
-                                child: ValueListenableBuilder<String?>(
-                                  valueListenable: viewModel.resendButtonText,
-                                  builder: (context, value, child) {
-                                    return Text(
-                                      value ?? "Resend",
-                                      style: AppFonts.font14BOrangeWeight400
-                                          .copyWith(
-                                              color: isEnabled
-                                                  ? ColorsManager.orange
-                                                  : ColorsManager.orange,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              decorationColor:
-                                                  ColorsManager.orange),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                            ValueListenableBuilder<bool>(
+                              valueListenable: viewModel.isResendButtonEnabled,
+                              builder: (context, isEnabled, child) {
+                                return InkWell(
+                                  onTap: isEnabled
+                                      ? () {
+                                          viewModel.startResendTimer();
+                                        }
+                                      : null,
+                                  child: ValueListenableBuilder<String?>(
+                                    valueListenable: viewModel.resendButtonText,
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        value ?? "Resend",
+                                        style: AppFonts.font14BOrangeWeight400
+                                            .copyWith(
+                                                color:
+                                                    isEnabled
+                                                        ? ColorsManager.orange
+                                                        : ColorsManager.orange,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor:
+                                                    ColorsManager.orange),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
               if (state is VerifyEmailLoading)
-               Positioned.fill(
+                Positioned.fill(
                   child: Container(
                     color: Colors.black.withValues(alpha: 0.3),
                     child: const Center(
@@ -144,35 +148,28 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   void _handelStateChange(VerifyEmailState state, VerifyEmailCubit cubit) {
     if (state is VerifyEmailSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
+      AppDialogs.showSuccessDialog(
+        context: context,
+        message: state.message,
       );
-      Future.delayed(const Duration(seconds: 2), () {
-        // ignore: use_build_context_synchronously
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, RouteName.resetPassword);
-        }
+
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, RouteName.resetPassword);
       });
     } else if (state is VerifyEmailError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.error)),
+      AppDialogs.showErrorDialog(
+        context: context,
+        errorMassage: state.error,
       );
     } else if (state is ResendSuccessState) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Resend OTP to your email.\n Please check your Email",
-          ),
-        ),
+      AppDialogs.showSuccessDialog(
+        context: context,
+        message: "Resend OTP to your email.\n Please check your Email",
       );
-      cubit.startResendTimer();
     } else if (state is ResendErrorState) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please Try Again")),
+      AppDialogs.showErrorDialog(
+        context: context,
+        errorMassage: "Please Try Again",
       );
     }
   }

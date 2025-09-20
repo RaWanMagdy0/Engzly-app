@@ -50,49 +50,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onNotificationTap: () {},
         showNotificationDot: true,
         child: Column(children: [
-          BlocConsumer<ProfileCubit, ProfileState>(
-            bloc: viewModel,
-            listener: (context, state) {
-              if (state is UserDataError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.error),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is UserDataLoading) {
-                return const UserDataShimmerWidget();
-              } else if (state is UserDataSuccess) {
-                return UserDataWidget(user: state.user);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-          CustomButton(
-            text: "Edit",
-            onPressed: () {
-              Navigator.pushReplacementNamed(
-                context,
-                RouteName.editProfile,
-              );
-            },
-            width: 100.w,
-            height: 40.h,
-            backgroundColor: ColorsManager.white,
-            textStyle: AppFonts.font16BlackWeight400.copyWith(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w500,
-            ),
-            borderColor: ColorsManager.orange,
-            borderRadius: 25.r,
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  BlocConsumer<ProfileCubit, ProfileState>(
+                    bloc: viewModel,
+                    listener: (context, state) {
+                      if (state is UserDataError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.error),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is UserDataLoading) {
+                        return const UserDataShimmerWidget();
+                      } else if (state is UserDataSuccess) {
+                        return UserDataWidget(user: state.user);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  CustomButton(
+                    text: "Edit",
+                    onPressed: () async {
+                      final cubit = context.read<ProfileCubit>();
+
+                      if (cubit.state is UserDataSuccess) {
+                        Navigator.pushNamed(context, RouteName.editProfile);
+                      } else {
+                        await cubit.getUserData();
+                        if (cubit.state is UserDataSuccess) {
+                          Navigator.pushNamed(context, RouteName.editProfile);
+                        } else if (cubit.state is UserDataError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content:
+                                    Text((cubit.state as UserDataError).error)),
+                          );
+                        }
+                      }
+                    },
+                    width: 100.w,
+                    height: 40.h,
+                    backgroundColor: ColorsManager.white,
+                    textStyle: AppFonts.font16BlackWeight400.copyWith(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    borderColor: ColorsManager.orange,
+                    borderRadius: 25.r,
+                  ),
                   GeneralDataWidget(),
                   NotificationWidget(),
                   MoreWidget(),

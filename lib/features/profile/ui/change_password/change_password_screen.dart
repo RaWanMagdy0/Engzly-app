@@ -41,7 +41,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Text("Change Password", style: AppFonts.font36BlackWeight700),
                 5.verticalSpace,
                 Text(
-                  "Please note changing password will requiredagain login to the app..",
+                  "Please note changing password will required again login to the app.",
                   textAlign: TextAlign.center,
                   style: AppFonts.font16BlackWeight400.copyWith(
                     color: ColorsManager.black.withValues(alpha: 0.5),

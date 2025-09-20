@@ -8,7 +8,6 @@ import 'package:engzly/features/profile/data/models/address/add_location_respons
 import 'package:engzly/features/profile/data/models/change_password_models/change_password_request_body.dart';
 import 'package:engzly/features/profile/data/models/change_password_models/change_password_response_model.dart';
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
-import 'package:engzly/features/profile/data/models/get_address/locations_response_model.dart';
 import 'package:engzly/features/profile/data/models/main_profile_models/get_user_data_response_model.dart';
 import 'package:engzly/features/profile/data/models/update_user_data_models/update_user_data_request_body.dart';
 import 'package:engzly/features/profile/data/repo/change_password_repo.dart';
@@ -26,17 +25,11 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
   final GetUserDataRepo _getUserDataRepo;
   final UpdateUserDataRepo _updateUserDataRepo;
   final LocationRepo _addLocationRepo;
-    final GetLocationsRepo _getLocationsRepo;
+  final GetLocationsRepo _getLocationsRepo;
 
-
-
-  ProfileCubit(
-    this._changePasswordRepo,
-    this._getUserDataRepo,
-    this._updateUserDataRepo,
-    this._addLocationRepo,
-    this._getLocationsRepo
-  ) : super(ProfileInitial());
+  ProfileCubit(this._changePasswordRepo, this._getUserDataRepo,
+      this._updateUserDataRepo, this._addLocationRepo, this._getLocationsRepo)
+      : super(ProfileInitial());
 
   final formKey = GlobalKey<FormState>();
   final appProvider = getIt.get<AppProvider>();
@@ -57,8 +50,7 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
 
   File? selectedImage;
 
-    List<LocationModel> locations = [];
-
+  List<LocationModel> locations = [];
 
   Future<void> forgetPassword({
     required String password,
@@ -97,6 +89,7 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
       emailController.text = response.email ?? "";
       phoneNumberController.text = response.phoneNumber ?? "";
       addressController.text = response.address ?? "";
+      appProvider.email = emailController.text;
 
       imageUrl = fixImageUrl(response.imageUrl);
 
@@ -136,12 +129,10 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     }
   }
 
-
   Future<void> addLocation({
     required String type,
     required String location,
   }) async {
-
     final addLocationRequest = AddLocationRequestBody(
       type: type,
       location: location,
@@ -159,22 +150,20 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     }
   }
 
- Future<void> getLocations() async {
-  emit(GetLocationsLoading());
+  Future<void> getLocations() async {
+    emit(GetLocationsLoading());
 
-  final result = await _getLocationsRepo.getLocations();
+    final result = await _getLocationsRepo.getLocations();
 
-  if (result is Success<List<LocationModel>>) {
-    locations = result.data!;
-    emit(GetLocationsSuccess(locations));
-  } else if (result is Fail) {
-    final failResult = result as Fail;
-    final errorMessage = getErrorMessageFromException(failResult.exception);
-    emit(GetLocationsError(errorMessage));
+    if (result is Success<List<LocationModel>>) {
+      locations = result.data!;
+      emit(GetLocationsSuccess(locations));
+    } else if (result is Fail) {
+      final failResult = result as Fail;
+      final errorMessage = getErrorMessageFromException(failResult.exception);
+      emit(GetLocationsError(errorMessage));
+    }
   }
-}
-
-
 
   static String fixImageUrl(String? url) {
     if (url == null || url.isEmpty) return "";
@@ -183,6 +172,7 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
       "http://engezly.runasp.net/",
     );
   }
+
   void setImage(File file) {
     selectedImage = file;
     emit(ProfileImagePicked());

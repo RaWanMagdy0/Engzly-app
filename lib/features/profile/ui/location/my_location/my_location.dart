@@ -40,21 +40,23 @@ class MyLocation extends StatelessWidget {
           showNotificationDot: true,
           child: Column(
             children: [
-              Expanded(child: _buildBody(state, cubit)),
               20.verticalSpace,
+              Expanded(child: _buildBody(state, cubit)),
               CustomButton(
-                height: 50.h,
-                backgroundColor: ColorsManager.orange,
-                color: ColorsManager.orange,
-                borderRadius: 25.r,
                 onPressed: () {
                   Navigator.pushNamed(context, RouteName.addLocation);
                 },
+                color: ColorsManager.orange,
+                textStyle: AppFonts.font14BWhiteWeight700,
+                height: 55.h,
+                width: 300.w,
+                borderRadius: 25.r,
                 child: Text(
                   "Add New Location",
                   style: AppFonts.font14BWhiteWeight700,
                 ),
               ),
+              20.verticalSpace,
             ],
           ),
         );
@@ -86,7 +88,7 @@ class MyLocation extends StatelessWidget {
         child: ListView.separated(
           padding: EdgeInsets.all(16.w),
           itemCount: state.locations.length,
-          separatorBuilder: (_, __) => 15.verticalSpace,
+          separatorBuilder: (_, __) => 20.verticalSpace,
           itemBuilder: (context, index) {
             final loc = state.locations[index];
             return LocationCard(

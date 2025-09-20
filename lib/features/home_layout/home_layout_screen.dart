@@ -1,5 +1,5 @@
 import 'package:engzly/core/di/di.dart';
-import 'package:engzly/features/history/history.dart';
+import 'package:engzly/features/history/ui/history.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/offers/offers.dart';
