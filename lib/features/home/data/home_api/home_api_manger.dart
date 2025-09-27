@@ -21,4 +21,6 @@ abstract class HomeApiManager {
   Future<List<ServiceResponseModel>> getservice(
     @Header("Authorization") String token,
   );
+
+  
 }

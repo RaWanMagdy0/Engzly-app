@@ -11,7 +11,6 @@ class ApiConstants {
 
   // --------------------  User  -----------------
 
-
   static const String getUserData = "User/GetUserDataForEdit";
   static const String updateUserData = "User/Put User data for Update";
   static const String changePassword = "User/ChangePassword";
@@ -22,8 +21,8 @@ class ApiConstants {
   // --------------------  Home  -----------------
 
   static const String getOffers = "Home/GetOffer&News";
-    static const String getservice = "Home/GetOtherServices";
-
+  static const String getservice = "Home/GetOtherServices";
+  static const String getHistory = "User/bookings";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

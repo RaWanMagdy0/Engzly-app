@@ -31,6 +31,10 @@ import '../../features/auth/logic/forget_password/verify_email/cubit.dart'
     as _i854;
 import '../../features/auth/logic/login_cubit/cubit.dart' as _i302;
 import '../../features/auth/logic/register_cubit/cubit.dart' as _i690;
+import '../../features/history/data/history_api/history_api_manager.dart'
+    as _i50;
+import '../../features/history/data/repo/history_repo.dart' as _i625;
+import '../../features/history/logic/cubit.dart' as _i61;
 import '../../features/home/data/home_api/home_api_manger.dart' as _i224;
 import '../../features/home/data/repo/home_repo.dart' as _i429;
 import '../../features/home/logic/cubit.dart' as _i563;
@@ -69,6 +73,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i224.HomeApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i113.ProfileApiManager>(
         () => _i113.ProfileApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i50.HistoryApiManager>(
+        () => _i50.HistoryApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(
@@ -86,6 +92,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
     gh.factory<_i429.HomeRepo>(
         () => _i429.HomeRepo(gh<_i224.HomeApiManager>()));
+    gh.factory<_i625.HistoryRepository>(
+        () => _i625.HistoryRepository(gh<_i50.HistoryApiManager>()));
+    gh.factory<_i61.HistoryCubit>(
+        () => _i61.HistoryCubit(gh<_i625.HistoryRepository>()));
     gh.factory<_i690.RegisterCubit>(() => _i690.RegisterCubit(
           gh<_i109.RegisterRepo>(),
           gh<_i834.ConfirmEmailRepo>(),
