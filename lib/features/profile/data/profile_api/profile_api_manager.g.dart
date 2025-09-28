@@ -181,7 +181,7 @@ class _ProfileApiManager implements ProfileApiManager {
     )
         .compose(
           _dio.options,
-          'User/UserLocations',
+          'HouseShifting/UserLocations',
           queryParameters: queryParameters,
           data: _data,
         )

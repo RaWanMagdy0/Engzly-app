@@ -69,12 +69,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
         () => _i1060.AuthApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i50.HistoryApiManager>(
+        () => _i50.HistoryApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i224.HomeApiManager>(
         () => _i224.HomeApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i113.ProfileApiManager>(
         () => _i113.ProfileApiManager(gh<_i361.Dio>()));
-    gh.lazySingleton<_i50.HistoryApiManager>(
-        () => _i50.HistoryApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(

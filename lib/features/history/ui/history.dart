@@ -56,7 +56,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   if (historyList.isEmpty) {
                     return const Center(child: Text("No history available"));
                   }
-
                   return ListView.builder(
                     itemCount: historyList.length,
                     itemBuilder: (context, index) {
