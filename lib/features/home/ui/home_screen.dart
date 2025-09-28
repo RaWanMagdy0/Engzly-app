@@ -139,11 +139,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemBuilder: (context, index) {
                                       final offer =
                                           offers[selectedTab].offers[index];
-                                      return OfferCard(
-                                        title: offers[selectedTab].type,
-                                        discountText: offer.type ?? "",
-                                        image: offer.icon ?? "",
-                                        color: Colors.blue,
+                                      return Image.network(
+                                        offer.icon ?? "",
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => SizedBox(
+                                          width: 80.w,
+                                          height: 80.h,
+                                          child: Icon(Icons.broken_image,
+                                              size: 32.sp),
+                                        ),
                                       );
                                     },
                                   ),

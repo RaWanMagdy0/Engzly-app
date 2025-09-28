@@ -1,3 +1,4 @@
+import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/helper/functions/validators/validators.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
@@ -122,22 +123,18 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordScreen> {
     ResetPasswordState state,
   ) {
     if (state is ResetPasswordSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
+      AppDialogs.showSuccessDialog(
+        context: context,
+        message: state.message,
       );
-      Future.delayed(const Duration(seconds: 2), () {
-        // ignore: use_build_context_synchronously
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, RouteName.login);
-        }
+
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, RouteName.login);
       });
     } else if (state is ResetPasswordError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.error)),
+      AppDialogs.showErrorDialog(
+        context: context,
+        errorMassage: state.error,
       );
     }
   }

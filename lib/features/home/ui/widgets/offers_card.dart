@@ -47,40 +47,10 @@ class OfferCard extends StatelessWidget {
       );
     }
 
-    return Container(
-      width: 260.w,
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        gradient: LinearGradient(
-          colors: [color.withOpacity(0.85), color],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: AppFonts.font14BWhiteWeight700.copyWith(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                    )),
-                10.verticalSpace,
-                Text(discountText,
-                    style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-              ],
-            ),
-          ),
-          imageWidget,
-        ],
-      ),
+    return Row(
+      children: [
+        imageWidget,
+      ],
     );
   }
 }

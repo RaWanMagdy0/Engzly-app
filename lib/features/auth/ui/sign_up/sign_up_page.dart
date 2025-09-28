@@ -1,5 +1,7 @@
 import 'package:engzly/core/di/di.dart';
+import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/register_cubit/states.dart';
@@ -70,8 +72,9 @@ class _SignUpPageState extends State<SignUpPage> {
               if (state is RegisterLoading)
                 Container(
                   color: Colors.black45,
-                  child: const Center(
-                    child: CircularProgressIndicator(color: Colors.orange),
+                  child: Center(
+                    child:
+                        CircularProgressIndicator(color: ColorsManager.orange),
                   ),
                 ),
             ],
@@ -83,27 +86,41 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _handelStateChange(RegisterState state) {
     if (state is RegisterError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.error),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 2),
-        ),
+      AppDialogs.showErrorDialog(
+        context: context,
+        errorMassage: state.error,
       );
     } else if (state is RegisterSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
+      AppDialogs.showSuccessDialog(
+        context: context,
+        message: state.message,
       );
-      Future.delayed(const Duration(seconds: 2), () {
-        // ignore: use_build_context_synchronously
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, RouteName.emailConfirmation);
-        }
+
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, RouteName.emailConfirmation);
       });
     }
   }
 }
+/*************
+ *  if (state is LoginLoading) {
+          AppDialogs.showLoading(context: context);
+        } else if (state is LoginSuccess) {
+
+          AppDialogs.showHideDialog(context);
+          AppDialogs.showSuccessDialog(
+            context: context,
+            message: "Login Successfully",
+          );
+
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
+          });
+        } else if (state is LoginError) {
+          AppDialogs.showHideDialog(context);
+          AppDialogs.showErrorDialog(
+            context: context,
+            errorMassage: "incorrect email or password",
+          );
+        }
+ */

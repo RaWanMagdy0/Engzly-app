@@ -54,32 +54,6 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
                 Validators.validateNotEmpty(title: "Address", value: value),
           ),
           15.verticalSpace,
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextFormField(
-                  hintText: "Zip Code",
-                  labelText: "Zip Code",
-                  validator: (value) => Validators.validateNotEmpty(
-                      title: "Zip Code", value: value),
-                  keyBordType: TextInputType.phone,
-                  controller: viewModel.zipCodeController,
-                ),
-              ),
-              15.horizontalSpace,
-              Expanded(
-                child: CustomTextFormField(
-                  hintText: "City",
-                  labelText: "City",
-                  keyBordType: TextInputType.text,
-                  validator: (value) =>
-                      Validators.validateNotEmpty(title: "City", value: value),
-                  controller: viewModel.stateController,
-                ),
-              ),
-            ],
-          ),
-          15.verticalSpace,
           CustomTextFormField(
             hintText: "Enter Your Phone Number",
             labelText: "Phone Number",
@@ -119,8 +93,6 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
                 viewModel.register(
                   fullName: viewModel.fullNameController.text,
                   address: viewModel.addressController.text,
-                  zipCode: int.tryParse(viewModel.zipCodeController.text) ?? 0,
-                  state: viewModel.stateController.text,
                   password: viewModel.passwordController.text,
                   confirmPassword: viewModel.confirmPasswordController.text,
                   phoneNumber: viewModel.phoneNumberController.text,

@@ -1,3 +1,4 @@
+import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
@@ -72,13 +73,12 @@ class _LogInScreenState extends State<LogInScreen> {
                             Navigator.pushNamed(
                                 context, RouteName.forgetPassword);
                           },
-                          child: Text(
-                            "Forget Password?",
-                            style: AppFonts.font13BlackWeight500.copyWith(
-                              fontSize: 15.sp,
-                              color: ColorsManager.orange,
-                            ),
-                          ),
+                          child: Text("Forget Password?",
+                              style: AppFonts.font13BlackWeight500.copyWith(
+                                  fontSize: 15.sp,
+                                  color: ColorsManager.orange,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ColorsManager.orange)),
                         ),
                       ],
                     ),
@@ -115,13 +115,12 @@ class _LogInScreenState extends State<LogInScreen> {
                           onTap: () {
                             Navigator.pushNamed(context, RouteName.signUp);
                           },
-                          child: Text(
-                            " Sign Up", //AppStrings.signUpTitle,
-                            style: AppFonts.font13BlackWeight500.copyWith(
-                              color: ColorsManager.orange,
-                              fontSize: 15.sp,
-                            ),
-                          ),
+                          child: Text(" Sign Up", //AppStrings.signUpTitle,
+                              style: AppFonts.font13BlackWeight500.copyWith(
+                                  color: ColorsManager.orange,
+                                  fontSize: 15.sp,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ColorsManager.orange)),
                         ),
                       ],
                     ),
@@ -137,7 +136,45 @@ class _LogInScreenState extends State<LogInScreen> {
 
   void _handelStateChange(LoginState state) {
     if (state is LoginSuccess) {
-      ScaffoldMessenger.of(context)
+      AppDialogs.showSuccessDialog(
+          context: context, message: "Login Successfully ");
+      Future.delayed(Duration(seconds: 2), () {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, RouteName.homeLayout);
+      });
+    } else if (state is LoginError) {
+      AppDialogs.showHideDialog(context);
+      AppDialogs.showErrorDialog(
+        context: context,
+        errorMassage: state.error,
+      );
+    }
+  }
+}
+/*************
+ *  if (state is LoginLoading) {
+          AppDialogs.showLoading(context: context);
+        } else if (state is LoginSuccess) {
+
+          AppDialogs.showHideDialog(context);
+          AppDialogs.showSuccessDialog(
+            context: context,
+            message: "Login Successfully",
+          );
+
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
+          });
+        } else if (state is LoginError) {
+          AppDialogs.showHideDialog(context);
+          AppDialogs.showErrorDialog(
+            context: context,
+            errorMassage: "incorrect email or password",
+          );
+        }
+ */
+ /*******
+     *   ScaffoldMessenger.of(context)
           .showSnackBar(
             const SnackBar(
               content: Text("Login Successfully "),
@@ -150,14 +187,4 @@ class _LogInScreenState extends State<LogInScreen> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, RouteName.homeLayout);
       });
-    } else if (state is LoginError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.error),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-}
+     */

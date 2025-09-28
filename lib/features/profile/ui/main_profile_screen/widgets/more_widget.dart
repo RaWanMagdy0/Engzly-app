@@ -38,11 +38,10 @@ class MoreWidget extends StatelessWidget {
                 ),
               ),
               Divider(),
-
               ListTile(
                 leading: Icon(Icons.login_outlined, color: Colors.black54),
                 title: Text(
-                  "Locations",
+                  "Logout",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 trailing: Icon(

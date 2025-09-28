@@ -16,6 +16,9 @@ abstract class AppImages {
   static const String notificationIcon = "assets/icons/notification_icon.png";
   static const String categoryIcon = "assets/icons/category_icon.svg";
 
-    static const String hand = "assets/images/hand.png";
+  static const String hand = "assets/images/hand.png";
 
+  static const String loading = "assets/animations/loading_animation.json";
+  static const String success = "assets/animations/success_animation.json";
+  static const String error = "assets/animations/error_animation.json";
 }
