@@ -8,6 +8,7 @@ class ServiceCard extends StatelessWidget {
   final Color iconBackgroundColor;
   final Color iconColor;
   final String title;
+  final VoidCallback onTab;
 
   const ServiceCard({
     super.key,
@@ -16,34 +17,38 @@ class ServiceCard extends StatelessWidget {
     required this.iconBackgroundColor,
     required this.iconColor,
     required this.title,
+    required this.onTab,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 28.r,
-            backgroundColor: iconBackgroundColor,
-            child: Icon(icon, size: 30.sp, color: iconColor),
-          ),
-          8.verticalSpace,
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: AppFonts.font14BWhiteWeight700.copyWith(
-              color: Colors.black87,
-              fontSize: 14.sp,
+    return GestureDetector(
+      onTap: onTab,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20.h),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 28.r,
+              backgroundColor: iconBackgroundColor,
+              child: Icon(icon, size: 30.sp, color: iconColor),
             ),
-          ),
-        ],
+            8.verticalSpace,
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppFonts.font14BWhiteWeight700.copyWith(
+                color: Colors.black87,
+                fontSize: 14.sp,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

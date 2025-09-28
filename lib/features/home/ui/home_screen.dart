@@ -4,7 +4,6 @@ import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/logic/state.dart';
 import 'package:engzly/features/home/ui/widgets/home_shimmer_widget.dart';
-import 'package:engzly/features/home/ui/widgets/offers_card.dart';
 import 'package:engzly/features/home/ui/widgets/offers_tabs.dart';
 import 'package:engzly/features/home/ui/widgets/service_row.dart';
 import 'package:engzly/features/home/ui/widgets/other_services_card.dart';

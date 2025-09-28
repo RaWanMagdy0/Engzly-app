@@ -1,3 +1,4 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/features/home/ui/widgets/service_card.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,9 @@ class ServiceRow extends StatelessWidget {
             iconBackgroundColor: ColorsManager.ovalBinkColor,
             iconColor: Colors.red,
             title: "House\nShifting",
+            onTab: () {
+              Navigator.pushNamed(context, RouteName.houseShifting);
+            },
           ),
         ),
         12.horizontalSpace,
@@ -28,6 +32,7 @@ class ServiceRow extends StatelessWidget {
             iconBackgroundColor: ColorsManager.ovalOrangeColor,
             iconColor: Colors.orange,
             title: "Office\nShifting",
+            onTab: () {},
           ),
         ),
         12.horizontalSpace,
@@ -37,6 +42,7 @@ class ServiceRow extends StatelessWidget {
             backgroundColor: ColorsManager.babyBlue,
             iconBackgroundColor: ColorsManager.ovalBlueColor,
             iconColor: Colors.blue,
+            onTab: () {},
             title: "Commercial\nShifting",
           ),
         ),
