@@ -23,6 +23,8 @@ class ApiConstants {
   static const String getOffers = "Home/GetOffer&News";
   static const String getservice = "Home/GetOtherServices";
   static const String getHistory = "User/bookings";
+  static const String getHouseSize = "HouseShifting/HouseSize";
+  static const String getFurnitures = "HouseShifting/Furnitures";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

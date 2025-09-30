@@ -21,6 +21,7 @@ import 'package:engzly/features/profile/ui/location/add_location/add_location_sc
 import 'package:engzly/features/profile/ui/location/my_location/my_location.dart'
     show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
+import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/house_shifting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,8 +132,14 @@ class AppRouter {
             child: ChangePasswordScreen(),
           ),
         );
-      case RouteName.houseShifting:
-        return MaterialPageRoute(builder: (_) => const HouseShiftingScreen());
+
+        case RouteName.houseShifting:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<HouseShiftingCubit>(),
+            child: HouseShiftingScreen(),
+          ),
+        );
 
       default:
         return null;

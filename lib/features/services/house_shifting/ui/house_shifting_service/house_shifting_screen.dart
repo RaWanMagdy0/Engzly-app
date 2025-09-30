@@ -3,11 +3,18 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart' show AppImages;
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_section.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_header_section.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_option_section.dart';
+import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/states.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_grid.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_header.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_shimmer.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_header_section.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_option_card.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_option_section.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_size_shimmer.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/packed_boxes_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,6 +23,12 @@ class HouseShiftingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HouseShiftingCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cubit.getHouseSize();
+      cubit.getFurnitures();
+    });
+
     return CustomScaffoldScreen(
       title: Text(
         "House Shifting Service",
@@ -32,12 +45,104 @@ class HouseShiftingScreen extends StatelessWidget {
         child: Column(
           children: [
             const HouseHeaderSection(),
-            const HouseOptionsSection(),
+            BlocBuilder<HouseShiftingCubit, HouseShiftingState>(
+              buildWhen: (previous, current) =>
+                  current is GetHouseSizeLoading ||
+                  current is GetHouseSizeSuccess ||
+                  current is GetHouseSizeError,
+              builder: (context, state) {
+                return SizedBox(
+                  height: 180.h,
+                  child: () {
+                    if (state is GetHouseSizeLoading) {
+                      return Row(
+                        children: List.generate(
+                          3,
+                          (_) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: const HouseSizeShimmer(),
+                          ),
+                        ),
+                      );
+                    } else if (state is GetHouseSizeSuccess) {
+                      final houseSizes = state.houseSizes;
+                      if (houseSizes.isEmpty) {
+                        return const Center(child: Text("No data available"));
+                      }
+                      return HouseOptionSection(
+                        options: houseSizes
+                            .map((item) => HouseOptionCard(
+                                  title: item.name,
+                                  iconUrl: item.icon,
+                                  price: item.price,
+                                ))
+                            .toList(),
+                      );
+                    } else if (state is GetHouseSizeError) {
+                      return Center(child: Text(state.error));
+                    }
+                    return const SizedBox();
+                  }(),
+                );
+              },
+            ),
             Container(
                 color: ColorsManager.lightGray,
                 width: double.infinity,
                 height: 15.h),
-            const FurnitureSection(),
+            BlocBuilder<HouseShiftingCubit, HouseShiftingState>(
+              buildWhen: (previous, current) =>
+                  current is GetFurnituresLoading ||
+                  current is GetFurnituresSuccess ||
+                  current is GetFurnituresError,
+              builder: (context, state) {
+                final count =
+                    state is GetFurnituresSuccess ? state.furnitures.length : 0;
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FurnitureHeader(furnituresCount: count),
+                      Text(
+                        "Approximate furnitures",
+                        style: TextStyle(
+                            fontSize: 14.sp, color: Colors.grey.shade500),
+                      ),
+                      10.verticalSpace,
+                      SizedBox(
+                        height: 180.h,
+                        child: () {
+                          if (state is GetFurnituresLoading) {
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 5,
+                                childAspectRatio: 0.8,
+                              ),
+                              itemCount: 10,
+                              itemBuilder: (_, __) => const FurnitureShimmer(),
+                            );
+                          } else if (state is GetFurnituresSuccess) {
+                            if (state.furnitures.isEmpty) {
+                              return const Center(
+                                  child: Text("No data available"));
+                            }
+                            return FurnitureGrid(furnitures: state.furnitures);
+                          } else if (state is GetFurnituresError) {
+                            return Center(child: Text(state.error));
+                          }
+                          return const SizedBox();
+                        }(),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             Container(
                 color: ColorsManager.lightGray,
                 width: double.infinity,

@@ -46,6 +46,11 @@ import '../../features/profile/data/repo/get_user_data_repo.dart' as _i374;
 import '../../features/profile/data/repo/location_repo.dart' as _i807;
 import '../../features/profile/data/repo/update_user_data_repo.dart' as _i89;
 import '../../features/profile/logic/cubit.dart' as _i773;
+import '../../features/services/house_shifting/data/api_manager/house_shifting_api.dart'
+    as _i795;
+import '../../features/services/house_shifting/data/repo/house_shifting_repo.dart'
+    as _i650;
+import '../../features/services/house_shifting/logic/cubit.dart' as _i332;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
 import '../helper/local/app_provider.dart' as _i44;
 import '../networking/api/dio/dio_factory.dart' as _i777;
@@ -75,6 +80,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i224.HomeApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i113.ProfileApiManager>(
         () => _i113.ProfileApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i795.HouseShiftingApiManager>(
+        () => _i795.HouseShiftingApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(
@@ -96,6 +103,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i625.HistoryRepository(gh<_i50.HistoryApiManager>()));
     gh.factory<_i61.HistoryCubit>(
         () => _i61.HistoryCubit(gh<_i625.HistoryRepository>()));
+    gh.factory<_i650.HouseShiftingRepo>(
+        () => _i650.HouseShiftingRepo(gh<_i795.HouseShiftingApiManager>()));
     gh.factory<_i690.RegisterCubit>(() => _i690.RegisterCubit(
           gh<_i109.RegisterRepo>(),
           gh<_i834.ConfirmEmailRepo>(),
@@ -113,6 +122,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i89.UpdateUserDataRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i854.VerifyEmailCubit>(
         () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
+    gh.factory<_i332.HouseShiftingCubit>(
+        () => _i332.HouseShiftingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(
         () => _i13.ForgetPasswordCubit(gh<_i896.ForgetPasswordRepo>()));
     gh.factory<_i773.ProfileCubit>(() => _i773.ProfileCubit(
