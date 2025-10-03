@@ -1,6 +1,6 @@
-
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
+import 'package:engzly/features/services/house_shifting/data/models/vehicle_model.dart';
 
 abstract class HouseShiftingState {}
 
@@ -9,7 +9,7 @@ class HouseShiftingInitial extends HouseShiftingState {}
 class GetHouseSizeLoading extends HouseShiftingState {}
 
 class GetHouseSizeSuccess extends HouseShiftingState {
-  final List< HouseSizeModel> houseSizes;
+  final List<HouseSizeModel> houseSizes;
   GetHouseSizeSuccess(this.houseSizes);
 }
 
@@ -18,12 +18,10 @@ class GetHouseSizeError extends HouseShiftingState {
   GetHouseSizeError(this.error);
 }
 
-
-
 class GetFurnituresLoading extends HouseShiftingState {}
 
 class GetFurnituresSuccess extends HouseShiftingState {
-  final List< FurnitureModel> furnitures;
+  final List<FurnitureModel> furnitures;
   GetFurnituresSuccess(this.furnitures);
 }
 
@@ -32,3 +30,14 @@ class GetFurnituresError extends HouseShiftingState {
   GetFurnituresError(this.error);
 }
 
+class GetVehiclesLoading extends HouseShiftingState {}
+
+class GetVehiclesSuccess extends HouseShiftingState {
+  final List<VehicleModel> vehicles;
+  GetVehiclesSuccess(this.vehicles);
+}
+
+class GetVehiclesError extends HouseShiftingState {
+  final String error;
+  GetVehiclesError(this.error);
+}

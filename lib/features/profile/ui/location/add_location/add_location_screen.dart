@@ -64,7 +64,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
         builder: (context, state) {
           return Stack(
             children: [
-              /// الخريطة
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(

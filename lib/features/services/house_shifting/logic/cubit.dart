@@ -2,6 +2,7 @@ import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
+import 'package:engzly/features/services/house_shifting/data/models/vehicle_model.dart';
 import 'package:engzly/features/services/house_shifting/data/repo/house_shifting_repo.dart';
 import 'package:engzly/features/services/house_shifting/logic/states.dart';
 import 'package:injectable/injectable.dart';
@@ -14,6 +15,7 @@ class HouseShiftingCubit extends BaseViewModel<HouseShiftingState> {
 
   List<HouseSizeModel> historyResponse = [];
   List<FurnitureModel> furnitureResponse = [];
+  List<VehicleModel> vehicleResponse = [];
 
   Future<void> getHouseSize() async {
     emit(GetHouseSizeLoading());
@@ -42,6 +44,21 @@ class HouseShiftingCubit extends BaseViewModel<HouseShiftingState> {
       final failResult = result as Fail;
       final errorMessage = getErrorMessageFromException(failResult.exception);
       emit(GetFurnituresError(errorMessage));
+    }
+  }
+
+  Future<void> getVehicles() async {
+    emit(GetVehiclesLoading());
+
+    final result = await _repository.getVehicles();
+
+    if (result is Success<List<VehicleModel>>) {
+      vehicleResponse = result.data ?? [];
+      emit(GetVehiclesSuccess(vehicleResponse));
+    } else if (result is Fail) {
+      final failResult = result as Fail;
+      final errorMessage = getErrorMessageFromException(failResult.exception);
+      emit(GetVehiclesError(errorMessage));
     }
   }
 }

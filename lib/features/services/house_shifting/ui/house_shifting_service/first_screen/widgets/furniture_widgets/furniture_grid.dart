@@ -1,5 +1,5 @@
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_item.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_item.dart';
 import 'package:flutter/material.dart';
 
 class FurnitureGrid extends StatelessWidget {

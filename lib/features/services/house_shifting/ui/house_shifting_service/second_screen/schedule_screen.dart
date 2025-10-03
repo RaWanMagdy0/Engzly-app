@@ -1,0 +1,117 @@
+import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/core/shared_widgets/custom_botton.dart';
+import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
+import 'package:engzly/core/theming/colors.dart';
+import 'package:engzly/core/theming/fonts.dart';
+import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/states.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/widgets/table_calender_widget.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/widgets/truck_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+class ScheduleScreen extends StatelessWidget {
+  const ScheduleScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<HouseShiftingCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cubit.getVehicles();
+    });
+
+    return CustomScaffoldScreen(
+      title: Text(
+        "Schedule Shifting",
+        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
+      ),
+      leadingIcon:
+          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
+      notificationIcon:
+          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+      onLeadingTap: () {},
+      onNotificationTap: () {},
+      showNotificationDot: true,
+      child: Column(
+        children: [
+          20.verticalSpace,
+          Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TableCalenderWidget()),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Choose Suitable Truck",
+                  style: AppFonts.font20BlackWeight700),
+            ),
+          ),
+          BlocBuilder<HouseShiftingCubit, HouseShiftingState>(
+            buildWhen: (prev, curr) =>
+                curr is GetVehiclesLoading ||
+                curr is GetVehiclesSuccess ||
+                curr is GetVehiclesError,
+            builder: (context, state) {
+              if (state is GetVehiclesLoading) {
+                return SizedBox(
+                  height: 160.h,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    itemCount: 3,
+                    separatorBuilder: (_, __) => 12.horizontalSpace,
+                    itemBuilder: (_, __) => Container(
+                      width: 120.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (state is GetVehiclesSuccess) {
+                final vehicles = state.vehicles;
+                return SizedBox(
+                  height: 160.h,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    itemCount: vehicles.length,
+                    separatorBuilder: (_, __) => 12.horizontalSpace,
+                    itemBuilder: (context, index) {
+                      final vehicle = vehicles[index];
+                      return TruckCard(
+                        imageUrl: vehicle.icon,
+                        title: vehicle.name,
+                        subtitle: "~ ${vehicle.capacity} Ton",
+                        isSelected: index == 0,
+                      );
+                    },
+                  ),
+                );
+              } else if (state is GetVehiclesError) {
+                return Center(child: Text(state.error));
+              }
+              return const SizedBox();
+            },
+          ),
+          60.verticalSpace,
+          CustomButton(
+            borderRadius: 15.r,
+            height: 50.h,
+            width: 300.w,
+            onPressed: () {
+              Navigator.pushNamed(context, RouteName.chooseLocation);
+            },
+            text: "Process",
+            color: ColorsManager.orange,
+            textStyle: AppFonts.font14BWhiteWeight700,
+          ),
+        ],
+      ),
+    );
+  }
+}

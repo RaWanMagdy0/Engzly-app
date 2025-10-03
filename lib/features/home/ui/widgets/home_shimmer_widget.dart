@@ -11,6 +11,29 @@ class HomeShimmerWidgets {
     );
   }
 
+  /// 🔹 شيمر للـ Tabs
+  static Widget buildTabsShimmer() {
+    return SizedBox(
+      height: 40.h,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3,
+        separatorBuilder: (_, __) => 8.horizontalSpace,
+        itemBuilder: (_, __) => shimmerWrapper(
+          Container(
+            width: 80.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(15.r),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 شيمر للـ Offers Images
   static Widget buildOffersShimmer() {
     return SizedBox(
       height: 150.h,
@@ -18,33 +41,61 @@ class HomeShimmerWidgets {
         scrollDirection: Axis.horizontal,
         itemCount: 3,
         separatorBuilder: (_, __) => SizedBox(width: 12.w),
-        itemBuilder: (context, index) => shimmerWrapper(
+        itemBuilder: (_, __) => shimmerWrapper(
           Container(
-            width: 260.w, 
+            width: 260.w,
             height: 150.h,
             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(16.r),
             ),
           ),
-          
         ),
       ),
     );
   }
 
-  static Widget buildServicesShimmer() {
+  /// 🔹 شيمر لعنوان "Other Services"
+  static Widget buildOtherServicesTitleShimmer() {
+    return shimmerWrapper(
+      Container(
+        width: 120.w,
+        height: 20.h,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(6.r),
+        ),
+      ),
+    );
+  }
+
+   static Widget buildServicesShimmer() {
     return SizedBox(
       height: 120.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: 4,
         separatorBuilder: (_, __) => SizedBox(width: 12.w),
-        itemBuilder: (context, index) => shimmerWrapper(
-          CircleAvatar(
-            radius: 35.r,
-            backgroundColor: Colors.grey.shade200,
-          ),
+        itemBuilder: (context, index) => Column(
+          children: [
+            shimmerWrapper(
+              CircleAvatar(
+                radius: 35.r,
+                backgroundColor: Colors.grey.shade200,
+              ),
+            ),
+            6.verticalSpace,
+            shimmerWrapper(
+              Container(
+                width: 60.w,
+                height: 12.h,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

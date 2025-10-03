@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:engzly/core/networking/api/api_constants.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
+import 'package:engzly/features/services/house_shifting/data/models/vehicle_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 part 'house_shifting_api.g.dart';
@@ -17,5 +18,7 @@ abstract class HouseShiftingApiManager {
   Future<List<HouseSizeModel>> getHouseSize(@Header("Authorization") String token);
     @GET(ApiConstants.getFurnitures)
   Future<List<FurnitureModel>> getFurnitures(@Header("Authorization") String token);
+  @GET(ApiConstants.getVehicles)
+  Future<List<VehicleModel>> getVehicles(@Header("Authorization") String token);
 
 }

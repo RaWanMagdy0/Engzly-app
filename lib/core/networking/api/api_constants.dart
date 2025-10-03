@@ -16,7 +16,7 @@ class ApiConstants {
   static const String changePassword = "User/ChangePassword";
 
   static const String selectLocation = "User/addLocation";
-  static const String getLocations = "HouseShifting/UserLocations";
+  static const String getLocations = "User/UserLocations";
 
   // --------------------  Home  -----------------
 
@@ -25,6 +25,7 @@ class ApiConstants {
   static const String getHistory = "User/bookings";
   static const String getHouseSize = "HouseShifting/HouseSize";
   static const String getFurnitures = "HouseShifting/Furnitures";
+  static const String getVehicles = "HouseShifting/Vehicles";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

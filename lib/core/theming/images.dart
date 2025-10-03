@@ -21,4 +21,7 @@ abstract class AppImages {
   static const String loading = "assets/animations/loading_animation.json";
   static const String success = "assets/animations/success_animation.json";
   static const String error = "assets/animations/error_animation.json";
+
+    static const String submitCheck = "assets/animations/submitCheck.json";
+
 }

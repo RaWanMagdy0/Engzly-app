@@ -22,7 +22,10 @@ import 'package:engzly/features/profile/ui/location/my_location/my_location.dart
     show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/house_shifting_screen.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/house_shifting_screen.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_confirmation.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/schedule_screen.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/third_screen/choose_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/onBoarding/onboarding_screen.dart';
@@ -133,13 +136,27 @@ class AppRouter {
           ),
         );
 
-        case RouteName.houseShifting:
+      case RouteName.houseShifting:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<HouseShiftingCubit>(),
             child: HouseShiftingScreen(),
           ),
         );
+      case RouteName.scheduleScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<HouseShiftingCubit>(),
+            child: ScheduleScreen(),
+          ),
+        );
+
+      case RouteName.chooseLocation:
+        return MaterialPageRoute(builder: (_) => const ChooseLocation());
+
+      case RouteName.orderConfirmation:
+        return MaterialPageRoute(builder: (_) => const OrderConfirmation());
+
 
       default:
         return null;

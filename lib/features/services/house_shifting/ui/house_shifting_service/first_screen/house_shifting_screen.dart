@@ -1,3 +1,4 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -5,14 +6,14 @@ import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart' show AppImages;
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/states.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_grid.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_header.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/furniture_widgets/furniture_shimmer.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_header_section.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_option_card.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_option_section.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/house_size_widget/house_size_shimmer.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/widgets/packed_boxes_card.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_grid.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_header.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_shimmer.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_header_section.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_option_card.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_option_section.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_size_shimmer.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/packed_boxes_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -152,7 +153,9 @@ class HouseShiftingScreen extends StatelessWidget {
               borderRadius: 15.r,
               height: 50.h,
               width: 300.w,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, RouteName.scheduleScreen);
+              },
               text: "Procces",
               color: ColorsManager.orange,
               textStyle: AppFonts.font14BWhiteWeight700,

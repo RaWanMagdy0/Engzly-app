@@ -102,13 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              HomeShimmerWidgets.shimmerWrapper(
-                                HomeShimmerWidgets.buildOffersShimmer(),
-                              ),
+                              HomeShimmerWidgets.buildTabsShimmer(),
+                              8.verticalSpace,
+                              HomeShimmerWidgets.buildOffersShimmer(),
                               16.verticalSpace,
-                              HomeShimmerWidgets.shimmerWrapper(
-                                HomeShimmerWidgets.buildServicesShimmer(),
-                              ),
+                              HomeShimmerWidgets.buildServicesShimmer(),
                             ],
                           );
                         } else if (state is HomeDataSuccess) {
@@ -140,13 +138,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           offers[selectedTab].offers[index];
                                       return Image.network(
                                         offer.icon ?? "",
+                                        width: 260.w,
+                                        height: 150.h,
                                         fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) => SizedBox(
-                                          width: 80.w,
-                                          height: 80.h,
-                                          child: Icon(Icons.broken_image,
-                                              size: 32.sp),
-                                        ),
+                                        errorBuilder: (_, __, ___) =>
+                                            Icon(Icons.broken_image),
                                       );
                                     },
                                   ),
@@ -200,35 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildServicesShimmer() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          height: 20.h,
-          width: 150.w,
-          color: Colors.grey[300],
-          margin: EdgeInsets.only(bottom: 8.h),
-        ),
-        SizedBox(
-          height: 120.h,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: 4,
-            separatorBuilder: (_, __) => SizedBox(width: 12.w),
-            itemBuilder: (context, index) => Container(
-              width: 100.w,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

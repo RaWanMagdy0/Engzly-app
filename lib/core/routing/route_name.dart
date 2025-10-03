@@ -16,6 +16,7 @@ class RouteName {
   static const String changePassword = "changePassword";
   static const String addLocation = "addLocation";
   static const String myLocation = "myLocation";
-    static const String houseShifting = "houseShifting";
-
-}
+  static const String houseShifting = "houseShifting";
+  static const String scheduleScreen = "scheduleScreen";
+  static const String chooseLocation = "chooseLocation";
+  static const String orderConfirmation = "orderConfirmation";}
