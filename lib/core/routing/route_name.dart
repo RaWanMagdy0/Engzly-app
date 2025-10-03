@@ -12,4 +12,7 @@ class RouteName {
   static const String editProfile = "editProfile";
   static const String profile = "profile";
   static const String changePassword = "changePassword";
+  static const String contactUs = "contactUs";
+    static const String questions = "questions";
+
 }
