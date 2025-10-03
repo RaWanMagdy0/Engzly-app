@@ -20,3 +20,7 @@ class RouteName {
   static const String scheduleScreen = "scheduleScreen";
   static const String chooseLocation = "chooseLocation";
   static const String orderConfirmation = "orderConfirmation";}
+  static const String contactUs = "contactUs";
+    static const String questions = "questions";
+
+}

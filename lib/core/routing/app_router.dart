@@ -16,6 +16,8 @@ import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/change_password/change_password_screen.dart';
+import 'package:engzly/features/profile/ui/contact_us/contact_us_screen.dart';
+import 'package:engzly/features/profile/ui/contact_us/questions_screen.dart';
 import 'package:engzly/features/profile/ui/edit_profile_screen/edit_profile_screen.dart';
 import 'package:engzly/features/profile/ui/location/add_location/add_location_screen.dart';
 import 'package:engzly/features/profile/ui/location/my_location/my_location.dart'
@@ -135,6 +137,11 @@ class AppRouter {
             child: ChangePasswordScreen(),
           ),
         );
+      case RouteName.contactUs:
+        return MaterialPageRoute(builder: (_) => const ContactUsScreen());
+
+      case RouteName.questions:
+        return MaterialPageRoute(builder: (_) => const QuestionsScreen());
 
       case RouteName.houseShifting:
         return MaterialPageRoute(

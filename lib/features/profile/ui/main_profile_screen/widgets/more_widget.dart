@@ -1,3 +1,4 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,6 +37,12 @@ class MoreWidget extends StatelessWidget {
                   size: 16.sp,
                   color: Colors.black,
                 ),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteName.contactUs,
+                  );
+                },
               ),
               Divider(),
               ListTile(
