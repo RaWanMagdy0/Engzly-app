@@ -52,7 +52,7 @@ class ContactUsScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                children: const [
+                children: [
                   SupportCard(
                     icon: Icons.chat,
                     iconColor: Colors.green,
@@ -76,6 +76,9 @@ class ContactUsScreen extends StatelessWidget {
                     iconColor: Colors.yellow,
                     title: "FAQ",
                     subtitle: "+50 Answers",
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.questions);
+                    },
                   ),
                 ],
               ),
