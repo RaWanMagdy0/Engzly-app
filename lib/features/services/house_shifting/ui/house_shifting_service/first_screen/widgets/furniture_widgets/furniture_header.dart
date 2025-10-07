@@ -1,5 +1,8 @@
 import 'package:engzly/core/theming/fonts.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FurnitureHeader extends StatelessWidget {
@@ -19,20 +22,23 @@ class FurnitureHeader extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        TextButton(
-          style: ButtonStyle(
-            backgroundColor:
-                WidgetStateProperty.all<Color>(Colors.grey.shade100),
-            padding: WidgetStateProperty.all(
-              EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
-            ),
-          ),
-          onPressed: () {},
-          child: Text("$furnituresCount Item  x",
-              style: AppFonts.font20BlackWeight700.copyWith(
-                fontSize: 12.sp,
-              )),
-        ),
+TextButton(
+  onPressed: () {},
+  style: ButtonStyle(
+    backgroundColor: WidgetStateProperty.all(Colors.grey.shade100),
+  ),
+  child: BlocBuilder<HouseShiftingBookingCubit, HouseShiftingBookingState>(
+    builder: (context, state) {
+      final cubit = context.read<HouseShiftingBookingCubit>();
+      final total = cubit.totalItemsCount;
+      return Text(
+        "$total Items",
+        style: AppFonts.font20BlackWeight700.copyWith(fontSize: 12.sp),
+      );
+    },
+  ),
+),
+
       ],
     );
   }

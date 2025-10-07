@@ -1,14 +1,13 @@
 import 'package:engzly/features/history/ui/widgets/card_map.dart';
+import 'package:engzly/features/history/ui/widgets/history_card_shimmer.dart';
+import 'package:engzly/features/history/ui/widgets/history_loading_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../../core/shared_widgets/custom_scaffold.dart';
 import '../../../core/theming/fonts.dart';
 import '../../../core/theming/images.dart';
-
 import 'package:engzly/features/history/logic/cubit.dart';
 import 'package:engzly/features/history/logic/state.dart';
 
@@ -21,11 +20,26 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   late HistoryCubit viewModel;
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     viewModel = context.read<HistoryCubit>();
-    viewModel.getHistory();
+    viewModel.getHistory(pageSize: 5);
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 100) {
+        viewModel.loadMoreHistory();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,10 +51,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
             "History",
             style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
-          leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
-              width: 22.w, height: 22.h),
-          notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h),
+          leadingIcon: SvgPicture.asset(
+            AppImages.categoryIcon,
+            width: 22.w,
+            height: 22.h,
+          ),
+          notificationIcon: Image.asset(
+            AppImages.notificationIcon,
+            width: 28.w,
+            height: 28.h,
+          ),
           onLeadingTap: () {},
           onNotificationTap: () {},
           showNotificationDot: true,
@@ -48,35 +68,41 @@ class _HistoryScreenState extends State<HistoryScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Builder(
               builder: (_) {
-                if (state is HistoryLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is HistorySuccess) {
-                  final historyList = state.history;
+                if (state is HistoryLoading &&
+                    viewModel.historyResponse.isEmpty) {
+                  return const HistoryLoadingList();
+                }
 
-                  if (historyList.isEmpty) {
-                    return const Center(child: Text("No history available"));
-                  }
-                  return ListView.builder(
-                    itemCount: historyList.length,
-                    itemBuilder: (context, index) {
-                      final item = historyList[index];
-                      return ServiceCardMap(
-                        status: item.status,
-                        title: item.title,
-                        date: item.date,
-                        address: item.address,
-                        location: LatLng(
-                          item.lat,
-                          item.lng,
-                        ),
-                      );
-                    },
-                  );
-                } else if (state is HistoryError) {
+                if (viewModel.historyResponse.isEmpty &&
+                    state is! HistoryLoading) {
+                  return const Center(child: Text("No history available"));
+                }
+
+                if (state is HistoryError &&
+                    viewModel.historyResponse.isEmpty) {
                   return Center(child: Text(state.message));
                 }
 
-                return const SizedBox.shrink();
+                return ListView.builder(
+                  controller: _scrollController,
+                  itemCount: viewModel.historyResponse.length +
+                      (viewModel.isLoadingMore && viewModel.hasMoreData
+                          ? 2
+                          : 0),
+                  itemBuilder: (context, index) {
+                    if (index >= viewModel.historyResponse.length) {
+                      return const HistoryCardShimmer();
+                    }
+
+                    final item = viewModel.historyResponse[index];
+                    return HistoryServiceCard(
+                      status: item.status,
+                      serviceName: item.serviceName,
+                      schedule: item.schedule,
+                      totalPrice: item.totalPrice,
+                    );
+                  },
+                );
               },
             ),
           ),

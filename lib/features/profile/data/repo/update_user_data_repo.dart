@@ -20,7 +20,6 @@ class UpdateUserDataRepo {
     return executeApiCall<String>(() async {
       var token = await _getToken();
 
-      /// FormData build
       final formData = FormData.fromMap({
         "CuurentAddress": body.cuurentAddress,
         "PhoneNumber": body.phoneNumber,
@@ -38,6 +37,12 @@ class UpdateUserDataRepo {
     });
   }
 
+  Future<void> revoke() {
+    return executeApiCall<void>(() async {
+      await _profileApiManager.revoke();
+    });
+  }
+  
   Future<String> _getToken() async {
     var token = await TokenManager.getToken();
     if (token == null || token.isEmpty) {

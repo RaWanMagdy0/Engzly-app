@@ -50,6 +50,8 @@ import '../../features/services/house_shifting/data/api_manager/house_shifting_a
     as _i795;
 import '../../features/services/house_shifting/data/repo/house_shifting_repo.dart'
     as _i650;
+import '../../features/services/house_shifting/logic/booking_cubit.dart'
+    as _i37;
 import '../../features/services/house_shifting/logic/cubit.dart' as _i332;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
 import '../helper/local/app_provider.dart' as _i44;
@@ -69,6 +71,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final dioModule = _$DioModule();
     gh.factory<_i777.DioFactory>(() => _i777.DioFactory());
+    gh.factory<_i37.HouseShiftingBookingCubit>(
+        () => _i37.HouseShiftingBookingCubit());
     gh.singleton<_i1040.AppProvider>(() => _i1040.AppProvider());
     gh.singleton<_i44.AppProvider>(() => _i44.AppProvider());
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
@@ -122,8 +126,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i89.UpdateUserDataRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i854.VerifyEmailCubit>(
         () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
-    gh.factory<_i332.HouseShiftingCubit>(
-        () => _i332.HouseShiftingCubit(gh<_i650.HouseShiftingRepo>()));
+    gh.factory<_i332.HouseShiftingCubit>(() => _i332.HouseShiftingCubit(
+          gh<_i650.HouseShiftingRepo>(),
+          gh<_i832.GetLocationsRepo>(),
+        ));
     gh.factory<_i13.ForgetPasswordCubit>(
         () => _i13.ForgetPasswordCubit(gh<_i896.ForgetPasswordRepo>()));
     gh.factory<_i773.ProfileCubit>(() => _i773.ProfileCubit(

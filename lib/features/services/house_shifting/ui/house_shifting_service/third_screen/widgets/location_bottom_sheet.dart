@@ -7,12 +7,14 @@ class LocationBottomSheet extends StatelessWidget {
   final String selectedAddress;
   final String selectedType;
   final Function(String) onTypeChanged;
+  final Function(String) onSelectAddress;
 
   const LocationBottomSheet({
     super.key,
     required this.selectedAddress,
     required this.selectedType,
     required this.onTypeChanged,
+    required this.onSelectAddress,
   });
 
   @override
@@ -29,10 +31,7 @@ class LocationBottomSheet extends StatelessWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
             boxShadow: const [
               BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
-              ),
+                  color: Colors.black12, blurRadius: 8, offset: Offset(0, -2)),
             ],
           ),
           child: ListView(
@@ -40,15 +39,13 @@ class LocationBottomSheet extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.location_on, color: Colors.green),
+                  Icon(Icons.location_on, color: ColorsManager.orange),
                   8.horizontalSpace,
                   Expanded(
                     child: Text(
                       selectedAddress,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
+                          fontWeight: FontWeight.w600, fontSize: 14),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -69,10 +66,10 @@ class LocationBottomSheet extends StatelessWidget {
               24.verticalSpace,
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, RouteName.orderConfirmation);
+                  Navigator.pushNamed(context, RouteName.orderDetails);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.green,
+                  backgroundColor: ColorsManager.orange,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -98,7 +95,7 @@ class LocationBottomSheet extends StatelessWidget {
           CircleAvatar(
             radius: 28,
             backgroundColor:
-                isSelected ? ColorsManager.green : Colors.grey.shade200,
+                isSelected ? ColorsManager.orange : Colors.grey.shade200,
             child: Icon(icon,
                 color: isSelected ? Colors.white : Colors.black, size: 28),
           ),
@@ -108,7 +105,7 @@ class LocationBottomSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: isSelected ? ColorsManager.green : Colors.black,
+              color: isSelected ? ColorsManager.orange : Colors.black,
             ),
           ),
         ],

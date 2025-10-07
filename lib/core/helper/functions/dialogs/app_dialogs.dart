@@ -1,7 +1,10 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
@@ -102,6 +105,7 @@ class AppDialogs {
 
   static void logoutDialog({
     required BuildContext context,
+    required ProfileCubit cubit,
   }) {
     showDialog(
       context: context,
@@ -113,59 +117,54 @@ class AppDialogs {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              15.verticalSpace,
               Text(
                 "LOGOUT",
                 style: AppFonts.font16BlackWeight400
                     .copyWith(fontWeight: FontWeight.w600),
               ),
-              SizedBox(
-                height: 5.h,
-              ),
+              5.verticalSpace,
               Text(
                 "Confirm logout!!",
                 style: AppFonts.font16BlackWeight400
                     .copyWith(fontWeight: FontWeight.w400),
               ),
+              20.verticalSpace,
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(20.w, 45.h),
-                      backgroundColor: ColorsManager.white,
+                      minimumSize: Size(90.w, 45.h),
+                      backgroundColor: ColorsManager.lightGray,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.r),
-                        side: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.w,
-                        ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text(
-                      textAlign: TextAlign.center,
-                      "cancel",
-                      style: AppFonts.font12BWhiteWeight500,
+                      "Cancel",
+                      style: AppFonts.font14BWhiteWeight700
+                          .copyWith(color: Colors.black),
                     ),
                   ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
+                  12.horizontalSpace,
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(20.w, 45.h),
-                      backgroundColor: ColorsManager.white,
+                      minimumSize: Size(90.w, 45.h),
+                      backgroundColor: ColorsManager.orange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.r),
-                        side: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.w,
-                        ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                      cubit.logout();
+                    },
                     child: Text(
-                      textAlign: TextAlign.center,
-                      "logout",
+                      "Logout",
                       style: AppFonts.font14BWhiteWeight700,
                     ),
                   ),

@@ -31,7 +31,7 @@ class SupportCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundColor: iconColor.withOpacity(0.1),
+              backgroundColor: iconColor.withValues(alpha: 0.1),
               radius: 30.r,
               child: Icon(icon, color: iconColor, size: 40.sp),
             ),

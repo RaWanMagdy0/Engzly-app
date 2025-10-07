@@ -17,11 +17,10 @@ class ChangePasswordError extends ProfileState {
   ChangePasswordError(this.error);
 }
 
-
 class UserDataLoading extends ProfileState {}
 
 class UserDataSuccess extends ProfileState {
-final GetUserDataResponseModel user; 
+  final GetUserDataResponseModel user;
   UserDataSuccess(this.user);
 }
 
@@ -30,11 +29,10 @@ class UserDataError extends ProfileState {
   UserDataError(this.error);
 }
 
-
 class UpdateUserDataLoading extends ProfileState {}
 
 class UpdateUserDataSuccess extends ProfileState {
-final String message; 
+  final String message;
   UpdateUserDataSuccess(this.message);
 }
 
@@ -46,7 +44,7 @@ class UpdateUserDataError extends ProfileState {
 class ProfileImagePicked extends ProfileState {}
 
 class SelectLocationSuccess extends ProfileState {
-final String message; 
+  final String message;
   SelectLocationSuccess(this.message);
 }
 
@@ -54,7 +52,6 @@ class SelectLocationError extends ProfileState {
   final String error;
   SelectLocationError(this.error);
 }
-
 
 class GetLocationsLoading extends ProfileState {}
 
@@ -70,3 +67,11 @@ class GetLocationsError extends ProfileState {
 
 
 
+class LogoutLoading extends ProfileState {}
+
+class LogoutSuccess extends ProfileState {}
+
+class LogoutError extends ProfileState {
+  final String message;
+  LogoutError(this.message);
+}

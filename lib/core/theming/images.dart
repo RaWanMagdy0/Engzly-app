@@ -24,4 +24,10 @@ abstract class AppImages {
 
     static const String submitCheck = "assets/animations/submitCheck.json";
 
+  static const String cleaningIcon = "assets/icons/cleaning_icon.png";
+  static const String labourIcon = "assets/icons/labour_icon.png";
+  static const String paintingIcon = "assets/icons/painting_icon.png";
+  static const String vehicleIcon = "assets/icons/vehicle_icon.png";
+
+
 }

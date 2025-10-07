@@ -30,7 +30,8 @@ class LoginForm extends StatelessWidget {
           labelText: "Password",
           controller: passwordController,
           keyBordType: TextInputType.text,
-          validator: (value) => Validators.validatePassword(value),
+          validator: (value) =>
+              Validators.validateNotEmpty(title: "Password", value: value),
         ),
       ],
     );

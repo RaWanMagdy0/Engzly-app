@@ -78,8 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Image.asset(
                     currentData['image']!,
                     key: ValueKey<String>(currentData['image']!),
-                    width: double.infinity,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                   ),
                   Positioned(
                     top: 45.h,

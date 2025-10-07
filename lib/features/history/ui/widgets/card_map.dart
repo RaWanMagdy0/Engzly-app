@@ -1,38 +1,33 @@
+import 'package:engzly/core/theming/fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ServiceCardMap extends StatefulWidget {
+class HistoryServiceCard extends StatelessWidget {
   final String status;
-  final String title;
-  final String date;
-  final String address;
-  final LatLng location;
+  final String serviceName;
+  final String schedule;
+  final double totalPrice;
 
-  const ServiceCardMap({
+  const HistoryServiceCard({
     super.key,
     required this.status,
-    required this.title,
-    required this.date,
-    required this.address,
-    required this.location,
+    required this.serviceName,
+    required this.schedule,
+    required this.totalPrice,
   });
 
-  @override
-  State<ServiceCardMap> createState() => _ServiceCardMapState();
-}
-
-class _ServiceCardMapState extends State<ServiceCardMap> {
-  GoogleMapController? _mapController;
-
   Color getStatusColor() {
-    switch (widget.status) {
-      case "Active":
+    switch (status.toLowerCase()) {
+      case "active":
         return Colors.green;
-      case "Cancelled":
+      case "cancelled":
         return Colors.red;
-      case "Done":
+      case "done":
         return Colors.black;
+      case "pending":
+        return Colors.grey;
       default:
         return Colors.grey;
     }
@@ -40,35 +35,34 @@ class _ServiceCardMapState extends State<ServiceCardMap> {
 
   @override
   Widget build(BuildContext context) {
+    final staticLocation = const LatLng(30.0444, 31.2357);
+
     return Card(
       color: ColorsManager.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 3,
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+      elevation: 4,
+      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.r),
+                  topRight: Radius.circular(16.r),
                 ),
                 child: SizedBox(
-                  height: 150,
+                  height: 150.h,
                   child: GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target: widget.location,
+                      target: staticLocation,
                       zoom: 14,
                     ),
-                    onMapCreated: (controller) {
-                      _mapController = controller;
-                    },
                     markers: {
                       Marker(
                         markerId: const MarkerId("service_location"),
-                        position: widget.location,
+                        position: staticLocation,
                       )
                     },
                     zoomControlsEnabled: false,
@@ -76,48 +70,72 @@ class _ServiceCardMapState extends State<ServiceCardMap> {
                     scrollGesturesEnabled: false,
                     tiltGesturesEnabled: false,
                     rotateGesturesEnabled: false,
+                    zoomGesturesEnabled: false,
+                    mapToolbarEnabled: false,
+                    liteModeEnabled: true,
                   ),
                 ),
               ),
               Positioned(
-                top: 10,
-                left: 10,
+                top: 12.h,
+                left: 10.w,
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
                   decoration: BoxDecoration(
                     color: getStatusColor(),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
-                  child: Text(
-                    widget.status,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
+                  child: Text(status, style: AppFonts.font14BWhiteWeight700),
                 ),
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.title,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Text(widget.date, style: const TextStyle(color: Colors.grey)),
-                const Divider(),
+                Text(serviceName,
+                    style: AppFonts.font20BlackWeight700
+                        .copyWith(fontSize: 16.sp)),
+                4.verticalSpace,
+                Text(
+                  schedule,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14.sp,
+                  ),
+                ),
+                Divider(height: 16.h),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.location_pin,
-                        color: Colors.green, size: 18),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(widget.address,
-                          style: const TextStyle(color: Colors.black54)),
-                    )
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_pin,
+                          color: Colors.green,
+                          size: 18.sp,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          "Service Location",
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "EGP ${totalPrice.toStringAsFixed(0)}",
+                      style: TextStyle(
+                        color: ColorsManager.orange,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
               ],

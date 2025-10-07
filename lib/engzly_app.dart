@@ -7,15 +7,22 @@ import 'core/routing/route_name.dart';
 class EngzlyApp extends StatelessWidget {
   final bool isFirstTime;
   final String? token;
+  final bool rememberMe;
 
-  const EngzlyApp({super.key, required this.isFirstTime, required this.token});
+  const EngzlyApp({
+    super.key,
+    required this.isFirstTime,
+    required this.token,
+    required this.rememberMe,
+  });
 
   @override
   Widget build(BuildContext context) {
     String initialRoute;
+
     if (isFirstTime) {
       initialRoute = RouteName.onBoarding;
-    } else if (token != null && token!.isNotEmpty) {
+    } else if (token != null && token!.isNotEmpty && rememberMe) {
       initialRoute = RouteName.homeLayout;
     } else {
       initialRoute = RouteName.login;

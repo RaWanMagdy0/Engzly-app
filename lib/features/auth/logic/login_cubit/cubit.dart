@@ -13,6 +13,7 @@ class LoginCubit extends BaseViewModel<LoginState> {
   final LoginRepo _loginRepo;
 
   LoginCubit(this._loginRepo) : super(LoginInitial());
+
   Future<void> login({
     required String email,
     required String password,
@@ -26,23 +27,22 @@ class LoginCubit extends BaseViewModel<LoginState> {
 
     if (result is Success<LoginResponseModel>) {
       final response = result.data;
+      final token = response?.token ?? "";
+      final refreshToken = response?.refreshToken ?? "";
 
-      final token = response?.token;
-      await TokenManager.setToken(token: response?.token);
-      await TokenManager.setRefreshToken(token: response?.refreshToken);
+      await TokenManager.setToken(token: token);
+      await TokenManager.setRefreshToken(token: refreshToken);
+      await SecureStorageFactory.writeData(key: 'token', value: token);
 
-      if (rememberMe && token != null && token.isNotEmpty) {
+      if (rememberMe) {
+        await SecureStorageFactory.writeData(key: 'rememberMe', value: 'true');
+        await SecureStorageFactory.writeData(key: 'savedEmail', value: email);
         await SecureStorageFactory.writeData(
-          key: 'token',
-          value: token,
-        );
-        await SecureStorageFactory.writeData(
-          key: 'refreshToken',
-          value: response?.refreshToken ?? "",
-        );
+            key: 'savedPassword', value: password);
       } else {
-        await SecureStorageFactory.deleteData(key: 'token');
-        await SecureStorageFactory.deleteData(key: 'refreshToken');
+        await SecureStorageFactory.writeData(key: 'rememberMe', value: 'false');
+        await SecureStorageFactory.deleteData(key: 'savedEmail');
+        await SecureStorageFactory.deleteData(key: 'savedPassword');
       }
 
       emit(LoginSuccess(response?.username ?? "Logged in successfully"));

@@ -33,14 +33,29 @@ class _ScheduleScreenState extends State<TableCalenderWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        daysOfWeekStyle: DaysOfWeekStyle(
+          weekdayStyle: TextStyle(
+            color: ColorsManager.orange,
+            fontWeight: FontWeight.w700,
+          ),
+          weekendStyle: TextStyle(
+            color: ColorsManager.orange,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         selectedDayPredicate: (day) => isSameDay(day, today),
         onDaySelected: _onDaySelected,
         focusedDay: today,
+        enabledDayPredicate: (day) {
+          final now = DateTime.now();
+          final todayOnly = DateTime(now.year, now.month, now.day);
+          return !day.isBefore(todayOnly);
+        },
         firstDay: DateTime.utc(2010, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
         calendarStyle: CalendarStyle(
           todayDecoration: BoxDecoration(
-            color: ColorsManager.orange.withValues(alpha: 0.6),
+            color: ColorsManager.orange.withValues(alpha: 0.7),
             shape: BoxShape.circle,
           ),
           selectedDecoration: BoxDecoration(

@@ -111,7 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         } else if (state is HomeDataSuccess) {
                           final offers = state.offers;
-                          final services = state.services;
 
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,32 +149,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               ] else
                                 const Text("No offers found"),
                               16.verticalSpace,
-                              if (services.isNotEmpty) ...[
-                                Text("Other Services",
-                                    style:
-                                        AppFonts.font14BWhiteWeight700.copyWith(
-                                      color: Colors.black,
-                                      fontSize: 18.sp,
-                                    )),
-                                8.verticalSpace,
-                                SizedBox(
-                                  height: 120.h,
-                                  child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: services.length,
-                                    separatorBuilder: (_, __) =>
-                                        SizedBox(width: 10.w),
-                                    itemBuilder: (context, index) {
-                                      final service = services[index];
-                                      return OtherServiceCard(
-                                        imageUrl: service.imageUrl,
-                                        title: service.name,
-                                      );
-                                    },
-                                  ),
+                              Text("Other Services",
+                                  style:
+                                      AppFonts.font14BWhiteWeight700.copyWith(
+                                    color: Colors.black,
+                                    fontSize: 18.sp,
+                                  )),
+                              8.verticalSpace,
+                              SizedBox(
+                                height: 120.h,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      OtherServiceCard.staticServices.length,
+                                  separatorBuilder: (_, __) =>
+                                      SizedBox(width: 10.w),
+                                  itemBuilder: (context, index) {
+                                    final service =
+                                        OtherServiceCard.staticServices[index];
+                                    return OtherServiceCard(
+                                      title: service['title'],
+                                      iconPath: service['iconPath'],
+                                      backgroundColor:
+                                          service['backgroundColor'],
+                                    );
+                                  },
                                 ),
-                              ] else
-                                const Text("No services available"),
+                              ),
                             ],
                           );
                         } else if (state is HomeError) {

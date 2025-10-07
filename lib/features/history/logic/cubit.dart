@@ -12,27 +12,54 @@ class HistoryCubit extends BaseViewModel<HistoryState> {
   HistoryCubit(this._repository) : super(HistoryInitial());
 
   List<HistoryResponseModel> historyResponse = [];
+  int currentPage = 1;
+  bool hasMoreData = true;
+  bool isLoadingMore = false;
 
   Future<void> getHistory({
-    int pageNumber = 1,
-    int pageSize = 3,
+    bool loadMore = false,
+    int pageSize = 2,
     String sortDirection = "desc",
   }) async {
-    emit(HistoryLoading());
+    if (loadMore) {
+      if (!hasMoreData || isLoadingMore) return;
+      isLoadingMore = true;
+      currentPage++;
+    } else {
+      emit(HistoryLoading());
+      currentPage = 1;
+      historyResponse.clear();
+      hasMoreData = true;
+    }
 
     final result = await _repository.getUserHistory(
-      pageNumber: pageNumber,
+      pageNumber: currentPage,
       pageSize: pageSize,
       sortDirection: sortDirection,
     );
 
     if (result is Success<List<HistoryResponseModel>>) {
-      historyResponse = result.data ?? [];
-      emit(HistorySuccess(historyResponse));
+      final newItems = result.data ?? [];
+
+      if (newItems.isEmpty || newItems.length < pageSize) {
+        hasMoreData = false;
+      }
+
+      historyResponse.addAll(newItems);
+      emit(HistorySuccess(List.from(historyResponse)));
     } else if (result is Fail) {
+      if (loadMore) {
+        currentPage--;
+      }
       final failResult = result as Fail;
       final errorMessage = getErrorMessageFromException(failResult.exception);
       emit(HistoryError(errorMessage));
     }
+
+    isLoadingMore = false;
+  }
+
+  void loadMoreHistory() {
+    getHistory(loadMore: true);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/vehicle_model.dart';
@@ -41,3 +42,15 @@ class GetVehiclesError extends HouseShiftingState {
   final String error;
   GetVehiclesError(this.error);
 }
+class ConfirmLocationsLoading extends HouseShiftingState {}
+
+class ConfirmLocationsSuccess extends HouseShiftingState {
+  final List<LocationModel> locations;
+  ConfirmLocationsSuccess(this.locations);
+}
+
+class ConfirmLocationsError extends HouseShiftingState {
+  final String message;
+  ConfirmLocationsError(this.message);
+}
+

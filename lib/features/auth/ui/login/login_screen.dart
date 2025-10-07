@@ -26,22 +26,23 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
-      listener: (context, state) => _handelStateChange(state),
+      listener: (context, state) => _handleStateChange(state),
       builder: (context, state) {
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+          resizeToAvoidBottomInset: true,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
-                    100.verticalSpace,
+                    80.verticalSpace,
                     Text(
                       "Let's Sign You In",
                       style: AppFonts.font36BlackWeight700,
-                    ), //AppStr
-                    50.verticalSpace,
+                    ),
+                    20.verticalSpace,
                     LoginForm(
                       emailController: _emailController,
                       passwordController: _passwordController,
@@ -73,54 +74,15 @@ class _LogInScreenState extends State<LogInScreen> {
                             Navigator.pushNamed(
                                 context, RouteName.forgetPassword);
                           },
-                          child: Text("Forget Password?",
-                              style: AppFonts.font13BlackWeight500.copyWith(
-                                  fontSize: 15.sp,
-                                  color: ColorsManager.orange,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorsManager.orange)),
-                        ),
-                      ],
-                    ),
-                    50.verticalSpace,
-                    CustomButton(
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-
-                        if (_formKey.currentState!.validate()) {
-                          context.read<LoginCubit>().login(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                              rememberMe: _isRemember);
-                        }
-                      },
-                      color: ColorsManager.orange,
-                      text: state is LoginLoading ? "Loading..." : "Login",
-                      textStyle: AppFonts.font14BWhiteWeight700,
-                      height: 55.h,
-                      width: 290.w,
-                      borderRadius: 16.r,
-                    ),
-                    10.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Dont Have An Account ?",
-                          style: AppFonts.font13BlackWeight500.copyWith(
-                            fontSize: 15.sp,
+                          child: Text(
+                            "Forget Password?",
+                            style: AppFonts.font13BlackWeight500.copyWith(
+                              fontSize: 15.sp,
+                              color: ColorsManager.orange,
+                              decoration: TextDecoration.underline,
+                              decorationColor: ColorsManager.orange,
+                            ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, RouteName.signUp);
-                          },
-                          child: Text(" Sign Up", //AppStrings.signUpTitle,
-                              style: AppFonts.font13BlackWeight500.copyWith(
-                                  color: ColorsManager.orange,
-                                  fontSize: 15.sp,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorsManager.orange)),
                         ),
                       ],
                     ),
@@ -129,21 +91,80 @@ class _LogInScreenState extends State<LogInScreen> {
               ),
             ),
           ),
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.only(
+              left: 40.w,
+              right: 40.w,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 30.h,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomButton(
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    if (_formKey.currentState!.validate()) {
+                      context.read<LoginCubit>().login(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            rememberMe: _isRemember,
+                          );
+                    }
+                  },
+                  color: ColorsManager.orange,
+                  text: state is LoginLoading ? "Loading..." : "Login",
+                  textStyle: AppFonts.font14BWhiteWeight700,
+                  height: 55.h,
+                  width: double.infinity,
+                  borderRadius: 16.r,
+                ),
+                10.verticalSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't Have An Account?",
+                      style: AppFonts.font13BlackWeight500
+                          .copyWith(fontSize: 15.sp),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, RouteName.signUp);
+                      },
+                      child: Text(
+                        " Sign Up",
+                        style: AppFonts.font13BlackWeight500.copyWith(
+                          color: ColorsManager.orange,
+                          fontSize: 15.sp,
+                          decoration: TextDecoration.underline,
+                          decorationColor: ColorsManager.orange,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
   }
 
-  void _handelStateChange(LoginState state) {
+  void _handleStateChange(LoginState state) {
     if (state is LoginSuccess) {
       AppDialogs.showSuccessDialog(
-          context: context, message: "Login Successfully ");
-      Future.delayed(Duration(seconds: 2), () {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, RouteName.homeLayout);
+          context: context, message: "Login Successfully");
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteName.homeLayout,
+            (route) => false,
+          );
+        }
       });
     } else if (state is LoginError) {
-      AppDialogs.showHideDialog(context);
       AppDialogs.showErrorDialog(
         context: context,
         errorMassage: state.error,
@@ -151,40 +172,3 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 }
-/*************
- *  if (state is LoginLoading) {
-          AppDialogs.showLoading(context: context);
-        } else if (state is LoginSuccess) {
-
-          AppDialogs.showHideDialog(context);
-          AppDialogs.showSuccessDialog(
-            context: context,
-            message: "Login Successfully",
-          );
-
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
-          });
-        } else if (state is LoginError) {
-          AppDialogs.showHideDialog(context);
-          AppDialogs.showErrorDialog(
-            context: context,
-            errorMassage: "incorrect email or password",
-          );
-        }
- */
- /*******
-     *   ScaffoldMessenger.of(context)
-          .showSnackBar(
-            const SnackBar(
-              content: Text("Login Successfully "),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          )
-          .closed
-          .then((_) {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, RouteName.homeLayout);
-      });
-     */

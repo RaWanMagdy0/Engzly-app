@@ -11,7 +11,6 @@ class HomeShimmerWidgets {
     );
   }
 
-  /// 🔹 شيمر للـ Tabs
   static Widget buildTabsShimmer() {
     return SizedBox(
       height: 40.h,
@@ -33,7 +32,6 @@ class HomeShimmerWidgets {
     );
   }
 
-  /// 🔹 شيمر للـ Offers Images
   static Widget buildOffersShimmer() {
     return SizedBox(
       height: 150.h,
@@ -55,7 +53,6 @@ class HomeShimmerWidgets {
     );
   }
 
-  /// 🔹 شيمر لعنوان "Other Services"
   static Widget buildOtherServicesTitleShimmer() {
     return shimmerWrapper(
       Container(

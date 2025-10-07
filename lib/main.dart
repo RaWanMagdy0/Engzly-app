@@ -16,11 +16,14 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
   final String? token = await SecureStorageFactory.readData(key: 'token');
+  final String? rememberMeValue =
+      await SecureStorageFactory.readData(key: 'rememberMe');
+  final bool rememberMe = (rememberMeValue ?? 'false') == 'true';
+  FlutterNativeSplash.remove();
 
   runApp(EngzlyApp(
     isFirstTime: isFirstTime,
     token: token,
+    rememberMe: rememberMe,
   ));
-
-  FlutterNativeSplash.remove();
 }

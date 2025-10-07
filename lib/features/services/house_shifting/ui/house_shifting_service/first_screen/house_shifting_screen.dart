@@ -4,13 +4,13 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart' show AppImages;
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/states.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_grid.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_header.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/furniture_widgets/furniture_shimmer.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_header_section.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_option_card.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_option_section.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_size_shimmer.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/packed_boxes_card.dart';
@@ -70,15 +70,7 @@ class HouseShiftingScreen extends StatelessWidget {
                       if (houseSizes.isEmpty) {
                         return const Center(child: Text("No data available"));
                       }
-                      return HouseOptionSection(
-                        options: houseSizes
-                            .map((item) => HouseOptionCard(
-                                  title: item.name,
-                                  iconUrl: item.icon,
-                                  price: item.price,
-                                ))
-                            .toList(),
-                      );
+                      return HouseOptionSection(options: houseSizes);
                     } else if (state is GetHouseSizeError) {
                       return Center(child: Text(state.error));
                     }
@@ -154,9 +146,26 @@ class HouseShiftingScreen extends StatelessWidget {
               height: 50.h,
               width: 300.w,
               onPressed: () {
+                final selection = context.read<HouseShiftingBookingCubit>();
+
+                if (selection.selectedHouseSize == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please select a house size')),
+                  );
+                  return;
+                }
+
+                if (selection.selectedFurnitureCounts.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Please select at least one furniture')),
+                  );
+                  return;
+                }
+
                 Navigator.pushNamed(context, RouteName.scheduleScreen);
               },
-              text: "Procces",
+              text: "Proceed",
               color: ColorsManager.orange,
               textStyle: AppFonts.font14BWhiteWeight700,
             ),

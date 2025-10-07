@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:engzly/core/di/di.dart';
 import 'package:engzly/core/helper/functions/providers/app_provider.dart';
+import 'package:engzly/core/helper/local/secure_storage.dart';
+import 'package:engzly/core/helper/local/token_manger.dart';
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
 import 'package:engzly/features/profile/data/models/address/add_location_request_body.dart';
@@ -164,6 +166,25 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
       emit(GetLocationsError(errorMessage));
     }
   }
+
+  Future<void> logout() async {
+    emit(LogoutLoading());
+    try {
+      await _updateUserDataRepo.revoke();
+      
+      await TokenManager.deleteToken();
+    //  await TokenManager.clearRefreshToken();
+      await SecureStorageFactory.deleteData(key: 'token');
+      await SecureStorageFactory.deleteData(key: 'rememberMe');
+      await SecureStorageFactory.deleteData(key: 'savedEmail');
+      await SecureStorageFactory.deleteData(key: 'savedPassword');
+      
+      emit(LogoutSuccess());
+    } catch (e) {
+      emit(LogoutError(e.toString()));
+    }
+  }
+
 
   static String fixImageUrl(String? url) {
     if (url == null || url.isEmpty) return "";

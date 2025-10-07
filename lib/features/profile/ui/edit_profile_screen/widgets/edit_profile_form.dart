@@ -33,16 +33,6 @@ class EditProfileForm extends StatelessWidget {
               ),
               15.verticalSpace,
               CustomTextFormField(
-                hintText: "Enter Your Email",
-                labelText: "Email Address",
-                keyBordType: TextInputType.text,
-                controller: viewModel.emailController,
-                readOnly: true,
-                validator: (value) =>
-                    Validators.validateNotEmpty(title: "Email", value: value),
-              ),
-              15.verticalSpace,
-              CustomTextFormField(
                 hintText: "Enter Your Phone Number",
                 labelText: "Phone Number",
                 validator: (value) => Validators.validatePhoneNumber(value),
@@ -60,6 +50,27 @@ class EditProfileForm extends StatelessWidget {
               ),
               15.verticalSpace,
               CustomTextFormField(
+                hintText: "Enter Your Email",
+                labelText: "Email Address",
+                keyBordType: TextInputType.text,
+                controller: viewModel.emailController,
+                readOnly: true,
+                validator: (value) =>
+                    Validators.validateNotEmpty(title: "Email", value: value),
+              ),
+              5.verticalSpace,
+              Padding(
+                padding: EdgeInsets.only(left: 10.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Note: You can't change your email ",
+                      style: AppFonts.font14BOrangeWeight400.copyWith(
+                        color: ColorsManager.red,
+                      )),
+                ),
+              ),
+              25.verticalSpace,
+              /*********  CustomTextFormField(
                 hintText: "**************",
                 labelText: "Password",
                 controller: viewModel.passwordController,
@@ -68,11 +79,11 @@ class EditProfileForm extends StatelessWidget {
                 validator: (value) => null,
                 keyBordType: TextInputType.text,
               ),
-              15.verticalSpace,
+              15.verticalSpace,*/
+
               CustomButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
-                      context, RouteName.changePassword);
+                  Navigator.pushNamed(context, RouteName.changePassword);
                 },
                 text: "Change Password",
                 textStyle: AppFonts.font14BWhiteWeight700

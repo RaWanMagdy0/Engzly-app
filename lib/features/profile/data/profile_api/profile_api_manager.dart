@@ -42,4 +42,6 @@ abstract class ProfileApiManager {
   Future<List<LocationModel>> getLocations(
     @Header("Authorization") String token,
   );
+  @POST(ApiConstants.revoke)
+  Future<void> revoke();
 }

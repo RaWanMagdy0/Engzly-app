@@ -20,36 +20,46 @@ class OfferCard extends StatelessWidget {
     Widget imageWidget;
     if (image.isNotEmpty &&
         (image.startsWith('http') || image.startsWith('https'))) {
-      imageWidget = Image.network(
-        image,
-        width: 80.w,
-        height: 80.h,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => SizedBox(
-          width: 80.w,
-          height: 80.h,
-          child: Icon(Icons.broken_image, size: 32.sp),
+      imageWidget = ClipRRect(
+        borderRadius: BorderRadius.circular(16.r),
+        child: Image.network(
+          image,
+          width: 260.w,
+          height: 150.h,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Container(
+            width: 260.w,
+            height: 150.h,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Icon(Icons.broken_image, size: 48.sp, color: Colors.grey),
+          ),
         ),
       );
     } else if (image.isNotEmpty) {
-      imageWidget = Image.asset(
-        image,
-        width: 80.w,
-        height: 80.h,
-        fit: BoxFit.contain,
+      imageWidget = ClipRRect(
+        borderRadius: BorderRadius.circular(16.r),
+        child: Image.asset(
+          image,
+          width: 260.w,
+          height: 150.h,
+          fit: BoxFit.contain,
+        ),
       );
     } else {
-      imageWidget = SizedBox(
-        width: 80.w,
-        height: 80.h,
-        child: Icon(Icons.image, size: 32.sp),
+      imageWidget = Container(
+        width: 260.w,
+        height: 150.h,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Icon(Icons.image, size: 48.sp, color: Colors.grey),
       );
     }
 
-    return Row(
-      children: [
-        imageWidget,
-      ],
-    );
+    return imageWidget;
   }
 }
