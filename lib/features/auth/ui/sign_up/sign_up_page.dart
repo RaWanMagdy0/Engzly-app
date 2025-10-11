@@ -102,25 +102,3 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 }
-/*************
- *  if (state is LoginLoading) {
-          AppDialogs.showLoading(context: context);
-        } else if (state is LoginSuccess) {
-
-          AppDialogs.showHideDialog(context);
-          AppDialogs.showSuccessDialog(
-            context: context,
-            message: "Login Successfully",
-          );
-
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.pushReplacementNamed(context, PageRouteName.layoutScreen);
-          });
-        } else if (state is LoginError) {
-          AppDialogs.showHideDialog(context);
-          AppDialogs.showErrorDialog(
-            context: context,
-            errorMassage: "incorrect email or password",
-          );
-        }
- */

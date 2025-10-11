@@ -22,23 +22,23 @@ class FurnitureHeader extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-TextButton(
-  onPressed: () {},
-  style: ButtonStyle(
-    backgroundColor: WidgetStateProperty.all(Colors.grey.shade100),
-  ),
-  child: BlocBuilder<HouseShiftingBookingCubit, HouseShiftingBookingState>(
-    builder: (context, state) {
-      final cubit = context.read<HouseShiftingBookingCubit>();
-      final total = cubit.totalItemsCount;
-      return Text(
-        "$total Items",
-        style: AppFonts.font20BlackWeight700.copyWith(fontSize: 12.sp),
-      );
-    },
-  ),
-),
-
+        TextButton(
+          onPressed: () {},
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(Colors.grey.shade100),
+          ),
+          child:
+              BlocBuilder<HouseShiftingBookingCubit, HouseShiftingBookingState>(
+            builder: (context, state) {
+              final cubit = context.read<HouseShiftingBookingCubit>();
+              final total = cubit.totalItemsCount;
+              return Text(
+                "x $total Items",
+                style: AppFonts.font20BlackWeight700.copyWith(fontSize: 12.sp),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

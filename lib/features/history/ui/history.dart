@@ -100,6 +100,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       serviceName: item.serviceName,
                       schedule: item.schedule,
                       totalPrice: item.totalPrice,
+                      locaion: item.locaion,
                     );
                   },
                 );

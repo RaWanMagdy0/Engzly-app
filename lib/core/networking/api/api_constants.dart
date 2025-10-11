@@ -8,8 +8,7 @@ class ApiConstants {
   static const String forgetPassword = "Auth/ForgetPassword";
   static const String verifiEmail = "Auth/ForgetPassVerfication";
   static const String resetPassword = "Auth/ForgetPasschange";
-    static const String revoke = "Auth/revoke";
-
+  static const String revoke = "Auth/revoke";
 
   // --------------------  User  -----------------
 
@@ -28,6 +27,8 @@ class ApiConstants {
   static const String getHouseSize = "HouseShifting/HouseSize";
   static const String getFurnitures = "HouseShifting/Furnitures";
   static const String getVehicles = "HouseShifting/Vehicles";
+  static const String checkPromoCode = "HouseShifting/check-promocode";
+  static const String checkOut = "Booking/HouseShifting";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

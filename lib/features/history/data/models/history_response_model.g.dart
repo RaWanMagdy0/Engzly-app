@@ -14,6 +14,7 @@ HistoryResponseModel _$HistoryResponseModelFromJson(
       schedule: json['schedule'] as String,
       totalPrice: (json['totalPrice'] as num).toDouble(),
       status: json['status'] as String,
+      locaion: json['locaion'] as String,
     );
 
 Map<String, dynamic> _$HistoryResponseModelToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$HistoryResponseModelToJson(
       'schedule': instance.schedule,
       'totalPrice': instance.totalPrice,
       'status': instance.status,
+      'locaion': instance.locaion,
     };

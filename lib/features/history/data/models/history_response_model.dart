@@ -9,6 +9,7 @@ class HistoryResponseModel {
   final String schedule;
   final double totalPrice;
   final String status;
+  final String locaion;
 
   HistoryResponseModel({
     required this.id,
@@ -16,6 +17,7 @@ class HistoryResponseModel {
     required this.schedule,
     required this.totalPrice,
     required this.status,
+    required this.locaion,
   });
 
   factory HistoryResponseModel.fromJson(Map<String, dynamic> json) =>

@@ -1,142 +1,203 @@
-import 'package:engzly/core/theming/colors.dart';
+import 'dart:math' show cos, sin, sqrt, atan2, pi, max, min;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 
-class OrderCardMap extends StatelessWidget {
-  const OrderCardMap({super.key});
+class OrderCardMap extends StatefulWidget {
+  final String? location;
+
+  const OrderCardMap({super.key, this.location});
+
+  @override
+  State<OrderCardMap> createState() => _OrderCardMapState();
+}
+
+class _OrderCardMapState extends State<OrderCardMap> {
+  LatLng? endPoint;
+  late LatLng startPoint;
+  GoogleMapController? mapController;
+  bool isLoading = true;
+
+  static const LatLng octoberStart = LatLng(29.9715, 30.9486); 
+
+  @override
+  void initState() {
+    super.initState();
+    _initMap();
+  }
+
+  Future<void> _initMap() async {
+    try {
+      debugPrint("📍 User address: ${widget.location}");
+
+      startPoint = octoberStart;
+
+      if (widget.location == null ||
+          widget.location!.isEmpty ||
+          widget.location!.trim().length < 3) {
+        setState(() {
+          endPoint = startPoint;
+          isLoading = false;
+        });
+        return;
+      }
+
+      final locations = await locationFromAddress(widget.location!);
+      if (locations.isNotEmpty) {
+        final end = LatLng(locations.first.latitude, locations.first.longitude);
+
+        setState(() {
+          endPoint = end;
+          isLoading = false;
+        });
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _fitMapToBounds();
+        });
+      } else {
+        setState(() {
+          endPoint = startPoint;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint("❌ Error getting coordinates: $e");
+      setState(() {
+        startPoint = octoberStart;
+        endPoint = octoberStart;
+        isLoading = false;
+      });
+    }
+  }
+
+  void _fitMapToBounds() {
+    if (mapController == null || endPoint == null) return;
+
+    LatLngBounds bounds = LatLngBounds(
+      southwest: LatLng(
+        min(startPoint.latitude, endPoint!.latitude),
+        min(startPoint.longitude, endPoint!.longitude),
+      ),
+      northeast: LatLng(
+        max(startPoint.latitude, endPoint!.latitude),
+        max(startPoint.longitude, endPoint!.longitude),
+      ),
+    );
+
+    mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 60));
+  }
 
   @override
   Widget build(BuildContext context) {
-    const startLocation = LatLng(30.0444, 31.2357);
-    const endLocation = LatLng(30.0480, 31.2400);
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-    return Card(
-      color: ColorsManager.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-      elevation: 4,
-      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  topRight: Radius.circular(16.r),
-                ),
-                child: SizedBox(
-                  height: 170.h,
-                  child: GoogleMap(
-                    initialCameraPosition: const CameraPosition(
-                      target: LatLng(30.046, 31.237),
-                      zoom: 14,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId("start"),
-                        position: startLocation,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueYellow),
-                      ),
-                      Marker(
-                        markerId: const MarkerId("end"),
-                        position: endLocation,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueAzure),
-                      ),
-                    },
-                    polylines: {
-                      Polyline(
-                        polylineId: const PolylineId("route"),
-                        color: ColorsManager.orange,
-                        width: 3,
-                        points: [startLocation, endLocation],
-                      ),
-                    },
-                    zoomControlsEnabled: false,
-                    myLocationButtonEnabled: false,
-                    scrollGesturesEnabled: false,
-                    tiltGesturesEnabled: false,
-                    rotateGesturesEnabled: false,
-                    zoomGesturesEnabled: false,
-                    mapToolbarEnabled: false,
-                    liteModeEnabled: true,
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 12.w,
-                top: 12.h,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.r),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2))
-                    ],
-                  ),
-                  child: Text(
-                    "847m",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.all(12.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildLocationRow(
-                  color: Colors.black,
-                  address: "2045 Lodgeville Street, Eagan",
-                ),
-                SizedBox(height: 6.h),
-                _buildLocationRow(
-                  color: Colors.green,
-                  address: "3329 Joyce Street, PA, USA",
-                ),
-              ],
+    if (endPoint == null) {
+      return const Center(child: Text("No map data available"));
+    }
+
+    final markers = <Marker>{
+      Marker(
+        markerId: const MarkerId('start'),
+        position: startPoint,
+        infoWindow: const InfoWindow(title: "Start Point (6th October)"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+      ),
+      Marker(
+        markerId: const MarkerId('end'),
+        position: endPoint!,
+        infoWindow: InfoWindow(title: widget.location ?? "Destination"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+      ),
+    };
+
+    final polyline = Polyline(
+      polylineId: const PolylineId('route'),
+      color: Colors.orange,
+      width: 4,
+      points: [startPoint, endPoint!],
+    );
+
+    final distanceInMeters = _calculateDistanceInMeters(startPoint, endPoint!);
+    final distanceText = distanceInMeters > 1000
+        ? "${(distanceInMeters / 1000).toStringAsFixed(2)} km"
+        : "${distanceInMeters.toStringAsFixed(0)} m";
+
+    return SizedBox(
+      height: 240.h,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition:
+                  CameraPosition(target: startPoint, zoom: 10),
+              markers: markers,
+              polylines: endPoint != startPoint ? {polyline} : {},
+              onMapCreated: (controller) {
+                mapController = controller;
+                if (endPoint != startPoint) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _fitMapToBounds();
+                  });
+                }
+              },
+              zoomControlsEnabled: false,
+              myLocationButtonEnabled: false,
+              scrollGesturesEnabled: true,
+              zoomGesturesEnabled: true,
+              rotateGesturesEnabled: true,
+              tiltGesturesEnabled: true,
+              mapToolbarEnabled: false,
+              liteModeEnabled: false,
+              gestureRecognizers: {
+                Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer()),
+              },
             ),
-          ),
-        ],
+            Positioned(
+              top: 12,
+              right: 12,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.straighten, color: Colors.white, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      distanceText,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildLocationRow({required Color color, required String address}) {
-    return Row(
-      children: [
-        Container(
-          width: 12.w,
-          height: 12.w,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        SizedBox(width: 8.w),
-        Expanded(
-          child: Text(
-            address,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-      ],
-    );
+  double _calculateDistanceInMeters(LatLng start, LatLng end) {
+    const earthRadius = 6371000; 
+    final dLat = (end.latitude - start.latitude) * (pi / 180);
+    final dLon = (end.longitude - start.longitude) * (pi / 180);
+    final a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(start.latitude * pi / 180) *
+            cos(end.latitude * pi / 180) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    return earthRadius * c;
   }
 }

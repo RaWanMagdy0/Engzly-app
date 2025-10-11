@@ -1,5 +1,10 @@
-import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/navigation_helper_booking_cubit.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/order_details.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/third_screen/choose_location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:engzly/core/theming/colors.dart';
 
@@ -8,6 +13,7 @@ class LocationBottomSheet extends StatelessWidget {
   final String selectedType;
   final Function(String) onTypeChanged;
   final Function(String) onSelectAddress;
+  final HouseShiftingBookingCubit bookingCubit;
 
   const LocationBottomSheet({
     super.key,
@@ -15,6 +21,7 @@ class LocationBottomSheet extends StatelessWidget {
     required this.selectedType,
     required this.onTypeChanged,
     required this.onSelectAddress,
+    required this.bookingCubit,
   });
 
   @override
@@ -31,7 +38,10 @@ class LocationBottomSheet extends StatelessWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
             boxShadow: const [
               BoxShadow(
-                  color: Colors.black12, blurRadius: 8, offset: Offset(0, -2)),
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, -2),
+              ),
             ],
           ),
           child: ListView(
@@ -45,7 +55,9 @@ class LocationBottomSheet extends StatelessWidget {
                     child: Text(
                       selectedAddress,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -66,7 +78,8 @@ class LocationBottomSheet extends StatelessWidget {
               24.verticalSpace,
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, RouteName.orderDetails);
+                  bookingCubit.selectLocation(selectedAddress);
+                  navigateWithBookingCubit(context, const OrderDetails());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ColorsManager.orange,

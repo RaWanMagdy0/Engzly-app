@@ -24,8 +24,7 @@ class DioFactory {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         final token = await TokenManager.getToken();
-        debugPrint(
-            "➡️ Request with token: Bearer $token"); // ⬅️ هتشوف التوكن اللي طالع
+        debugPrint("➡️ Request with token: Bearer $token");
         if (token != null && token.isNotEmpty) {
           options.headers["Authorization"] = "Bearer $token";
         }
@@ -92,6 +91,9 @@ class DioFactory {
 
       final response = await dio.post(
         ApiConstants.refreshToken,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
         data: {
           "accessToken": access,
           "refreshToken": refresh,

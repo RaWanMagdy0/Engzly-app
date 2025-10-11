@@ -1,13 +1,16 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_states.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/navigation_helper_booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/states.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/widgets/table_calender_widget.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/widgets/truck_card.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/third_screen/choose_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,18 +32,27 @@ class ScheduleScreen extends StatelessWidget {
         style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
       ),
       leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
+          SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
       notificationIcon:
           Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
-      onLeadingTap: () {},
+      onLeadingTap: () {
+        Navigator.pop(context);
+      },
       onNotificationTap: () {},
       showNotificationDot: true,
       child: Column(
         children: [
           20.verticalSpace,
           Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TableCalenderWidget()),
+            padding: const EdgeInsets.all(16.0),
+            child: TableCalenderWidget(
+              onDateSelected: (selectedDate) {
+                context
+                    .read<HouseShiftingBookingCubit>()
+                    .selectDate(selectedDate);
+              },
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Align(
@@ -83,11 +95,28 @@ class ScheduleScreen extends StatelessWidget {
                     separatorBuilder: (_, __) => 12.horizontalSpace,
                     itemBuilder: (context, index) {
                       final vehicle = vehicles[index];
-                      return TruckCard(
-                        imageUrl: vehicle.icon,
-                        title: vehicle.name,
-                        subtitle: "~ ${vehicle.capacity} Ton",
-                        isSelected: index == 0,
+                      return GestureDetector(
+                        onTap: () {
+                          context
+                              .read<HouseShiftingBookingCubit>()
+                              .selectVehicle(
+                                  vehicle.id, vehicle.name, vehicle.price);
+                        },
+                        child: BlocBuilder<HouseShiftingBookingCubit,
+                            HouseShiftingBookingState>(
+                          builder: (context, bookingState) {
+                            final isSelected = context
+                                    .read<HouseShiftingBookingCubit>()
+                                    .selectedVehicleId ==
+                                vehicle.id;
+                            return TruckCard(
+                              imageUrl: vehicle.icon,
+                              title: vehicle.name,
+                              subtitle: "~ ${vehicle.capacity} Ton",
+                              isSelected: isSelected,
+                            );
+                          },
+                        ),
                       );
                     },
                   ),
@@ -104,7 +133,23 @@ class ScheduleScreen extends StatelessWidget {
             height: 50.h,
             width: 300.w,
             onPressed: () {
-              Navigator.pushNamed(context, RouteName.chooseLocation);
+              final bookingCubit = context.read<HouseShiftingBookingCubit>();
+
+              if (bookingCubit.selectedDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please select the day first')),
+                );
+                return;
+              }
+
+              if (bookingCubit.selectedVehicleId == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please select a truck')),
+                );
+                return;
+              }
+
+              navigateWithBookingCubit(context, const ChooseLocation());
             },
             text: "Process",
             color: ColorsManager.orange,

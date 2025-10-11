@@ -1,4 +1,5 @@
 import 'package:engzly/core/theming/colors.dart';
+import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_states.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,12 @@ import 'package:engzly/features/services/house_shifting/data/models/house_size_m
 
 class HouseOptionCard extends StatelessWidget {
   final HouseSizeModel houseSize;
+  final int houseSizePrice;
 
   const HouseOptionCard({
     super.key,
     required this.houseSize,
+    required this.houseSizePrice,
   });
 
   @override
@@ -22,7 +25,7 @@ class HouseOptionCard extends StatelessWidget {
         final isSelected = cubit.selectedHouseSize?.id == houseSize.id;
 
         return GestureDetector(
-          onTap: () => cubit.selectHouseSize(houseSize),
+          onTap: () => cubit.selectHouseSize(houseSize, houseSizePrice),
           child: Container(
             height: 140.h,
             width: 110.w,
@@ -40,19 +43,13 @@ class HouseOptionCard extends StatelessWidget {
                 Image.network(
                   houseSize.icon,
                   height: 70.h,
-                  width: 70.w,
+                  width: double.infinity,
                   fit: BoxFit.contain,
                 ),
                 8.verticalSpace,
-                Text(
-                  houseSize.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
-                ),
+                Text(houseSize.name,
+                    textAlign: TextAlign.center,
+                    style: AppFonts.font13BlackWeight500),
               ],
             ),
           ),

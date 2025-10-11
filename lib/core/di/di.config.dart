@@ -71,8 +71,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final dioModule = _$DioModule();
     gh.factory<_i777.DioFactory>(() => _i777.DioFactory());
-    gh.factory<_i37.HouseShiftingBookingCubit>(
-        () => _i37.HouseShiftingBookingCubit());
     gh.singleton<_i1040.AppProvider>(() => _i1040.AppProvider());
     gh.singleton<_i44.AppProvider>(() => _i44.AppProvider());
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
@@ -130,6 +128,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i650.HouseShiftingRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
+    gh.factory<_i37.HouseShiftingBookingCubit>(
+        () => _i37.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(
         () => _i13.ForgetPasswordCubit(gh<_i896.ForgetPasswordRepo>()));
     gh.factory<_i773.ProfileCubit>(() => _i773.ProfileCubit(

@@ -1,4 +1,5 @@
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/states.dart';
 import 'package:flutter/material.dart';
@@ -57,10 +58,13 @@ class _ChooseLocationState extends State<ChooseLocation> {
             "Confirm Location",
             style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
-          leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
-              width: 22.w, height: 22.h),
+          leadingIcon:
+              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
           notificationIcon: Image.asset(AppImages.notificationIcon,
               width: 28.w, height: 28.h),
+          onLeadingTap: () {
+            Navigator.pop(context);
+          },
           child: Stack(
             children: [
               if (state is ConfirmLocationsLoading)
@@ -98,6 +102,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
                     await _moveToSavedLocation(type, locations);
                   },
                   onSelectAddress: (_) {},
+                  bookingCubit: context.read<HouseShiftingBookingCubit>(),
                 ),
             ],
           ),

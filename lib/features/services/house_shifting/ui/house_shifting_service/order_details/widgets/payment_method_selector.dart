@@ -1,3 +1,4 @@
+import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,7 +24,7 @@ class PaymentMethodSelector extends StatelessWidget {
             onTap: () => onMethodChanged('online'),
           ),
         ),
-        SizedBox(width: 16.w),
+        12.horizontalSpace,
         Expanded(
           child: _PaymentMethodOption(
             icon: Icons.account_balance_wallet_outlined,
@@ -54,54 +55,69 @@ class _PaymentMethodOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: 70.w,
-                height: 70.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Icon(
-                  icon,
-                  color: isSelected ? Colors.white : Colors.grey.shade600,
-                  size: 32.sp,
-                ),
-              ),
-              if (isSelected)
-                Positioned(
-                  top: -2,
-                  right: -2,
-                  child: Container(
-                    width: 24.w,
-                    height: 24.h,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF6B35),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 14.sp,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.r),
+            border: Border.all(
+              color: Colors.transparent,
+              width: 2.w,
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 3))
+            ]),
+        child: Stack(
+          alignment: Alignment.center,
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 10.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    size: 36.sp,
+                    color: isSelected
+                        ? Colors.black
+                        : Colors.grey.withOpacity(0.5),
+                  ),
+                  10.verticalSpace,
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.black : Colors.grey.shade500,
                     ),
                   ),
-                ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
+                ],
+              ),
             ),
-          ),
-        ],
+            if (isSelected)
+              Positioned(
+                top: 10.h,
+                right: 12.w,
+                child: Container(
+                  width: 22.w,
+                  height: 22.h,
+                  decoration: BoxDecoration(
+                    color: ColorsManager.orange,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2.w),
+                  ),
+                  child: Icon(
+                    Icons.check,
+                    size: 14.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

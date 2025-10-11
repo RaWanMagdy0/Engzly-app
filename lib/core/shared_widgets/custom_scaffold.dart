@@ -27,6 +27,7 @@ class CustomScaffoldScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
         title: title,

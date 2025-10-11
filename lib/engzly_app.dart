@@ -2,6 +2,7 @@ import 'package:engzly/core/routing/app_router.dart';
 import 'package:engzly/core/theming/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'core/routing/route_name.dart';
 
 class EngzlyApp extends StatelessWidget {
@@ -18,6 +19,7 @@ class EngzlyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     String initialRoute;
 
     if (isFirstTime) {

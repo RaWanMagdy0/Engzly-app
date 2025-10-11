@@ -167,49 +167,33 @@ class AppRouter {
           ),
         );
       case RouteName.chooseLocation:
+        return MaterialPageRoute(builder: (_) => const ChooseLocation());
+
+      case RouteName.orderDetails:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => getIt<HouseShiftingCubit>(),
-            child: ChooseLocation(),
+            create: (context) => getIt<HouseShiftingBookingCubit>(),
+            child: OrderDetails(),
           ),
         );
       case RouteName.orderConfirmation:
-        return MaterialPageRoute(builder: (_) => const OrderConfirmation());
-      case RouteName.orderDetails:
-        return MaterialPageRoute(builder: (_) => const OrderDetails());
+        return MaterialPageRoute(
+         builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<ProfileCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+            ],
+            child: const OrderConfirmation(),
+          ),
+        );
 
 /***********
  * 
 
-case RouteName.scheduleScreen:
-  return MaterialPageRoute(
-    builder: (context) => MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: context.read<HouseShiftingCubit>(),
-        ),
-        BlocProvider.value(
-          value: context.read<HouseShiftingSelectionCubit>(),
-        ),
-      ],
-      child: const ScheduleScreen(),
-    ),
-  );
-
-case RouteName.chooseLocation:
-  return MaterialPageRoute(
-    builder: (context) => MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: context.read<HouseShiftingCubit>(),
-        ),
-        BlocProvider.value(
-          value: context.read<HouseShiftingSelectionCubit>(),
-        ),
-      ],
-      child: const ChooseLocation(),
-    ),
-  );
 
 case RouteName.orderDetails:
   return MaterialPageRoute(

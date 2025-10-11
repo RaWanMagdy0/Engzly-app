@@ -15,7 +15,6 @@ class HistoryCardShimmer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Map shimmer
           Stack(
             children: [
               Shimmer.fromColors(
@@ -55,7 +54,6 @@ class HistoryCardShimmer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Service name shimmer
                 Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
@@ -69,7 +67,6 @@ class HistoryCardShimmer extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8.h),
-                // Schedule shimmer
                 Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
@@ -84,7 +81,6 @@ class HistoryCardShimmer extends StatelessWidget {
                 ),
                 SizedBox(height: 8.h),
                 Divider(height: 16.h),
-                // Location and price shimmer
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

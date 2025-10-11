@@ -16,7 +16,10 @@ class HouseOptionSection extends StatelessWidget {
         children: options.map((item) {
           return Padding(
             padding: EdgeInsets.only(right: 9.0.w),
-            child: HouseOptionCard(houseSize: item),
+            child: HouseOptionCard(
+              houseSize: item,
+              houseSizePrice: item.price ,
+            ),
           );
         }).toList(),
       ),

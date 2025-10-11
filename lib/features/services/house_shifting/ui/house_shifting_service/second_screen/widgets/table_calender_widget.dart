@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class TableCalenderWidget extends StatefulWidget {
-  const TableCalenderWidget({super.key});
+  final Function(DateTime)? onDateSelected;
+
+  const TableCalenderWidget({super.key, this.onDateSelected});
 
   @override
   State<TableCalenderWidget> createState() => _ScheduleScreenState();
@@ -16,8 +18,8 @@ class _ScheduleScreenState extends State<TableCalenderWidget> {
     setState(() {
       today = day;
     });
+    widget.onDateSelected?.call(day);
   }
-
   @override
   Widget build(BuildContext context) {
     return TableCalendar(

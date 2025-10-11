@@ -1,4 +1,5 @@
 import 'package:engzly/core/helper/functions/validators/validators.dart';
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
@@ -54,6 +55,32 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
                 Validators.validateNotEmpty(title: "Address", value: value),
           ),
           15.verticalSpace,
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  hintText: "Zip Code",
+                  labelText: "Zip Code",
+                  validator: (value) => Validators.validateNotEmpty(
+                      title: "Zip Code", value: value),
+                  keyBordType: TextInputType.phone,
+                  controller: viewModel.zipCodeController,
+                ),
+              ),
+              15.horizontalSpace,
+              Expanded(
+                child: CustomTextFormField(
+                  hintText: "City",
+                  labelText: "City",
+                  keyBordType: TextInputType.text,
+                  validator: (value) =>
+                      Validators.validateNotEmpty(title: "City", value: value),
+                  controller: viewModel.stateController,
+                ),
+              ),
+            ],
+          ),
+          15.verticalSpace,
           CustomTextFormField(
             hintText: "Enter Your Phone Number",
             labelText: "Phone Number",
@@ -106,6 +133,30 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             height: 50.h,
             width: 290.w,
             borderRadius: 16.r,
+          ),
+          5.verticalSpace,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Already Have An Account?",
+                style: AppFonts.font13BlackWeight500.copyWith(fontSize: 15.sp),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.login);
+                },
+                child: Text(
+                  " Login ",
+                  style: AppFonts.font13BlackWeight500.copyWith(
+                    color: ColorsManager.orange,
+                    fontSize: 15.sp,
+                    decoration: TextDecoration.underline,
+                    decorationColor: ColorsManager.orange,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -3,23 +3,71 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
 
-class HistoryServiceCard extends StatelessWidget {
+class HistoryServiceCard extends StatefulWidget {
   final String status;
   final String serviceName;
   final String schedule;
   final double totalPrice;
-
+  final String locaion;
   const HistoryServiceCard({
     super.key,
     required this.status,
     required this.serviceName,
     required this.schedule,
     required this.totalPrice,
+    required this.locaion,
   });
 
+  @override
+  State<HistoryServiceCard> createState() => _HistoryServiceCardState();
+}
+
+class _HistoryServiceCardState extends State<HistoryServiceCard> {
+  LatLng? locationPoint;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getLocationCoordinates();
+  }
+
+  Future<void> _getLocationCoordinates() async {
+    try {
+      if (widget.locaion.isEmpty) {
+        setState(() {
+          locationPoint = const LatLng(30.0444, 31.2357);
+          isLoading = false;
+        });
+        return;
+      }
+
+      final locations = await locationFromAddress(widget.locaion);
+      if (locations.isNotEmpty) {
+        setState(() {
+          locationPoint =
+              LatLng(locations.first.latitude, locations.first.longitude);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          locationPoint = const LatLng(30.0444, 31.2357);
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint(" Error getting coordinates for ${widget.locaion}: $e");
+      setState(() {
+        locationPoint = const LatLng(30.0444, 31.2357);
+        isLoading = false;
+      });
+    }
+  }
+
   Color getStatusColor() {
-    switch (status.toLowerCase()) {
+    switch (widget.status.toLowerCase()) {
       case "active":
         return Colors.green;
       case "cancelled":
@@ -35,8 +83,6 @@ class HistoryServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final staticLocation = const LatLng(30.0444, 31.2357);
-
     return Card(
       color: ColorsManager.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
@@ -45,63 +91,67 @@ class HistoryServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  topRight: Radius.circular(16.r),
-                ),
-                child: SizedBox(
-                  height: 150.h,
-                  child: GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: staticLocation,
-                      zoom: 14,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId("service_location"),
-                        position: staticLocation,
-                      )
-                    },
-                    zoomControlsEnabled: false,
-                    myLocationButtonEnabled: false,
-                    scrollGesturesEnabled: false,
-                    tiltGesturesEnabled: false,
-                    rotateGesturesEnabled: false,
-                    zoomGesturesEnabled: false,
-                    mapToolbarEnabled: false,
-                    liteModeEnabled: true,
+          SizedBox(
+            height: 150.h,
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.r),
+                          topRight: Radius.circular(16.r),
+                        ),
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: locationPoint!,
+                            zoom: 14,
+                          ),
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId("service_location"),
+                              position: locationPoint!,
+                              infoWindow: InfoWindow(title: widget.locaion),
+                            )
+                          },
+                          zoomControlsEnabled: false,
+                          myLocationButtonEnabled: false,
+                          scrollGesturesEnabled: false,
+                          tiltGesturesEnabled: false,
+                          rotateGesturesEnabled: false,
+                          zoomGesturesEnabled: false,
+                          mapToolbarEnabled: false,
+                          liteModeEnabled: true,
+                        ),
+                      ),
+                      Positioned(
+                        top: 12.h,
+                        left: 10.w,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 12.w),
+                          decoration: BoxDecoration(
+                            color: getStatusColor(),
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          child: Text(widget.status,
+                              style: AppFonts.font14BWhiteWeight700),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              Positioned(
-                top: 12.h,
-                left: 10.w,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-                  decoration: BoxDecoration(
-                    color: getStatusColor(),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(status, style: AppFonts.font14BWhiteWeight700),
-                ),
-              ),
-            ],
           ),
           Padding(
             padding: EdgeInsets.all(12.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(serviceName,
+                Text(widget.serviceName,
                     style: AppFonts.font20BlackWeight700
                         .copyWith(fontSize: 16.sp)),
                 4.verticalSpace,
                 Text(
-                  schedule,
+                  widget.schedule,
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14.sp,
@@ -109,31 +159,20 @@ class HistoryServiceCard extends StatelessWidget {
                 ),
                 Divider(height: 16.h),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_pin,
-                          color: Colors.green,
-                          size: 18.sp,
+                    Icon(Icons.location_pin,
+                        color: ColorsManager.green, size: 20.sp),
+                    SizedBox(width: 6.w),
+                    Expanded(
+                      child: Text(
+                        widget.locaion,
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 14.sp,
                         ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          "Service Location",
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "EGP ${totalPrice.toStringAsFixed(0)}",
-                      style: TextStyle(
-                        color: ColorsManager.orange,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
                     ),
                   ],

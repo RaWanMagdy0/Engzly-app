@@ -12,6 +12,8 @@ abstract class AppImages {
   static const String whiteHomeIcon = "assets/icons/white_home_icon.svg";
   static const String whiteOffersIcon = "assets/icons/white_offers_icon.svg";
   static const String whiteProfileIcon = "assets/icons/white_profile_icon.svg";
+    static const String backArrow = "assets/icons/arrow-left.svg";
+
 
   static const String notificationIcon = "assets/icons/notification_icon.png";
   static const String categoryIcon = "assets/icons/category_icon.svg";
