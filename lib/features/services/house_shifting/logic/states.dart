@@ -1,7 +1,6 @@
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
-import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
 import 'package:engzly/features/services/house_shifting/data/models/vehicle_model.dart';
 
 abstract class HouseShiftingState {}

@@ -83,7 +83,7 @@ class _PaymentMethodOption extends StatelessWidget {
                     size: 36.sp,
                     color: isSelected
                         ? Colors.black
-                        : Colors.grey.withOpacity(0.5),
+                        : Colors.grey.withValues(alpha:0.5),
                   ),
                   10.verticalSpace,
                   Text(

@@ -5,7 +5,6 @@ import 'package:engzly/features/onBoarding/widgets/indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../core/routing/route_name.dart';
 import '../../../core/theming/images.dart';
 

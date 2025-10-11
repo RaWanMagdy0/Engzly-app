@@ -23,7 +23,7 @@ class OrderItemCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: backgroundColor.withOpacity(0.1),
+        color: backgroundColor.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';

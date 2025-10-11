@@ -273,19 +273,11 @@ class _OrderDetailsState extends State<OrderDetails>
       await Stripe.instance.presentPaymentSheet();
 
       if (context.mounted) {
-        const snackBar = SnackBar(
-          content: Text(' Payment successful!'),
-          duration: Duration(seconds: 2),
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RouteName.orderConfirmation,
+          (route) => false,
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        await Future.delayed(snackBar.duration);
-        if (context.mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            RouteName.orderConfirmation,
-            (route) => false,
-          );
-        }
       }
     } on StripeException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

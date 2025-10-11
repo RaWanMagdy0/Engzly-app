@@ -11,6 +11,7 @@ class BookingResponse {
   @JsonKey(defaultValue: '')
   final String message;
   
+  // ignore: deprecated_member_use
   @JsonKey(nullable: true)
   final BookingData? data;
   
@@ -26,17 +27,11 @@ class BookingResponse {
 
   factory BookingResponse.fromJson(Map<String, dynamic> json) {
     try {
-      print('🔍 Parsing BookingResponse from: $json');
       final response = _$BookingResponseFromJson(json);
-      print('✅ BookingResponse parsed successfully');
-      print('🔑 Has data: ${response.data != null}');
       if (response.data != null) {
-        print('🔑 Client Secret: ${response.data!.clientSecret}');
       }
       return response;
-    } catch (e, stackTrace) {
-      print('❌ Error in BookingResponse.fromJson: $e');
-      print('📍 Stack trace: $stackTrace');
+    } catch (e) {
       rethrow;
     }
   }

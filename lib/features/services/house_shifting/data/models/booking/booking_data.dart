@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:json_annotation/json_annotation.dart';
 part 'booking_data.g.dart';
 
@@ -20,14 +22,9 @@ class BookingData {
 
   factory BookingData.fromJson(Map<String, dynamic> json) {
     try {
-      print('🔍 Parsing BookingData from: $json');
       final data = _$BookingDataFromJson(json);
-      print('✅ BookingData parsed successfully');
-      print('🔑 Client Secret: ${data.clientSecret}');
       return data;
-    } catch (e, stackTrace) {
-      print('❌ Error in BookingData.fromJson: $e');
-      print('📍 Stack trace: $stackTrace');
+    } catch (e) {
       rethrow;
     }
   }
