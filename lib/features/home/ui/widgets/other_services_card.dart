@@ -6,12 +6,14 @@ class OtherServiceCard extends StatelessWidget {
   final String title;
   final String iconPath;
   final Color backgroundColor;
+  final VoidCallback? onTap;
 
   const OtherServiceCard({
     super.key,
     required this.title,
     required this.iconPath,
     required this.backgroundColor,
+    required this.onTap
   });
 
   static final List<Map<String, dynamic>> staticServices = [
@@ -41,16 +43,19 @@ class OtherServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          width: 75.w,
-          height: 75.h,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            shape: BoxShape.circle,
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(12.w),
-            child: _buildIcon(),
+        InkWell(
+          onTap: onTap,
+          child: Container(
+            width: 75.w,
+            height: 75.h,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              shape: BoxShape.circle,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(12.w),
+              child: _buildIcon(),
+            ),
           ),
         ),
         5.verticalSpace,

@@ -38,7 +38,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final phoneNumber = "01048733684";
-       // final selectedDate = bookingCubit.selectedDate;
+        // final selectedDate = bookingCubit.selectedDate;
 
         return CustomScaffoldScreen(
           title: Text(
@@ -60,7 +60,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 SizedBox(
                   height: 300.h,
                   width: 200.w,
-                  child: Lottie.asset(AppImages.submitCheck),
+                  child: Lottie.asset(AppImages.houseShiftingSubmitCheck),
                 ),
                 Text(
                   "Order Placed",

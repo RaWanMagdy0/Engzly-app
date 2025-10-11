@@ -3,6 +3,7 @@ import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
+import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/auth/logic/forget_password/verify_email/cubit.dart';
 import 'package:engzly/features/auth/logic/forget_password/verify_email/states.dart';
 import 'package:flutter/material.dart';
@@ -163,6 +164,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       );
     } else if (state is ResendSuccessState) {
       AppDialogs.showSuccessDialog(
+
+        
+
         context: context,
         message: "Resend OTP to your email.\n Please check your Email",
       );

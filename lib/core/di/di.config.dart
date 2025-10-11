@@ -46,6 +46,10 @@ import '../../features/profile/data/repo/get_user_data_repo.dart' as _i374;
 import '../../features/profile/data/repo/location_repo.dart' as _i807;
 import '../../features/profile/data/repo/update_user_data_repo.dart' as _i89;
 import '../../features/profile/logic/cubit.dart' as _i773;
+import '../../features/services/cleaning/data/api_manager/cleaning_api_manager.dart'
+    as _i502;
+import '../../features/services/cleaning/data/repo/cleaning_repo.dart' as _i783;
+import '../../features/services/cleaning/logic/booking_cubit.dart' as _i521;
 import '../../features/services/house_shifting/data/api_manager/house_shifting_api.dart'
     as _i795;
 import '../../features/services/house_shifting/data/repo/house_shifting_repo.dart'
@@ -82,6 +86,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i224.HomeApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i113.ProfileApiManager>(
         () => _i113.ProfileApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i502.CleaningApiManager>(
+        () => _i502.CleaningApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i795.HouseShiftingApiManager>(
         () => _i795.HouseShiftingApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
@@ -124,10 +130,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i89.UpdateUserDataRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i854.VerifyEmailCubit>(
         () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
+    gh.factory<_i783.CleaningRepo>(
+        () => _i783.CleaningRepo(gh<_i502.CleaningApiManager>()));
     gh.factory<_i332.HouseShiftingCubit>(() => _i332.HouseShiftingCubit(
           gh<_i650.HouseShiftingRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
+    gh.factory<_i521.HouseShiftingBookingCubit>(
+        () => _i521.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i37.HouseShiftingBookingCubit>(
         () => _i37.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(

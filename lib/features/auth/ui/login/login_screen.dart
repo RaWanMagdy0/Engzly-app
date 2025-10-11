@@ -3,6 +3,7 @@ import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
+import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/login_cubit/states.dart';
 import 'package:engzly/features/auth/ui/login/widgets/login_form.dart';
@@ -154,7 +155,8 @@ class _LogInScreenState extends State<LogInScreen> {
   void _handleStateChange(LoginState state) {
     if (state is LoginSuccess) {
       AppDialogs.showSuccessDialog(
-          context: context, message: "Login Successfully");
+          context: context, message: "Login Successfully",    
+);
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
           Navigator.pushNamedAndRemoveUntil(

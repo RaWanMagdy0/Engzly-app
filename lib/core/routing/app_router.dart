@@ -23,6 +23,11 @@ import 'package:engzly/features/profile/ui/location/add_location/add_location_sc
 import 'package:engzly/features/profile/ui/location/my_location/my_location.dart'
     show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/cleaning_order_confirmation.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/cleaning_screen.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/second_screen/cleaning_schedule_screen.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/third_screen/cleaning_choose_location.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/house_shifting_screen.dart';
@@ -178,7 +183,7 @@ class AppRouter {
         );
       case RouteName.orderConfirmation:
         return MaterialPageRoute(
-         builder: (context) => MultiBlocProvider(
+          builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => getIt<ProfileCubit>(),
@@ -191,36 +196,76 @@ class AppRouter {
           ),
         );
 
-/***********
- * 
-
-
-case RouteName.orderDetails:
-  return MaterialPageRoute(
-    builder: (context) => MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: context.read<HouseShiftingSelectionCubit>(),
-        ),
-      ],
-      child: const OrderDetails(),
-    ),
-  );
-
-case RouteName.orderConfirmation:
-  return MaterialPageRoute(
-    builder: (context) => MultiBlocProvider(
-      providers: [
-        BlocProvider.value(
-          value: context.read<HouseShiftingSelectionCubit>(),
-        ),
-      ],
-      child: const OrderConfirmation(),
-    ),
-  );
-
- * 
- */
+      case RouteName.cleaning:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+            ],
+            child: const CleaningScreen(),
+          ),
+        );
+      case RouteName.cleaningSchedule:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+            ],
+            child: const CleaningScheduleScreen(),
+          ),
+        );
+      case RouteName.cleaningLocation:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+            ],
+            child: const CleaningChooseLocation(),
+          ),
+        );
+      case RouteName.cleaningOrderDetails:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+            ],
+            child: const CleaningOrderDetails(),
+          ),
+        );
+      case RouteName.cleaningOrderConfirmation:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+            ],
+            child: const CleaningOrderConfirmation(),
+          ),
+        );
       default:
         return null;
     }

@@ -61,6 +61,7 @@ class AppDialogs {
   static void showSuccessDialog({
     required BuildContext context,
     required String message,
+
     VoidCallback? whenAnimationFinished,
   }) {
     showDialog(

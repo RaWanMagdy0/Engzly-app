@@ -1,3 +1,4 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
@@ -172,6 +173,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       iconPath: service['iconPath'],
                                       backgroundColor:
                                           service['backgroundColor'],
+                                      onTap: () {
+                                        switch (service['title']) {
+                                          case 'Cleaning':
+                                            Navigator.pushNamed(
+                                                context, RouteName.cleaning);
+                                            break;
+
+                                          default:
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content:
+                                                      Text('Coming soon!')),
+                                            );
+                                        }
+                                      },
                                     );
                                   },
                                 ),

@@ -92,9 +92,9 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     } else if (state is RegisterSuccess) {
       AppDialogs.showSuccessDialog(
-        context: context,
-        message: state.message,
-      );
+          context: context,
+          message: state.message,
+        );
 
       Future.delayed(Duration(seconds: 2), () {
         Navigator.pushReplacementNamed(context, RouteName.emailConfirmation);
