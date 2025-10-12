@@ -6,16 +6,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 
-class OrderCardMap extends StatefulWidget {
+class CleaningOrderMap extends StatefulWidget {
   final String? location;
 
-  const OrderCardMap({super.key, this.location});
+  const CleaningOrderMap({super.key, this.location});
 
   @override
-  State<OrderCardMap> createState() => _OrderCardMapState();
+  State<CleaningOrderMap> createState() => _CleaningOrderMap();
 }
 
-class _OrderCardMapState extends State<OrderCardMap> {
+class _CleaningOrderMap extends State<CleaningOrderMap> {
   LatLng? endPoint;
   late LatLng startPoint;
   GoogleMapController? mapController;

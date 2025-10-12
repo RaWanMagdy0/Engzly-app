@@ -4,27 +4,27 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_item.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_map.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_summry.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_payment_method.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_promo_code.dart';
-import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
-import 'package:engzly/features/services/house_shifting/logic/booking_states.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/order_card_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CleaningOrderDetails extends StatefulWidget {
   const CleaningOrderDetails({super.key});
 
   @override
-  State<CleaningOrderDetails> createState() => _CleaningOrderDetails();
+  State<CleaningOrderDetails> createState() => _CleaningOrderDetailsState();
 }
 
-class _CleaningOrderDetails extends State<CleaningOrderDetails>
+class _CleaningOrderDetailsState extends State<CleaningOrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
@@ -45,7 +45,6 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    // ignore: deprecated_member_use
     final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
     final keyboardVisible = bottomInset > 0.0;
     if (keyboardVisible) {
@@ -59,65 +58,70 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffoldScreen(
-      title: Text(
-        "Order Details",
-        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
-      ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
-      onLeadingTap: () {
-        Navigator.pop(context);
-      },
-      onNotificationTap: () {},
-      showNotificationDot: true,
-      child: BlocConsumer<HouseShiftingBookingCubit, HouseShiftingBookingState>(
-        listener: (context, state) async {
-          if (state is CheckPromoCodeError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
-          }
-
-          if (state is CheckOutOrderSuccess) {
-            final response = state.booking.first;
-            if (selectedPaymentMethod == 'online') {
-              final clientSecret = response.data?.clientSecret;
-              if (clientSecret != null) {
-                await handleStripePayment(context, clientSecret);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Payment data not found')),
-                );
-              }
+    return BlocConsumer<CleaningCubit, CleaningStates>(
+      listener: (context, state) async {
+        if (state is CleaningCheckOutOrderSuccess) {
+          final response = state.booking.first;
+          if (selectedPaymentMethod == 'online') {
+            final clientSecret = response.data?.clientSecret;
+            if (clientSecret != null) {
+              await handleStripePayment(context, clientSecret);
             } else {
-              if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  RouteName.orderConfirmation,
-                  (route) => false,
-                );
-              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Payment data not found')),
+              );
+            }
+          } else {
+            if (context.mounted) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RouteName.cleaningOrderConfirmation,
+                (route) => false,
+              );
             }
           }
+        }
 
-          if (state is CheckOutOrderError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          }
-        },
-        builder: (context, state) {
-          final cubit = context.watch<HouseShiftingBookingCubit>();
-          final double subtotal = cubit.totalPrice;
-          final double discount = (cubit.discountPercentage ?? 0) > 0
-              ? subtotal * (cubit.discountPercentage! / 100)
-              : 0;
-          final double totalAfterDiscount = cubit.totalPriceAfterDiscount;
+        if (state is CleaningCheckOutOrderError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
 
-          return Stack(
+        if (state is CleaningCheckOutOrderError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        final cubit = context.watch<CleaningCubit>();
+
+        // 🧮 الحسابات
+        double basePrice = cubit.selectedHouseSizePrice?.toDouble() ?? 0;
+        double personCost = cubit.requiredPersons * 5;
+        double hourlyRate = basePrice + personCost;
+        double totalHourCost = cubit.workingHours * hourlyRate;
+        double serviceCharge = 50;
+        double subtotal = totalHourCost + serviceCharge;
+
+        double discount = 0;
+        if ((cubit.discountPercentage ?? 0) > 0) {
+          discount = subtotal * (cubit.discountPercentage! / 100);
+        }
+
+        double totalAfterDiscount = subtotal - discount;
+
+        return CustomScaffoldScreen(
+          title: Text(
+            "Order Details",
+            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
+          ),
+          leadingIcon:
+              SvgPicture.asset(AppImages.backArrow, width: 22.w, height: 22.h),
+          notificationIcon: Image.asset(AppImages.notificationIcon,
+              width: 28.w, height: 28.h),
+          child: Stack(
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 7.h),
@@ -127,55 +131,48 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      OrderCardMap(location: cubit.address ?? ''),
+                      CleaningOrderMap(location: cubit.address ?? ''),
                       10.verticalSpace,
                       CleaningOrderItem(
                         icon: '🏠',
-                        title: cubit.selectedHouseSize?.name ?? "House Size",
-                        subtitle: '+ 1st for baby room',
+                        title: cubit.selectedHouseSize?.name ??
+                            "No house selected",
+                        subtitle: '1 Kitchen Included',
                         price: cubit.selectedHouseSizePrice != null
-                            ? cubit.selectedHouseSizePrice!.toStringAsFixed(0)
-                            : '\$0',
+                            ? "\$${cubit.selectedHouseSizePrice}/hr"
+                            : "—",
                         backgroundColor: const Color(0xFFFFE0B2),
                       ),
                       CleaningOrderItem(
-                        icon: '🛋️',
-                        title: cubit.totalItemsCount > 0 || cubit.boxesCount > 0
-                            ? 'Furniture x${cubit.totalItemsCount}, Boxes x${cubit.boxesCount}'
-                            : "Furniture & Boxes",
-                        subtitle: '+ \$5 for additional box',
-                        price: cubit.totalFurniturePrice.toStringAsFixed(2),
-                        backgroundColor: const Color(0xFFE1BEE7),
+                        icon: '🧹',
+                        title: '${cubit.requiredPersons} Cleaner',
+                        subtitle: '+\$5 for additional cleaner',
+                        price: "\$${personCost.toStringAsFixed(0)}/hr",
+                        backgroundColor: const Color(0xFFE3F2FD),
                       ),
+                      10.verticalSpace,
                       Divider(color: Colors.grey.shade300),
-                      5.verticalSpace,
                       CleaningOrderSummry(
-                        label: cubit.selectedVehicleName != null
-                            ? 'Vehicle : (${cubit.selectedVehicleName})'
-                            : 'Vehicle',
-                        value: cubit.selectedVehiclePrice != null
-                            ? '\$${cubit.selectedVehiclePrice!.toStringAsFixed(2)}'
-                            : '\$0',
+                        label: 'Working Hours',
+                        value: '${cubit.workingHours} hr',
                       ),
                       CleaningOrderSummry(
                         label: 'Service Charge',
-                        value: '\$50.00',
+                        value: '\$${serviceCharge.toStringAsFixed(0)}',
                       ),
                       CleaningPromoCode(
                         appliedPromoCode: cubit.appliedPromoCode,
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                      if (state is CheckPromoCodeLoading)
+                      if (state is CleaningCheckOutOrderLoading)
                         const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: CircularProgressIndicator(
                             color: ColorsManager.green,
                           ),
                         ),
-                      10.verticalSpace,
-                      Divider(color: Colors.grey.shade300, thickness: 2),
-                      5.verticalSpace,
+                      Divider(color: Colors.grey.shade300),
                       CleaningOrderSummry(
                         label: 'Subtotal',
                         value: '\$${subtotal.toStringAsFixed(2)}',
@@ -210,60 +207,48 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: CustomButton(
-                    /********
-                     *   onPressed: state is CheckOutOrderLoading
-                        ? null
-                        : () {
-                            if (cubit.selectedHouseSize == null ||
-                                cubit.selectedVehicleId == null ||
-                                cubit.address == null ||
-                                cubit.selectedDate == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Please complete all required fields')),
-                              );
-                              return;
-                            }
-                            cubit.checkOut(
-                              schedule: cubit.selectedDate ?? DateTime.now(),
-                              serviceId: cubit.selectedHouseSize?.id ?? 1,
-                              location: cubit.address ?? '',
-                              promoCodes: cubit.appliedPromoCode ?? '',
-                              paymentMethodId:
-                                  selectedPaymentMethod == 'online' ? 1 : 2,
-                              houseSizeId: cubit.selectedHouseSize?.id ?? 1,
-                              vehiclesId: cubit.selectedVehicleId ?? 1,
-                              packedBoxes: cubit.boxesCount,
-                              furnitures: cubit.selectedFurnitureCounts
-                                  .map((k, v) => MapEntry(k.id.toString(), v)),
-                              totalPrice: totalAfterDiscount,
-                            );
-                          },
-                    text: state is CheckOutOrderLoading
-                        ? "Processing..."
-                        : "Proceed",
-                    color: state is CheckOutOrderLoading
-                        ? Colors.grey
-                        : ColorsManager.green,
-                    textStyle: AppFonts.font14BWhiteWeight700,
-                     */
                     textStyle: AppFonts.font14BWhiteWeight700,
                     borderRadius: 15.r,
                     height: 50.h,
-                    text: "Proceed",
-                    color: ColorsManager.green,
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, RouteName.cleaningOrderConfirmation);
-                    },
+                    text: state is CleaningCheckOutOrderLoading
+                        ? "Processing..."
+                        : "Proceed (\$${totalAfterDiscount.toStringAsFixed(0)})",
+                    color: state is CleaningCheckOutOrderLoading
+                        ? Colors.grey
+                        : ColorsManager.green,
+                    onPressed: state is CleaningCheckOutOrderLoading
+                        ? null
+                        : () {
+                            if (cubit.selectedHouseSize == null ||
+                                cubit.address == null ||
+                                cubit.requiredPersons == 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "Please complete all required fields"),
+                                ),
+                              );
+                              return;
+                            }
+
+                            cubit.checkOut(
+                              schedule: cubit.selectedDate!,
+                              totalPrice: totalAfterDiscount,
+                              serviceId: 3,
+                              location: cubit.address!,
+                              promoCodes: cubit.appliedPromoCode ?? '',
+                              paymentMethodId:
+                                  selectedPaymentMethod == 'online' ? 1 : 2,
+                              houseSizeId: cubit.selectedHouseSize!.id,
+                            );
+                          },
                   ),
                 ),
               ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -284,14 +269,14 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          RouteName.orderConfirmation,
+          RouteName.cleaningOrderConfirmation,
           (route) => false,
         );
       }
     } on StripeException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(' Payment failed: ${e.error.localizedMessage}'),
+          content: Text('Payment failed: ${e.error.localizedMessage}'),
           backgroundColor: ColorsManager.red,
         ),
       );

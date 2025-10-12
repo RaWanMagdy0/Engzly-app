@@ -28,7 +28,8 @@ class ApiConstants {
   static const String getFurnitures = "HouseShifting/Furnitures";
   static const String getVehicles = "HouseShifting/Vehicles";
   static const String checkPromoCode = "HouseShifting/check-promocode";
-  static const String checkOut = "Booking/HouseShifting";
+  static const String houseShiftingCheckOut = "Booking/HouseShifting";
+  static const String cleaningCheckOut = "Booking/CleaningBooking";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

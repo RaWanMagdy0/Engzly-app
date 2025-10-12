@@ -1,15 +1,14 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
-import 'package:engzly/core/theming/images.dart' show AppImages;
+import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/widgets/cleaning_counter_row.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/widgets/house_size_widget/cleaning_header_section.dart'
-    show CleaningHeaderSection;
-import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
-import 'package:engzly/features/services/house_shifting/logic/states.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_option_section.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/widgets/house_size_widget/cleaning_header_section.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/widgets/house_size_widget/cleaning_house_option_section.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/second_screen/cleaning_schedule_screen.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_size_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,16 +23,17 @@ class CleaningScreen extends StatefulWidget {
 }
 
 class _CleaningScreenState extends State<CleaningScreen> {
-  int persons = 0;
-
-  int hours = 2;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CleaningCubit>().getHouseSize();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<HouseShiftingCubit>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cubit.getHouseSize();
-    });
+    final cubit = context.read<CleaningCubit>();
 
     return CustomScaffoldScreen(
       title: Text(
@@ -44,91 +44,79 @@ class _CleaningScreenState extends State<CleaningScreen> {
           SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
       notificationIcon:
           Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
-      onLeadingTap: () {
-        Navigator.pop(context);
-      },
+      onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
       showNotificationDot: true,
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(
-              bottom: 80.h,
-              top: 6.h,
-            ),
+            padding: EdgeInsets.only(bottom: 80.h, top: 6.h),
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   const CleaningHeaderSection(),
-                  BlocBuilder<HouseShiftingCubit, HouseShiftingState>(
+                  BlocBuilder<CleaningCubit, CleaningStates>(
                     buildWhen: (previous, current) =>
                         current is GetHouseSizeLoading ||
                         current is GetHouseSizeSuccess ||
-                        current is GetHouseSizeError,
+                        current is GetHouseSizeError ||
+                        current is CleaningHouseSizeSelected,
                     builder: (context, state) {
-                      return SizedBox(
-                        height: 180.h,
-                        child: () {
-                          if (state is GetHouseSizeLoading) {
-                            return Row(
-                              children: List.generate(
-                                3,
-                                (_) => Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.w),
-                                  child: const HouseSizeShimmer(),
-                                ),
-                              ),
-                            );
-                          } else if (state is GetHouseSizeSuccess) {
-                            final houseSizes = state.houseSizes;
-                            if (houseSizes.isEmpty) {
-                              return const Center(
-                                  child: Text("No data available"));
-                            }
-                            return HouseOptionSection(options: houseSizes);
-                          } else if (state is GetHouseSizeError) {
-                            return Center(child: Text(state.error));
-                          }
-                          return const SizedBox();
-                        }(),
-                      );
+                      final cubit = context.watch<CleaningCubit>();
+                      final sizes = cubit.houseSizeResponse;
+
+                      if (state is GetHouseSizeLoading) {
+                        return Row(
+                          children: List.generate(
+                            3,
+                            (_) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w),
+                              child: const HouseSizeShimmer(),
+                            ),
+                          ),
+                        );
+                      } else if (state is GetHouseSizeSuccess ||
+                          state is CleaningHouseSizeSelected) {
+                        if (sizes.isEmpty) {
+                          return const Center(child: Text("No data available"));
+                        }
+                        return CleaningHouseOptionSection(options: sizes);
+                      } else if (state is GetHouseSizeError) {
+                        return Center(child: Text(state.error));
+                      }
+                      return const SizedBox.shrink();
                     },
                   ),
                   Container(
-                      color: ColorsManager.lightGray,
-                      width: double.infinity,
-                      height: 15.h),
-                  CounterRow(
-                    title: 'Required Person',
-                    subtitle:
-                        'Regular cost is \$5/hr. Total cost will be calculated later',
-                    iconPath: AppImages.workerIcon,
-                    value: persons,
-                    onIncrement: () => setState(() => persons++),
-                    onDecrement: () => setState(() {
-                      if (persons > 0) persons--;
-                    }),
+                    color: ColorsManager.lightGray,
+                    width: double.infinity,
+                    height: 15.h,
                   ),
-                  CounterRow(
-                    title: 'Working Hour',
-                    subtitle: 'Cost will increase after 2 hrs of work.',
-                    iconPath: AppImages.timerIcon,
-                    value: hours,
-                    onIncrement: () => setState(() => hours++),
-                    onDecrement: () => setState(() {
-                      if (hours > 0) hours--;
-                    }),
-                  ),
-                  CounterRow(
-                    title: 'Working Hour',
-                    subtitle: 'Cost will increase after 2 hrs of work.',
-                    iconPath: AppImages.timerIcon,
-                    value: hours,
-                    onIncrement: () => setState(() => hours++),
-                    onDecrement: () => setState(() {
-                      if (hours > 0) hours--;
-                    }),
+                  BlocBuilder<CleaningCubit, CleaningStates>(
+                    builder: (context, state) {
+                      return Column(
+                        children: [
+                          CounterRow(
+                            title: 'Required Person',
+                            subtitle:
+                                'Regular cost is \$5/hr. Total cost will be calculated later',
+                            iconPath: AppImages.workerIcon,
+                            value: cubit.requiredPersons,
+                            onIncrement: cubit.increasePersons,
+                            onDecrement: cubit.decreasePersons,
+                          ),
+                          30.verticalSpace,
+                          CounterRow(
+                            title: 'Working Hour',
+                            subtitle: 'Cost will increase after 2 hrs of work.',
+                            iconPath: AppImages.timerIcon,
+                            value: cubit.workingHours,
+                            onIncrement: cubit.increaseWorkingHours,
+                            onDecrement: cubit.decreaseWorkingHours,
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -142,17 +130,45 @@ class _CleaningScreenState extends State<CleaningScreen> {
               borderRadius: 20.r,
               height: 50.h,
               onPressed: () {
-                Navigator.pushNamed(context, RouteName.cleaningSchedule);
-                /********* 
-                 *  final selection = context.read<HouseShiftingBookingCubit>();
-
-                if (selection.selectedHouseSize == null) {
+                if (cubit.selectedHouseSize == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please select a house size')),
+                    const SnackBar(
+                      content: Text("Please select a house size first"),
+                    ),
                   );
                   return;
                 }
-                */
+
+                if (cubit.requiredPersons <= 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select at least one worker"),
+                    ),
+                  );
+                  return;
+                }
+
+                if (cubit.workingHours < 1) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select valid working hours"),
+                    ),
+                  );
+                  return;
+                }
+                final cleaningCubit = context.read<CleaningCubit>();
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: cleaningCubit),
+                      ],
+                      child: CleaningScheduleScreen(),
+                    ),
+                  ),
+                );
               },
               text: "Proceed",
               color: ColorsManager.green,

@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'booking_request_model.g.dart';
+part 'house_booking_request_model.g.dart';
 
 @JsonSerializable()
-class BookingRequestModel {
+class HouseBookingRequestModel {
   final DateTime schedule;
   final double totalPrice;
   final String location;
@@ -15,7 +15,7 @@ class BookingRequestModel {
   final Map<String, int> furnitures;
   final int packedBoxes;
 
-  BookingRequestModel({
+  HouseBookingRequestModel({
     required this.schedule,
     required this.totalPrice,
     required this.location,
@@ -28,8 +28,8 @@ class BookingRequestModel {
     required this.packedBoxes,
   });
 
-  factory BookingRequestModel.fromJson(Map<String, dynamic> json) =>
-      _$BookingRequestModelFromJson(json);
+  factory HouseBookingRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$HouseBookingRequestModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BookingRequestModelToJson(this);
+  Map<String, dynamic> toJson() => _$HouseBookingRequestModelToJson(this);
 }

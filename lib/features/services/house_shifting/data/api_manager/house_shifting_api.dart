@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
-
 import 'package:engzly/core/networking/api/api_constants.dart';
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_request_model.dart';
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_response.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_request_model.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_response.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
@@ -31,9 +30,9 @@ abstract class HouseShiftingApiManager {
     @Query("code") String code,
   );
 
-  @POST(ApiConstants.checkOut)
-  Future<BookingResponse> checkOut(
+  @POST(ApiConstants.houseShiftingCheckOut)
+  Future<HouseBookingResponse> checkOut(
     @Header("Authorization") String token,
-    @Body() BookingRequestModel bookingRequestModel,
+    @Body() HouseBookingRequestModel bookingRequestModel,
   );
 }

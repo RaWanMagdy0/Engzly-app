@@ -1,7 +1,7 @@
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_request_model.dart';
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_response.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_request_model.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_response.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
 import 'package:engzly/features/services/house_shifting/data/repo/house_shifting_repo.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_states.dart';
@@ -154,7 +154,7 @@ class HouseShiftingBookingCubit
   }) async {
     emit(CheckOutOrderLoading());
 
-    final bookingRequest = BookingRequestModel(
+    final bookingRequest = HouseBookingRequestModel(
         schedule: schedule,
         totalPrice: totalPrice,
         location: location,
@@ -168,7 +168,7 @@ class HouseShiftingBookingCubit
 
     final result = await _repo.checkOut(bookingRequest);
 
-    if (result is Success<BookingResponse>) {
+    if (result is Success<HouseBookingResponse>) {
       final response = result.data;
       emit(CheckOutOrderSuccess([response!]));
     } else if (result is Fail) {

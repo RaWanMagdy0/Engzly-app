@@ -49,7 +49,7 @@ import '../../features/profile/logic/cubit.dart' as _i773;
 import '../../features/services/cleaning/data/api_manager/cleaning_api_manager.dart'
     as _i502;
 import '../../features/services/cleaning/data/repo/cleaning_repo.dart' as _i783;
-import '../../features/services/cleaning/logic/booking_cubit.dart' as _i521;
+import '../../features/services/cleaning/logic/cleaning_cubit.dart' as _i672;
 import '../../features/services/house_shifting/data/api_manager/house_shifting_api.dart'
     as _i795;
 import '../../features/services/house_shifting/data/repo/house_shifting_repo.dart'
@@ -136,8 +136,6 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i650.HouseShiftingRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
-    gh.factory<_i521.HouseShiftingBookingCubit>(
-        () => _i521.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i37.HouseShiftingBookingCubit>(
         () => _i37.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(
@@ -148,6 +146,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i89.UpdateUserDataRepo>(),
           gh<_i807.LocationRepo>(),
           gh<_i832.GetLocationsRepo>(),
+        ));
+    gh.factory<_i672.CleaningCubit>(() => _i672.CleaningCubit(
+          gh<_i650.HouseShiftingRepo>(),
+          gh<_i783.CleaningRepo>(),
         ));
     return this;
   }

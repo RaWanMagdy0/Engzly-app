@@ -171,9 +171,9 @@ class _HouseShiftingApiManager implements HouseShiftingApiManager {
   }
 
   @override
-  Future<BookingResponse> checkOut(
+  Future<HouseBookingResponse> checkOut(
     String token,
-    BookingRequestModel bookingRequestModel,
+    HouseBookingRequestModel bookingRequestModel,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -181,7 +181,7 @@ class _HouseShiftingApiManager implements HouseShiftingApiManager {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(bookingRequestModel.toJson());
-    final _options = _setStreamType<BookingResponse>(Options(
+    final _options = _setStreamType<HouseBookingResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -198,9 +198,9 @@ class _HouseShiftingApiManager implements HouseShiftingApiManager {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BookingResponse _value;
+    late HouseBookingResponse _value;
     try {
-      _value = BookingResponse.fromJson(_result.data!);
+      _value = HouseBookingResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

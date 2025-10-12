@@ -1,22 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'booking_response.dart';
+part of 'cleaning_booking_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-BookingResponse _$BookingResponseFromJson(Map<String, dynamic> json) =>
-    BookingResponse(
-      statusCode: (json['statusCode'] as num?)?.toInt() ?? 500,
+CleaningBookingResponse _$CleaningBookingResponseFromJson(
+        Map<String, dynamic> json) =>
+    CleaningBookingResponse(
+      statusCode: (json['statusCode'] as num).toInt(),
       message: json['message'] as String? ?? '',
       data: json['data'] == null
           ? null
-          : BookingData.fromJson(json['data'] as Map<String, dynamic>),
+          : HouseBookingData.fromJson(json['data'] as Map<String, dynamic>),
       success: json['success'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$BookingResponseToJson(BookingResponse instance) =>
+Map<String, dynamic> _$CleaningBookingResponseToJson(
+        CleaningBookingResponse instance) =>
     <String, dynamic>{
       'statusCode': instance.statusCode,
       'message': instance.message,

@@ -2,8 +2,8 @@ import 'package:engzly/core/helper/local/token_manger.dart';
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/api/execute_api_call.dart';
 import 'package:engzly/features/services/house_shifting/data/api_manager/house_shifting_api.dart';
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_request_model.dart';
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_response.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_request_model.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_response.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
@@ -49,8 +49,8 @@ class HouseShiftingRepo {
     return message;
   });
 }
- Future<Result<BookingResponse>> checkOut(BookingRequestModel bookingRequestModel) {
-  return executeApiCall<BookingResponse>(() async {
+ Future<Result<HouseBookingResponse>> checkOut(HouseBookingRequestModel bookingRequestModel) {
+  return executeApiCall<HouseBookingResponse>(() async {
     final token = await _getToken();
     final response = await _apiManager.checkOut(token, bookingRequestModel);
 

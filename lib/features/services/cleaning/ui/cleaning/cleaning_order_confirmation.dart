@@ -21,15 +21,12 @@ class CleaningOrderConfirmation extends StatefulWidget {
 }
 
 class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
-  // late ProfileCubit profileCubit;
   late HouseShiftingBookingCubit bookingCubit;
 
   @override
   void initState() {
     super.initState();
-    //  profileCubit = context.read<ProfileCubit>();
     bookingCubit = context.read<HouseShiftingBookingCubit>();
-    //  profileCubit.getUserData();
   }
 
   @override

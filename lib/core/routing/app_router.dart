@@ -23,6 +23,7 @@ import 'package:engzly/features/profile/ui/location/add_location/add_location_sc
 import 'package:engzly/features/profile/ui/location/my_location/my_location.dart'
     show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/cleaning_order_confirmation.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/cleaning_screen.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
@@ -201,11 +202,9 @@ class AppRouter {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => getIt<HouseShiftingCubit>(),
+                create: (context) => getIt<CleaningCubit>(),
               ),
-              BlocProvider(
-                create: (context) => getIt<HouseShiftingBookingCubit>(),
-              ),
+          
             ],
             child: const CleaningScreen(),
           ),
@@ -215,10 +214,7 @@ class AppRouter {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => getIt<HouseShiftingCubit>(),
-              ),
-              BlocProvider(
-                create: (context) => getIt<HouseShiftingBookingCubit>(),
+                create: (context) => getIt<CleaningCubit>(),
               ),
             ],
             child: const CleaningScheduleScreen(),
@@ -229,11 +225,9 @@ class AppRouter {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => getIt<HouseShiftingCubit>(),
+                create: (context) => getIt<CleaningCubit>(),
               ),
-              BlocProvider(
-                create: (context) => getIt<HouseShiftingBookingCubit>(),
-              ),
+         
             ],
             child: const CleaningChooseLocation(),
           ),
@@ -243,10 +237,7 @@ class AppRouter {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => getIt<HouseShiftingCubit>(),
-              ),
-              BlocProvider(
-                create: (context) => getIt<HouseShiftingBookingCubit>(),
+                create: (context) => getIt<CleaningCubit>(),
               ),
             ],
             child: const CleaningOrderDetails(),

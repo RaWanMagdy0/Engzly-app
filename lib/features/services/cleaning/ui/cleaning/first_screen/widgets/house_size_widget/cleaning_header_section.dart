@@ -1,3 +1,4 @@
+import 'package:engzly/core/theming/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:engzly/core/theming/fonts.dart';
@@ -17,7 +18,13 @@ class CleaningHeaderSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Cleaning", style: AppFonts.font36BlackWeight700),
+              Row(
+                children: [
+                  Image.asset(AppImages.cleaningIcon),
+                  5.horizontalSpace,
+                  Text("Cleaning", style: AppFonts.font36BlackWeight700),
+                ],
+              ),
               TextButton.icon(
                 style: ButtonStyle(
                   backgroundColor:

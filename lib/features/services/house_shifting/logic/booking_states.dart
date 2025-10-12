@@ -1,4 +1,4 @@
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_response.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_response.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/furniture_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
@@ -55,7 +55,7 @@ class PromoCodeRemoved extends HouseShiftingBookingState {}
 class CheckOutOrderLoading extends HouseShiftingBookingState {}
 
 class CheckOutOrderSuccess extends HouseShiftingBookingState {
-  final List<BookingResponse> booking;
+  final List<HouseBookingResponse> booking;
   CheckOutOrderSuccess(this.booking);
 }
 

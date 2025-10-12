@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:json_annotation/json_annotation.dart';
-part 'booking_data.g.dart';
+part 'house_booking_data.g.dart';
 
 @JsonSerializable()
-class BookingData {
+class HouseBookingData {
   @JsonKey(nullable: true)
   final String? stripePaymentIntentId;
   
@@ -14,20 +14,20 @@ class BookingData {
   @JsonKey(nullable: true)
   final int? status;
 
-  BookingData({
+  HouseBookingData({
     this.stripePaymentIntentId,
     this.clientSecret,
     this.status,
   });
 
-  factory BookingData.fromJson(Map<String, dynamic> json) {
+  factory HouseBookingData.fromJson(Map<String, dynamic> json) {
     try {
-      final data = _$BookingDataFromJson(json);
+      final data = _$HouseBookingDataFromJson(json);
       return data;
     } catch (e) {
       rethrow;
     }
   }
 
-  Map<String, dynamic> toJson() => _$BookingDataToJson(this);
+  Map<String, dynamic> toJson() => _$HouseBookingDataToJson(this);
 }

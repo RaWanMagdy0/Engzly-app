@@ -1,24 +1,23 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
-import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:engzly/core/theming/colors.dart';
 
-class LocationBottomSheet extends StatelessWidget {
+class CleaningLocationBottomSheet extends StatelessWidget {
   final String selectedAddress;
   final String selectedType;
   final Function(String) onTypeChanged;
-  final Function(String) onSelectAddress;
-  final HouseShiftingBookingCubit bookingCubit;
+  final VoidCallback onConfirm;
 
-  const LocationBottomSheet({
+  const CleaningLocationBottomSheet({
     super.key,
     required this.selectedAddress,
     required this.selectedType,
     required this.onTypeChanged,
-    required this.onSelectAddress,
-    required this.bookingCubit,
+    required this.onConfirm,
   });
 
   @override
@@ -74,26 +73,35 @@ class LocationBottomSheet extends StatelessWidget {
               ),
               24.verticalSpace,
               CustomButton(
+                text: "Proceed",
                 onPressed: () {
-                  Navigator.pushNamed(context, RouteName.cleaningOrderDetails);
-                },
-                child: const Text("Proceed"),
-              )
-              /*********  
-              ElevatedButton(
-                onPressed: () {
+                  if (selectedAddress.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text("Please select a location first")),
+                    );
+                    return;
+                  }
+                  onConfirm();
+                  final cleaningCubit = context.read<CleaningCubit>();
 
-                   bookingCubit.selectLocation(selectedAddress);
-                  navigateWithBookingCubit(context, const OrderDetails());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value: cleaningCubit),
+                        ],
+                        child: CleaningOrderDetails(),
+                      ),
+                    ),
+                  );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.green,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),*/
+                color: ColorsManager.green,
+                textColor: ColorsManager.white,
+                borderRadius: 15.r,
+                height: 50.h,
+              ),
             ],
           ),
         );

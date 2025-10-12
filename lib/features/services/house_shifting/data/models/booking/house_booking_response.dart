@@ -1,10 +1,10 @@
-import 'package:engzly/features/services/house_shifting/data/models/booking/booking_data.dart';
+import 'package:engzly/features/services/house_shifting/data/models/booking/house_booking_data.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'booking_response.g.dart';
+part 'house_booking_response.g.dart';
 
 @JsonSerializable()
-class BookingResponse {
+class HouseBookingResponse {
   @JsonKey(defaultValue: 500)
   final int statusCode;
   
@@ -13,21 +13,21 @@ class BookingResponse {
   
   // ignore: deprecated_member_use
   @JsonKey(nullable: true)
-  final BookingData? data;
+  final HouseBookingData? data;
   
   @JsonKey(defaultValue: false)
   final bool success;
 
-  BookingResponse({
+  HouseBookingResponse({
     required this.statusCode,
     required this.message,
     this.data,
     required this.success,
   });
 
-  factory BookingResponse.fromJson(Map<String, dynamic> json) {
+  factory HouseBookingResponse.fromJson(Map<String, dynamic> json) {
     try {
-      final response = _$BookingResponseFromJson(json);
+      final response = _$HouseBookingResponseFromJson(json);
       if (response.data != null) {
       }
       return response;
@@ -36,5 +36,5 @@ class BookingResponse {
     }
   }
 
-  Map<String, dynamic> toJson() => _$BookingResponseToJson(this);
+  Map<String, dynamic> toJson() => _$HouseBookingResponseToJson(this);
 }
