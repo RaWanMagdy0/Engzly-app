@@ -1,5 +1,5 @@
 import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
-import 'package:engzly/features/services/vehicle/ui/cleaning/order_details/vehicle_order_details.dart';
+import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/vehicle_order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
