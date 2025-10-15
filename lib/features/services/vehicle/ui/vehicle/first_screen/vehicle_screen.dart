@@ -50,53 +50,41 @@ class _VehicleScreenState extends State<VehicleScreen> {
         children: [
           Padding(
             padding: EdgeInsets.only(bottom: 80.h, top: 6.h),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  5.verticalSpace,
-                  const VehicleHeaderSection(),
-                  BlocBuilder<VehicleCubit, VehicleStates>(
-                    buildWhen: (previous, current) =>
-                        current is GetVehicleVehiclesLoading ||
-                        current is GetVehicleVehiclesSuccess ||
-                        current is GetVehicleVehiclesError ||
-                        current is VehicleSelected,
-                    builder: (context, state) {
-                      final cubit = context.watch<VehicleCubit>();
-                      final vehicle = cubit.vehicleResponse;
+            child: Column(
+              children: [
+                5.verticalSpace,
+                const VehicleHeaderSection(),
+                BlocBuilder<VehicleCubit, VehicleStates>(
+                  buildWhen: (previous, current) =>
+                      current is GetVehicleVehiclesLoading ||
+                      current is GetVehicleVehiclesSuccess ||
+                      current is GetVehicleVehiclesError ||
+                      current is VehicleSelected,
+                  builder: (context, state) {
+                    final cubit = context.watch<VehicleCubit>();
+                    final vehicle = cubit.vehicleResponse;
 
-                      if (state is GetVehicleVehiclesLoading) {
-                        return Row(
-                          children: List.generate(
-                            3,
-                            (_) => Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                                child: const VehicleShimmer(),
-                              ),
-                            ),
-                          ),
-                        );
-                      } else if (state is GetVehicleVehiclesSuccess ||
-                          state is VehicleSelected) {
-                        if (vehicle.isEmpty) {
-                          return const Center(child: Text("No data available"));
-                        }
-                        return VehicleHouseOptionSection(options: vehicle);
-                      } else if (state is GetVehicleVehiclesError) {
-                        return Center(child: Text(state.error));
+                    if (state is GetVehicleVehiclesLoading) {
+                      return const VehicleShimmer();
+                    } else if (state is GetVehicleVehiclesSuccess ||
+                        state is VehicleSelected) {
+                      if (vehicle.isEmpty) {
+                        return const Center(child: Text("No data available"));
                       }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                  20.verticalSpace,
-                  Container(
-                    color: ColorsManager.lightGray,
-                    width: double.infinity,
-                    height: 15.h,
-                  ),
-                ],
-              ),
+                      return VehicleHouseOptionSection(options: vehicle);
+                    } else if (state is GetVehicleVehiclesError) {
+                      return Center(child: Text(state.error));
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+                20.verticalSpace,
+                Container(
+                  color: ColorsManager.lightGray,
+                  width: double.infinity,
+                  height: 15.h,
+                ),
+              ],
             ),
           ),
           Positioned(
