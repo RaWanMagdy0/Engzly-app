@@ -54,6 +54,7 @@ class _CleaningScreenState extends State<CleaningScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  5.verticalSpace,
                   const CleaningHeaderSection(),
                   BlocBuilder<CleaningCubit, CleaningStates>(
                     buildWhen: (previous, current) =>
@@ -87,6 +88,7 @@ class _CleaningScreenState extends State<CleaningScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
+                  20.verticalSpace,
                   Container(
                     color: ColorsManager.lightGray,
                     width: double.infinity,
@@ -96,6 +98,7 @@ class _CleaningScreenState extends State<CleaningScreen> {
                     builder: (context, state) {
                       return Column(
                         children: [
+                          20.verticalSpace,
                           CounterRow(
                             title: 'Required Person',
                             subtitle:
@@ -105,7 +108,7 @@ class _CleaningScreenState extends State<CleaningScreen> {
                             onIncrement: cubit.increasePersons,
                             onDecrement: cubit.decreasePersons,
                           ),
-                          30.verticalSpace,
+                          20.verticalSpace,
                           CounterRow(
                             title: 'Working Hour',
                             subtitle: 'Cost will increase after 2 hrs of work.',

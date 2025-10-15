@@ -8,24 +8,18 @@ class OtherServiceCard extends StatelessWidget {
   final Color backgroundColor;
   final VoidCallback? onTap;
 
-  const OtherServiceCard({
-    super.key,
-    required this.title,
-    required this.iconPath,
-    required this.backgroundColor,
-    required this.onTap
-  });
+  const OtherServiceCard(
+      {super.key,
+      required this.title,
+      required this.iconPath,
+      required this.backgroundColor,
+      required this.onTap});
 
   static final List<Map<String, dynamic>> staticServices = [
     {
       'title': 'Cleaning',
       'iconPath': AppImages.cleaningIcon,
       'backgroundColor': const Color(0xFFF0FAF2).withValues(alpha: 0.7),
-    },
-    {
-      'title': 'Labour Service',
-      'iconPath': AppImages.labourIcon,
-      'backgroundColor': const Color(0xFFE5F3FB).withValues(alpha: 0.74),
     },
     {
       'title': 'Vehicle',

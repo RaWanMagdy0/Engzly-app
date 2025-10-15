@@ -1,5 +1,7 @@
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
+import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
+import 'package:engzly/features/profile/data/repo/get_locations_repo.dart';
 import 'package:engzly/features/services/cleaning/data/models/cleaning_booking_request_model.dart';
 import 'package:engzly/features/services/cleaning/data/models/cleaning_booking_response.dart';
 import 'package:engzly/features/services/cleaning/data/repo/cleaning_repo.dart';
@@ -13,11 +15,14 @@ import 'package:injectable/injectable.dart';
 class CleaningCubit extends BaseViewModel<CleaningStates> {
   final HouseShiftingRepo _houseShiftingRepo;
   final CleaningRepo _cleaningRepo;
+  final GetLocationsRepo _getLocationsRepo;
 
-  CleaningCubit(this._houseShiftingRepo, this._cleaningRepo)
+  CleaningCubit(
+      this._houseShiftingRepo, this._cleaningRepo, this._getLocationsRepo)
       : super(CleaningInitial());
 
   List<HouseSizeModel> houseSizeResponse = [];
+  List<LocationModel> locations = [];
 
   HouseSizeModel? selectedHouseSize;
   int? selectedHouseSizePrice;
@@ -30,7 +35,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
   int requiredPersons = 0;
   int workingHours = 2;
 
-void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
+  void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
     selectedHouseSize = size;
     selectedHouseSizePrice = houseSizePrice;
     emit(CleaningHouseSizeSelected(size));
@@ -81,6 +86,28 @@ void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
     }
   }
 
+  List<LocationModel> homeLocations = [];
+  List<LocationModel> workLocations = [];
+
+  Future<void> getLocations() async {
+    emit(CleaningLocationsLoading());
+
+    final result = await _getLocationsRepo.getLocations();
+
+    if (result is Success<List<LocationModel>>) {
+      locations = result.data!;
+
+      homeLocations = locations.where((l) => l.type == 'home').toList();
+      workLocations = locations.where((l) => l.type == 'work').toList();
+
+      emit(CleaningLocationsSuccess(locations));
+    } else if (result is Fail) {
+      final failResult = result as Fail;
+      final errorMessage = getErrorMessageFromException(failResult.exception);
+      emit(CleaningLocationsError(errorMessage));
+    }
+  }
+
   Future<void> checkOut({
     required DateTime schedule,
     required double totalPrice,
@@ -122,7 +149,7 @@ void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
     if (result is Success<PromoCodeResponse>) {
       final response = result.data!;
       appliedPromoCode = code;
-      discountPercentage = response.discountPercentage.toDouble() ;
+      discountPercentage = response.discountPercentage.toDouble();
       emit(CleaningPromoCodeSuccess(response));
     } else if (result is Fail) {
       final failResult = result as Fail;

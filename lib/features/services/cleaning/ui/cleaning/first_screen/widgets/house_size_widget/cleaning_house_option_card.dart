@@ -29,12 +29,12 @@ class CleaningHouseOptionCard extends StatelessWidget {
             cubit.selectHouseSize(houseSize, houseSizePrice);
           },
           child: Container(
-            height: 140.h,
+            height: 160.h,
             width: 110.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.r),
               border: Border.all(
-                color: isSelected ? ColorsManager.orange : Colors.grey.shade300,
+                color: isSelected ? ColorsManager.green : Colors.grey.shade300,
                 width: isSelected ? 2 : 1,
               ),
               color: Colors.white,
@@ -47,20 +47,16 @@ class CleaningHouseOptionCard extends StatelessWidget {
                   height: 70.h,
                   width: double.infinity,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) =>
-                      const Icon(Icons.image_not_supported),
                 ),
                 8.verticalSpace,
                 Text(
                   houseSize.name,
                   textAlign: TextAlign.center,
                   style: AppFonts.font13BlackWeight500.copyWith(
-                    color: isSelected
-                        ? ColorsManager.orange
-                        : Colors.grey.shade700,
+                    color: Colors.grey.shade700,
                   ),
                 ),
-                4.verticalSpace,
+                5.verticalSpace,
                 Text(
                   "\$${houseSize.price}",
                   style: AppFonts.font13BlackWeight500.copyWith(

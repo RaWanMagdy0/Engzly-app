@@ -26,9 +26,9 @@ class DateSelected extends HouseShiftingBookingState {
   DateSelected(this.date);
 }
 
-class VehicleSelected extends HouseShiftingBookingState {
+class HouseShiftingVehicleSelected extends HouseShiftingBookingState {
   final int vehicleId;
-  VehicleSelected(this.vehicleId);
+  HouseShiftingVehicleSelected(this.vehicleId);
 }
 class LocationSelected extends HouseShiftingBookingState {
   final String address;

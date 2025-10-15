@@ -127,7 +127,7 @@ class HouseShiftingBookingCubit
     selectedVehicleId = vehicleId;
     selectedVehicleName = vehicleName;
     selectedVehiclePrice = vehiclePrice;
-    emit(VehicleSelected(vehicleId));
+    emit(HouseShiftingVehicleSelected(vehicleId));
   }
 
   void selectDate(DateTime date) {

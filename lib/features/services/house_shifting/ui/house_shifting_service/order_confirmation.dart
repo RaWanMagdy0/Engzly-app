@@ -22,15 +22,12 @@ class OrderConfirmation extends StatefulWidget {
 }
 
 class _OrderConfirmationState extends State<OrderConfirmation> {
-  // late ProfileCubit profileCubit;
   late HouseShiftingBookingCubit bookingCubit;
 
   @override
   void initState() {
     super.initState();
-    //  profileCubit = context.read<ProfileCubit>();
     bookingCubit = context.read<HouseShiftingBookingCubit>();
-    //  profileCubit.getUserData();
   }
 
   @override
@@ -38,7 +35,6 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final phoneNumber = "01048733684";
-        // final selectedDate = bookingCubit.selectedDate;
 
         return CustomScaffoldScreen(
           title: Text(

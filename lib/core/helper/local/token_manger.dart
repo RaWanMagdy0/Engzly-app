@@ -25,4 +25,13 @@ class TokenManager {
   static Future<String?> getRefreshToken() async {
     return await SecureStorageFactory.readData(key: refreshKey);
   }
+
+  static Future<void> deleteRefreshToken() async {
+    return await SecureStorageFactory.deleteData(key: refreshKey);
+  }
+
+  static Future<void> clearAll() async {
+    await deleteToken();
+    await deleteRefreshToken();
+  }
 }

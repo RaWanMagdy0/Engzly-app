@@ -21,10 +21,10 @@ class CleaningOrderDetails extends StatefulWidget {
   const CleaningOrderDetails({super.key});
 
   @override
-  State<CleaningOrderDetails> createState() => _CleaningOrderDetailsState();
+  State<CleaningOrderDetails> createState() => _CleaningOrderDetails();
 }
 
-class _CleaningOrderDetailsState extends State<CleaningOrderDetails>
+class _CleaningOrderDetails extends State<CleaningOrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
@@ -96,8 +96,6 @@ class _CleaningOrderDetailsState extends State<CleaningOrderDetails>
       },
       builder: (context, state) {
         final cubit = context.watch<CleaningCubit>();
-
-        // 🧮 الحسابات
         double basePrice = cubit.selectedHouseSizePrice?.toDouble() ?? 0;
         double personCost = cubit.requiredPersons * 5;
         double hourlyRate = basePrice + personCost;
@@ -144,17 +142,11 @@ class _CleaningOrderDetailsState extends State<CleaningOrderDetails>
                         backgroundColor: const Color(0xFFFFE0B2),
                       ),
                       CleaningOrderItem(
-                        icon: '🧹',
+                        icon: '👷',
                         title: '${cubit.requiredPersons} Cleaner',
                         subtitle: '+\$5 for additional cleaner',
                         price: "\$${personCost.toStringAsFixed(0)}/hr",
                         backgroundColor: const Color(0xFFE3F2FD),
-                      ),
-                      10.verticalSpace,
-                      Divider(color: Colors.grey.shade300),
-                      CleaningOrderSummry(
-                        label: 'Working Hours',
-                        value: '${cubit.workingHours} hr',
                       ),
                       CleaningOrderSummry(
                         label: 'Service Charge',

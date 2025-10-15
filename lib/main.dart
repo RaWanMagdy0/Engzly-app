@@ -10,24 +10,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   Bloc.observer = AppBlocObserver();
-
   configureDependencies();
+
   Stripe.publishableKey =
       'pk_test_51SA7jDA6rtRTWn7mEnguFl9Mzp7e98QsoHTkvcbYbMexDrcG5YM7yfhaCjDOFhyY5MY9Lw6CP1pfQXsU1pGQNBN200kUhoYNrt';
   await Stripe.instance.applySettings();
 
   final prefs = await SharedPreferences.getInstance();
   final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
-  final String? token = await SecureStorageFactory.readData(key: 'token');
+
   final String? rememberMeValue =
       await SecureStorageFactory.readData(key: 'rememberMe');
   final bool rememberMe = (rememberMeValue ?? 'false') == 'true';
+
+
+
   FlutterNativeSplash.remove();
 
   runApp(EngzlyApp(
     isFirstTime: isFirstTime,
-    token: token,
     rememberMe: rememberMe,
   ));
 }
+

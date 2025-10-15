@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/second_screen/widgets/cleaning_calender_widget.dart';
 
@@ -44,7 +43,7 @@ class CleaningScheduleScreen extends StatelessWidget {
               },
             ),
           ),
-          40.verticalSpace,
+          300.verticalSpace,
           CustomButton(
             borderRadius: 15.r,
             height: 50.h,

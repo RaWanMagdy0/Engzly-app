@@ -27,6 +27,11 @@ class RouteName {
   static const String cleaningLocation = "cleaningLocation";
   static const String cleaningOrderDetails = "cleaningOrderDetails";
   static const String cleaningOrderConfirmation = "cleaningOrderConfirmation";
+    static const String vehicleOrderConfirmation = "vehicleOrderConfirmation";
+
+
+
+  static const String vehicle = "vehicle";
 
   static const String contactUs = "contactUs";
   static const String questions = "questions";

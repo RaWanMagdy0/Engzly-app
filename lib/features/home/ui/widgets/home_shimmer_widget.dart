@@ -66,12 +66,12 @@ class HomeShimmerWidgets {
     );
   }
 
-   static Widget buildServicesShimmer() {
+  static Widget buildServicesShimmer() {
     return SizedBox(
       height: 120.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: 3,
         separatorBuilder: (_, __) => SizedBox(width: 12.w),
         itemBuilder: (context, index) => Column(
           children: [

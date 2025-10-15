@@ -1,3 +1,4 @@
+import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/services/cleaning/data/models/cleaning_booking_response.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
@@ -65,3 +66,14 @@ class CleaningPromoCodeError extends CleaningStates {
 }
 
 class CleaningPromoCodeRemoved extends CleaningStates {}
+class CleaningLocationsLoading extends CleaningStates {}
+
+class CleaningLocationsSuccess extends CleaningStates {
+  final List<LocationModel> locations;
+  CleaningLocationsSuccess(this.locations);
+}
+
+class CleaningLocationsError extends CleaningStates {
+  final String message;
+  CleaningLocationsError(this.message);
+}

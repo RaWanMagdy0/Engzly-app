@@ -57,6 +57,10 @@ import '../../features/services/house_shifting/data/repo/house_shifting_repo.dar
 import '../../features/services/house_shifting/logic/booking_cubit.dart'
     as _i37;
 import '../../features/services/house_shifting/logic/cubit.dart' as _i332;
+import '../../features/services/vehicle/data/api_manager/vehicle_api_manager.dart'
+    as _i555;
+import '../../features/services/vehicle/data/repo/vehicle_repo.dart' as _i791;
+import '../../features/services/vehicle/logic/vehicle_cubit.dart' as _i694;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
 import '../helper/local/app_provider.dart' as _i44;
 import '../networking/api/dio/dio_factory.dart' as _i777;
@@ -90,6 +94,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i502.CleaningApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i795.HouseShiftingApiManager>(
         () => _i795.HouseShiftingApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i555.VehicleApiManager>(
+        () => _i555.VehicleApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(
@@ -105,6 +111,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i302.LoginCubit>(() => _i302.LoginCubit(gh<_i869.LoginRepo>()));
     gh.factory<_i1003.ResetPasswordCubit>(
         () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
+    gh.factory<_i791.VehicleRepo>(
+        () => _i791.VehicleRepo(gh<_i555.VehicleApiManager>()));
     gh.factory<_i429.HomeRepo>(
         () => _i429.HomeRepo(gh<_i224.HomeApiManager>()));
     gh.factory<_i625.HistoryRepository>(
@@ -147,9 +155,15 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i807.LocationRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
+    gh.factory<_i694.VehicleCubit>(() => _i694.VehicleCubit(
+          gh<_i650.HouseShiftingRepo>(),
+          gh<_i791.VehicleRepo>(),
+          gh<_i832.GetLocationsRepo>(),
+        ));
     gh.factory<_i672.CleaningCubit>(() => _i672.CleaningCubit(
           gh<_i650.HouseShiftingRepo>(),
           gh<_i783.CleaningRepo>(),
+          gh<_i832.GetLocationsRepo>(),
         ));
     return this;
   }

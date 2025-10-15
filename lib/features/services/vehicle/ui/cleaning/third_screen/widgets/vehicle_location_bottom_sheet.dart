@@ -1,23 +1,24 @@
-import 'package:engzly/core/shared_widgets/custom_botton.dart';
-import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
+import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
+import 'package:engzly/features/services/vehicle/ui/cleaning/order_details/vehicle_order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:engzly/core/theming/colors.dart';
 
-class CleaningLocationBottomSheet extends StatelessWidget {
+class VehicleLocationBottomSheet extends StatelessWidget {
   final String selectedAddress;
   final String selectedType;
   final Function(String) onTypeChanged;
-  final VoidCallback onConfirm;
+  final Function(String) onSelectAddress;
+  final VehicleCubit vehicleCubit;
 
-  const CleaningLocationBottomSheet({
+  const VehicleLocationBottomSheet({
     super.key,
     required this.selectedAddress,
     required this.selectedType,
     required this.onTypeChanged,
-    required this.onConfirm,
+    required this.onSelectAddress,
+    required this.vehicleCubit,
   });
 
   @override
@@ -45,7 +46,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(Icons.location_on, color: ColorsManager.green),
+                  Icon(Icons.location_on, color: ColorsManager.orange),
                   8.horizontalSpace,
                   Expanded(
                     child: Text(
@@ -72,35 +73,32 @@ class CleaningLocationBottomSheet extends StatelessWidget {
                 ],
               ),
               24.verticalSpace,
-              CustomButton(
-                text: "Proceed",
+              ElevatedButton(
                 onPressed: () {
-                  if (selectedAddress.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("Please select a location first")),
-                    );
-                    return;
-                  }
-                  onConfirm();
-                  final cleaningCubit = context.read<CleaningCubit>();
+                  vehicleCubit.selectLocation(selectedAddress);
+                  final cubit = context.read<VehicleCubit>();
 
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => MultiBlocProvider(
                         providers: [
-                          BlocProvider.value(value: cleaningCubit),
+                          BlocProvider.value(value: cubit),
                         ],
-                        child: CleaningOrderDetails(),
+                        child: VehicleOrderDetails(),
                       ),
                     ),
                   );
                 },
-                color: ColorsManager.green,
-                textColor: ColorsManager.white,
-                borderRadius: 15.r,
-                height: 50.h,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorsManager.orange,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                child: const Text("Proceed"),
               ),
             ],
           ),
@@ -119,7 +117,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
           CircleAvatar(
             radius: 28,
             backgroundColor:
-                isSelected ? ColorsManager.green : Colors.grey.shade200,
+                isSelected ? ColorsManager.orange : Colors.grey.shade200,
             child: Icon(icon,
                 color: isSelected ? Colors.white : Colors.black, size: 28),
           ),
@@ -129,7 +127,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: isSelected ? ColorsManager.green : Colors.black,
+              color: isSelected ? ColorsManager.orange : Colors.black,
             ),
           ),
         ],

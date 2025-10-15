@@ -1,5 +1,7 @@
+import 'package:engzly/core/theming/images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LimitedOffer extends StatelessWidget {
   const LimitedOffer({super.key});
@@ -7,9 +9,10 @@ class LimitedOffer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> cardImages = [
-      "assets/images/ima.png",
-      "assets/images/ima.png",
-      "assets/images/ima.png",
+      AppImages.truck,
+      AppImages.truck,
+
+//"assets/images/ima.png",
     ];
 
     return Column(
@@ -20,9 +23,8 @@ class LimitedOffer extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         10.verticalSpace,
-
         SizedBox(
-          height: 250.h,
+          height: 150.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: cardImages.length,
@@ -32,11 +34,8 @@ class LimitedOffer extends StatelessWidget {
                 width: 300.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.r),
-                  image: DecorationImage(
-                    image: AssetImage(cardImages[index]),
-                    fit: BoxFit.cover,
-                  ),
                 ),
+                child: SvgPicture.asset(cardImages[index]),
               );
             },
           ),

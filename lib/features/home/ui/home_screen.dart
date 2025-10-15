@@ -66,23 +66,28 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            20.verticalSpace,
-            Row(
-              children: [
-                Text("Welcome ", style: AppFonts.font36BlackWeight700),
-                Image.asset(AppImages.hand)
-              ],
-            ),
-            Row(
-              children: [
-                Text("Need a helping hand today?",
-                    style: AppFonts.font24greykWeight400),
-              ],
-            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    Row(
+                      children: [
+                        Text("Welcome ",
+                            style: AppFonts.font36BlackWeight700
+                                .copyWith(fontSize: 28.sp)),
+                        Image.asset(
+                          AppImages.hand,
+                          height: 30.h,
+                          width: 30.w,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Need a helping hand today?",
+                            style: AppFonts.font24greykWeight400),
+                      ],
+                    ),
                     8.verticalSpace,
                     ServiceRow(),
                     12.verticalSpace,
@@ -164,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemCount:
                                       OtherServiceCard.staticServices.length,
                                   separatorBuilder: (_, __) =>
-                                      SizedBox(width: 10.w),
+                                      SizedBox(width: 25.w),
                                   itemBuilder: (context, index) {
                                     final service =
                                         OtherServiceCard.staticServices[index];
@@ -178,15 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           case 'Cleaning':
                                             Navigator.pushNamed(
                                                 context, RouteName.cleaning);
+                                          case 'Vehicle':
+                                            Navigator.pushNamed(
+                                                context, RouteName.vehicle);
                                             break;
-
-                                          default:
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                  content:
-                                                      Text('Coming soon!')),
-                                            );
                                         }
                                       },
                                     );
