@@ -40,13 +40,12 @@ class _SignUpPageState extends State<SignUpPage> {
               Scaffold(
                 appBar: AppBar(
                   forceMaterialTransparency: true,
-                  title: Text(
-                    "Register",
-                    style: AppFonts.font20BlackWeight700.copyWith(
-                      fontSize: 18.sp,
-                    ),
-                  ),
                   centerTitle: true,
+                  // Explicitly ensure title and icons are black (fallback to theme)
+                  titleTextStyle: AppFonts.font20BlackWeight700.copyWith(fontSize: 18.sp),
+                  iconTheme: const IconThemeData(color: ColorsManager.black),
+                  actionsIconTheme: const IconThemeData(color: ColorsManager.black),
+                  title: const Text("Register"),
                 ),
                 body: Padding(
                   padding: const EdgeInsets.all(12.0),

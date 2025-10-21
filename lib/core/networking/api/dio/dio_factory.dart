@@ -147,7 +147,7 @@ class DioFactory {
       }
 
       debugPrint(" Calling refresh endpoint...");
-      
+
       final refreshDio = Dio(
         BaseOptions(
           baseUrl: ApiConstants.baseUrl,
@@ -168,13 +168,18 @@ class DioFactory {
         },
       );
 
-      final newAccessToken = response.data?["accessToken"];
-      final newRefreshToken = response.data?["refreshToken"];
+      final newAccessToken = response.data?["accessToken"] ??
+          response.data?["token"] ??
+          response.data?["access_token"];
+      final newRefreshToken =
+          response.data?["refreshToken"] ?? response.data?["refresh_token"];
 
       if (newAccessToken == null || newAccessToken.isEmpty) {
         debugPrint(" No accessToken in refresh response");
+        debugPrint(" Response data: ${response.data}");
         return null;
       }
+
       if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
         await TokenManager.setRefreshToken(token: newRefreshToken);
         debugPrint(" Both tokens updated");

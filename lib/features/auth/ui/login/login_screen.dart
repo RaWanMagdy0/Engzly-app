@@ -93,8 +93,8 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.only(
-              left: 40.w,
-              right: 40.w,
+              left: 16.w,
+              right: 16.w,
               bottom: MediaQuery.of(context).viewInsets.bottom + 30.h,
             ),
             child: Column(
@@ -154,8 +154,9 @@ class _LogInScreenState extends State<LogInScreen> {
   void _handleStateChange(LoginState state) {
     if (state is LoginSuccess) {
       AppDialogs.showSuccessDialog(
-          context: context, message: "Login Successfully",    
-);
+        context: context,
+        message: "Login Successfully",
+      );
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
           Navigator.pushNamedAndRemoveUntil(

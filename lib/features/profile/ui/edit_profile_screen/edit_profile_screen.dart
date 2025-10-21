@@ -54,16 +54,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         return CustomScaffoldScreen(
           title: Text(
             "Edit Profile ",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
-          leadingIcon: Icon(Icons.arrow_back, size: 28.w, color: Colors.white),
+          leadingIcon: Icon(Icons.arrow_back, size: 28.w, color: Colors.black),
           notificationIcon: Image.asset(
             AppImages.notificationIcon,
             width: 28.w,
             height: 28.h,
+            color: ColorsManager.black,
           ),
           onLeadingTap: () {
-            Navigator.pushNamed(context, RouteName.profile);
+            Navigator.pushNamed(context, RouteName.homeLayout);
           },
           onNotificationTap: () {},
           showNotificationDot: true,
@@ -112,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         width: 120.w,
                         height: 120.h,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha:0.4),
+                          color: Colors.black.withValues(alpha: 0.4),
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                       ),

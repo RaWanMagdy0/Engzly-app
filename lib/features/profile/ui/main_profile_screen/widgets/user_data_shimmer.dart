@@ -1,6 +1,4 @@
-
 import 'package:engzly/core/theming/colors.dart';
-import 'package:engzly/core/theming/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,8 +13,8 @@ class UserDataShimmerWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-         Shimmer.fromColors(
-            baseColor: ColorsManager.lightGray.withOpacity(0.3),
+          Shimmer.fromColors(
+            baseColor: ColorsManager.lightGray.withValues(alpha: 0.3),
             highlightColor: Colors.white,
             child: Container(
               width: 120.w,
@@ -27,7 +25,6 @@ class UserDataShimmerWidget extends StatelessWidget {
               ),
             ),
           ),
-
           SizedBox(height: 5.h),
           Shimmer.fromColors(
             baseColor: ColorsManager.lightGray.withOpacity(0.3),

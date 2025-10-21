@@ -23,16 +23,13 @@ class MyLocation extends StatelessWidget {
         return CustomScaffoldScreen(
           title: Text(
             "My Locations ",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
-          leadingIcon: SvgPicture.asset(
-            AppImages.categoryIcon,
-            width: 22.w,
-            height: 22.h,
-          ),
+          leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+              width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(
             AppImages.notificationIcon,
             width: 28.w,
+            color: ColorsManager.black,
             height: 28.h,
           ),
           onLeadingTap: () {},

@@ -113,12 +113,11 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
         return CustomScaffoldScreen(
           title: Text(
             "Order Details",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
-          leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 22.w, height: 22.h),
+          leadingIcon: SvgPicture.asset(AppImages.backArrow,
+              width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h),
+              width: 28.w, height: 28.h, color: ColorsManager.black),
           child: Stack(
             children: [
               Padding(
@@ -137,7 +136,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                             "No house selected",
                         subtitle: '1 Kitchen Included',
                         price: cubit.selectedHouseSizePrice != null
-                            ? "\$${cubit.selectedHouseSizePrice}/hr"
+                            ? "${cubit.selectedHouseSizePrice}/hr"
                             : "—",
                         backgroundColor: const Color(0xFFFFE0B2),
                       ),
@@ -145,7 +144,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                         icon: '👷',
                         title: '${cubit.requiredPersons} Cleaner',
                         subtitle: '+\$5 for additional cleaner',
-                        price: "\$${personCost.toStringAsFixed(0)}/hr",
+                        price: "${personCost.toStringAsFixed(0)}/hr",
                         backgroundColor: const Color(0xFFE3F2FD),
                       ),
                       CleaningOrderSummry(

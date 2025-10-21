@@ -39,6 +39,8 @@ import 'package:engzly/features/services/house_shifting/ui/house_shifting_servic
 import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/first_screen/vehicle_screen.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/vehicle_order_confirmation.dart';
+import 'package:engzly/notification/nitification_screen.dart';
+import 'package:engzly/notification/notification_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/onBoarding/onboarding_screen.dart';
@@ -279,6 +281,13 @@ class AppRouter {
               ),
             ],
             child: const VehicleOrderConfirmation(),
+          ),
+        );
+         case RouteName.notification:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<NotificationCubit>(),
+            child: NotificationsScreen(),
           ),
         );
       default:

@@ -10,7 +10,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
-import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'widgets/map_view.dart';
@@ -55,12 +54,11 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
           showNotificationDot: true,
           title: Text(
             "Confirm Location",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
           leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
+              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h,color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h),
+              width: 28.w, height: 28.h,color: ColorsManager.black),
           onLeadingTap: () {
             Navigator.pop(context);
           },

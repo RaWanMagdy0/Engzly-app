@@ -61,6 +61,7 @@ import '../../features/services/vehicle/data/api_manager/vehicle_api_manager.dar
     as _i555;
 import '../../features/services/vehicle/data/repo/vehicle_repo.dart' as _i791;
 import '../../features/services/vehicle/logic/vehicle_cubit.dart' as _i694;
+import '../../notification/notification_cubit.dart' as _i426;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
 import '../helper/local/app_provider.dart' as _i44;
 import '../networking/api/dio/dio_factory.dart' as _i777;
@@ -79,6 +80,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final dioModule = _$DioModule();
     gh.factory<_i777.DioFactory>(() => _i777.DioFactory());
+    gh.factory<_i426.NotificationCubit>(() => _i426.NotificationCubit());
     gh.singleton<_i1040.AppProvider>(() => _i1040.AppProvider());
     gh.singleton<_i44.AppProvider>(() => _i44.AppProvider());
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));

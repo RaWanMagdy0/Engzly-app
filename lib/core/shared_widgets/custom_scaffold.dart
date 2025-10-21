@@ -1,6 +1,5 @@
 import 'package:engzly/core/shared_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A reusable Scaffold layout with a custom AppBar and a white container for the main content.
 
@@ -28,7 +27,7 @@ class CustomScaffoldScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: title,
         leadingIcon: leadingIcon,
@@ -41,10 +40,6 @@ class CustomScaffoldScreen extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40.r),
-            topRight: Radius.circular(40.r),
-          ),
         ),
         child: child,
       ),

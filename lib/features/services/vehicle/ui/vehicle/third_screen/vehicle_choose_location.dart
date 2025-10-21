@@ -55,12 +55,11 @@ class _VehicleChooseLocation extends State<VehicleChooseLocation> {
           showNotificationDot: true,
           title: Text(
             "Confirm Location",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
           leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
+              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h,color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h),
+              width: 28.w, height: 28.h,color: ColorsManager.black),
           onLeadingTap: () {
             Navigator.pop(context);
           },

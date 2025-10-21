@@ -12,6 +12,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -27,38 +28,38 @@ android {
     }
 
     signingConfigs {
-    create("release") {
-        val storeFilePath = project.findProperty("MYAPP_UPLOAD_STORE_FILE")?.toString()
-        val storePassword = project.findProperty("MYAPP_UPLOAD_STORE_PASSWORD")?.toString()
-        val keyAlias = project.findProperty("MYAPP_UPLOAD_KEY_ALIAS")?.toString()
-        val keyPassword = project.findProperty("MYAPP_UPLOAD_KEY_PASSWORD")?.toString()
+        create("release") {
+            val storeFilePath = project.findProperty("MYAPP_UPLOAD_STORE_FILE")?.toString()
+            val storePassword = project.findProperty("MYAPP_UPLOAD_STORE_PASSWORD")?.toString()
+            val keyAlias = project.findProperty("MYAPP_UPLOAD_KEY_ALIAS")?.toString()
+            val keyPassword = project.findProperty("MYAPP_UPLOAD_KEY_PASSWORD")?.toString()
 
-        if (storeFilePath != null) {
-            storeFile = file(storeFilePath)
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+            }
+            this.storePassword = storePassword
+            this.keyAlias = keyAlias
+            this.keyPassword = keyPassword
         }
-        this.storePassword = storePassword
-        this.keyAlias = keyAlias
-        this.keyPassword = keyPassword
     }
-}
 
-buildTypes {
-    getByName("release") {
-        signingConfig = signingConfigs.getByName("release")
-        isMinifyEnabled = false
-        isShrinkResources = false
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
-}
-
-
-
-    
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

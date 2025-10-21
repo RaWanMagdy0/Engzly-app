@@ -1,8 +1,10 @@
 import 'package:engzly/core/routing/app_router.dart';
+import 'package:engzly/core/theming/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'core/routing/route_name.dart';
+import 'core/theming/app_theme.dart';
 
 class EngzlyApp extends StatelessWidget {
   final bool isFirstTime;
@@ -34,9 +36,20 @@ class EngzlyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Engzly',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
+          theme: AppTheme.appTheme.copyWith(
             textTheme: GoogleFonts.dmSansTextTheme(
-              Theme.of(context).textTheme,
+              AppTheme.appTheme.textTheme,
+            ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              elevation: 0,
+              titleTextStyle: AppFonts.font20BlackWeight700.copyWith(
+                fontSize: 18.sp,
+                color: Colors.black,
+              ),
+              iconTheme: const IconThemeData(color: Colors.black),
+              actionsIconTheme: const IconThemeData(color: Colors.black),
             ),
           ),
           initialRoute: initialRoute,

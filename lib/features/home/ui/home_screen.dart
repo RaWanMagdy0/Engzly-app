@@ -1,5 +1,6 @@
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
+import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
@@ -51,30 +52,57 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffoldScreen(
-      title: Text(
-        "ENGZLY ",
-        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            AppImages.logo,
+            width: 22.w,
+            height: 22.h,
+            color: ColorsManager.black,
+          ),
+          10.horizontalSpace,
+          Text(
+            "ENGZLY ",
+            style: AppFonts.font14BWhiteWeight700.copyWith(
+              fontSize: 18.sp,
+              color: ColorsManager.black,
+            ),
+          ),
+        ],
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+      leadingIcon: SvgPicture.asset(
+        AppImages.categoryIcon,
+        width: 22.w,
+        height: 22.h,
+        // ignore: deprecated_member_use
+        color: ColorsManager.white,
+      ),
+      notificationIcon: Image.asset(
+        AppImages.notificationIcon,
+        width: 28.w,
+        height: 28.h,
+        color: ColorsManager.black,
+      ),
       onLeadingTap: () {},
-      onNotificationTap: () {},
+      onNotificationTap: () {
+        Navigator.pushNamed(context, RouteName.notification);
+      },
       showNotificationDot: true,
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    15.verticalSpace,
                     Row(
                       children: [
                         Text("Welcome ",
                             style: AppFonts.font36BlackWeight700
-                                .copyWith(fontSize: 28.sp)),
+                                .copyWith(fontSize: 26.sp)),
                         Image.asset(
                           AppImages.hand,
                           height: 30.h,
@@ -90,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     8.verticalSpace,
                     ServiceRow(),
-                    12.verticalSpace,
+                    20.verticalSpace,
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -141,20 +169,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemBuilder: (context, index) {
                                       final offer =
                                           offers[selectedTab].offers[index];
-                                      return Image.network(
-                                        offer.icon ?? "",
-                                        width: 260.w,
-                                        height: 150.h,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) =>
-                                            Icon(Icons.broken_image),
+                                      return ClipRRect(
+                                        borderRadius: BorderRadiusGeometry.all(
+                                            Radius.circular(15.r)),
+                                        child: Image.network(
+                                          offer.icon ?? "",
+                                          width: 260.w,
+                                          height: 150.h,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) =>
+                                              Icon(Icons.broken_image),
+                                        ),
                                       );
                                     },
                                   ),
                                 ),
                               ] else
                                 const Text("No offers found"),
-                              16.verticalSpace,
+                              20.verticalSpace,
                               Text("Other Services",
                                   style:
                                       AppFonts.font14BWhiteWeight700.copyWith(

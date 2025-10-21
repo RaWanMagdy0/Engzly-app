@@ -37,12 +37,11 @@ class _VehicleScreenState extends State<VehicleScreen> {
     return CustomScaffoldScreen(
       title: Text(
         "Vehicles Service",
-        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+      leadingIcon: SvgPicture.asset(AppImages.backArrow,
+          width: 30.w, height: 30.h, color: ColorsManager.black),
+      notificationIcon: Image.asset(AppImages.notificationIcon,
+          width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
       showNotificationDot: true,

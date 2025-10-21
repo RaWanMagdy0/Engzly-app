@@ -36,12 +36,11 @@ class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
     return CustomScaffoldScreen(
       title: Text(
         "Order Confirmation",
-        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
       ),
       leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
+          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h,color: ColorsManager.black),
       notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h,color: ColorsManager.black),
       onLeadingTap: () {},
       onNotificationTap: () {},
       showNotificationDot: true,

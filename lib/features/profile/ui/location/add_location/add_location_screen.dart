@@ -45,12 +45,11 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
       showNotificationDot: true,
       title: Text(
         "Select Location",
-        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+      leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+          width: 22.w, height: 22.h, color: ColorsManager.black),
+      notificationIcon: Image.asset(AppImages.notificationIcon,
+          width: 28.w, height: 28.h, color: ColorsManager.black),
       child: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is SelectLocationSuccess) {

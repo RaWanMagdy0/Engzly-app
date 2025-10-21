@@ -1,3 +1,4 @@
+import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/features/history/ui/widgets/card_map.dart';
 import 'package:engzly/features/history/ui/widgets/history_card_shimmer.dart';
 import 'package:engzly/features/history/ui/widgets/history_loading_list.dart';
@@ -49,18 +50,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
         return CustomScaffoldScreen(
           title: Text(
             "History",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
-          leadingIcon: SvgPicture.asset(
-            AppImages.categoryIcon,
-            width: 22.w,
-            height: 22.h,
-          ),
-          notificationIcon: Image.asset(
-            AppImages.notificationIcon,
-            width: 28.w,
-            height: 28.h,
-          ),
+          leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+              width: 22.w, height: 22.h, color: ColorsManager.black),
+          notificationIcon: Image.asset(AppImages.notificationIcon,
+              width: 28.w, height: 28.h, color: ColorsManager.black),
           onLeadingTap: () {},
           onNotificationTap: () {},
           showNotificationDot: true,

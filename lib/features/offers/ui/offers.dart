@@ -1,3 +1,4 @@
+import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/features/offers/ui/widgets/just_for_you.dart';
 import 'package:engzly/features/offers/ui/widgets/latest_offers.dart';
 import 'package:engzly/features/offers/ui/widgets/limited_offers.dart';
@@ -16,12 +17,19 @@ class OffersScreen extends StatelessWidget {
     return CustomScaffoldScreen(
       title: Text(
         "Offers",
-        style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+      leadingIcon: SvgPicture.asset(
+        AppImages.categoryIcon,
+        width: 22.w,
+        height: 22.h,
+        color: ColorsManager.black,
+      ),
+      notificationIcon: Image.asset(
+        AppImages.notificationIcon,
+        width: 28.w,
+        height: 28.h,
+        color: ColorsManager.black,
+      ),
       onLeadingTap: () {},
       onNotificationTap: () {},
       showNotificationDot: true,
@@ -30,14 +38,12 @@ class OffersScreen extends StatelessWidget {
         child: Column(
           children: [
             20.verticalSpace,
-
             LatestOffers(),
             25.verticalSpace,
             LimitedOffer(),
             25.verticalSpace,
             JustForYou(),
             25.verticalSpace,
-
           ],
         ),
       ),

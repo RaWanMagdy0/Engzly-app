@@ -8,7 +8,7 @@ import 'package:engzly/features/profile/logic/state.dart';
 import 'package:engzly/features/profile/ui/main_profile_screen/widgets/general_data_widget.dart';
 import 'package:engzly/features/profile/ui/main_profile_screen/widgets/more_widget.dart';
 import 'package:engzly/features/profile/ui/main_profile_screen/widgets/notification_widget.dart';
-import 'package:engzly/features/profile/ui/main_profile_screen/widgets/user_data_shimmer';
+import 'package:engzly/features/profile/ui/main_profile_screen/widgets/user_data_shimmer.dart';
 import 'package:engzly/features/profile/ui/main_profile_screen/widgets/user_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:engzly/core/theming/images.dart';
@@ -40,12 +40,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return CustomScaffoldScreen(
         title: Text(
           "Profile ",
-          style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
         ),
-        leadingIcon:
-            SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h),
-        notificationIcon:
-            Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
+        leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+            width: 22.w, height: 22.h, color: ColorsManager.black),
+        notificationIcon: Image.asset(AppImages.notificationIcon,
+            width: 28.w, height: 28.h, color: ColorsManager.black),
         onLeadingTap: () {},
         onNotificationTap: () {},
         showNotificationDot: true,

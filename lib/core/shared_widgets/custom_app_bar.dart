@@ -1,4 +1,5 @@
 import 'package:engzly/core/theming/colors.dart';
+import 'package:engzly/core/theming/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,9 +24,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      titleTextStyle: AppFonts.font20BlackWeight700.copyWith(fontSize: 18.sp),
+      iconTheme: const IconThemeData(color: ColorsManager.black),
+      actionsIconTheme: const IconThemeData(color: ColorsManager.black),
+      backgroundColor: Colors.white,
+      forceMaterialTransparency: true,
       centerTitle: true,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.black,
       elevation: 0,
       toolbarHeight: 60.h,
       leading: Padding(
@@ -33,6 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: IconButton(
           onPressed: onLeadingTap,
           icon: leadingIcon,
+          color: ColorsManager.black,
         ),
       ),
       title: title,
@@ -45,6 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 onPressed: onNotificationTap,
                 icon: notificationIcon,
+                color: ColorsManager.black,
               ),
               if (showNotificationDot)
                 Positioned(

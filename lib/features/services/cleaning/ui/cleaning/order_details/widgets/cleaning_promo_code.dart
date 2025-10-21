@@ -45,7 +45,7 @@ class _CleaningPromoCode extends State<CleaningPromoCode> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE3F2FD),
+                    color: ColorsManager.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(

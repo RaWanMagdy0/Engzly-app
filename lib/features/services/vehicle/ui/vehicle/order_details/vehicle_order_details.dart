@@ -107,12 +107,11 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
         return CustomScaffoldScreen(
           title: Text(
             "Order Details",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
           leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 22.w, height: 22.h),
+              SvgPicture.asset(AppImages.backArrow, width: 22.w, height: 22.h,color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h),
+              width: 28.w, height: 28.h,color: ColorsManager.black),
           child: Stack(
             children: [
               Padding(

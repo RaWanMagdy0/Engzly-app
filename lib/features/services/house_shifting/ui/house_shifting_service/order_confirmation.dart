@@ -39,12 +39,11 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
         return CustomScaffoldScreen(
           title: Text(
             "Order Confirmation",
-            style: AppFonts.font14BWhiteWeight700.copyWith(fontSize: 18.sp),
           ),
           leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
-              width: 22.w, height: 22.h),
+              width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h),
+              width: 28.w, height: 28.h, color: ColorsManager.black),
           onLeadingTap: () {},
           onNotificationTap: () {},
           showNotificationDot: true,
