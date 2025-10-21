@@ -1,7 +1,7 @@
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
-import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/third_screen/widgets/cleaning_location_bottom_sheet.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
+import 'package:engzly/features/services/painting/logic/painting_states.dart';
+import 'package:engzly/features/services/painting/ui/painting/third_screen/widgets/painting_location_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,16 +13,16 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'widgets/map_view.dart';
-import 'widgets/cleaning_address_top_bar.dart';
+import 'widgets/painting_address_top_bar.dart';
 
-class CleaningChooseLocation extends StatefulWidget {
-  const CleaningChooseLocation({super.key});
+class PaintingChooseLocation extends StatefulWidget {
+  const PaintingChooseLocation({super.key});
 
   @override
-  State<CleaningChooseLocation> createState() => _CleaningChooseLocation();
+  State<PaintingChooseLocation> createState() => _PaintingChooseLocation();
 }
 
-class _CleaningChooseLocation extends State<CleaningChooseLocation> {
+class _PaintingChooseLocation extends State<PaintingChooseLocation> {
   GoogleMapController? _mapController;
   final Set<Marker> _markers = {};
   LatLng? selectedLocation;
@@ -33,21 +33,21 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
   @override
   void initState() {
     super.initState();
-    context.read<CleaningCubit>().getLocations();
+    context.read<PaintingCubit>().getLocations();
     _initializeMap();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CleaningCubit, CleaningStates>(
+    return BlocConsumer<PaintingCubit, PaintingStates>(
       listener: (context, state) {
-        if (state is CleaningLocationsError) {
+        if (state is PaintingLocationsError) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       builder: (context, state) {
-        final cubit = context.read<CleaningCubit>();
+        final cubit = context.read<PaintingCubit>();
         final locations = cubit.locations;
 
         return CustomScaffoldScreen(
@@ -55,19 +55,19 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
           title: Text(
             "Confirm Location",
           ),
-          leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h,color: ColorsManager.black),
+          leadingIcon: SvgPicture.asset(AppImages.backArrow,
+              width: 30.w, height: 30.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h,color: ColorsManager.black),
+              width: 28.w, height: 28.h, color: ColorsManager.black),
           onLeadingTap: () {
             Navigator.pop(context);
           },
           child: Stack(
             children: [
-              if (state is CleaningLocationsLoading)
+              if (state is PaintingLocationsLoading)
                 const Center(
                   child: CircularProgressIndicator(
-                    color: ColorsManager.green,
+                    color: ColorsManager.yellow,
                   ),
                 )
               else
@@ -88,10 +88,10 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
                 top: 20.h,
                 left: 16.w,
                 right: 16.w,
-                child: CleaningAddressTopBar(address: selectedAddress),
+                child: PaintingAddressTopBar(address: selectedAddress),
               ),
               if (locations.isNotEmpty)
-                CleaningLocationBottomSheet(
+                PaintingLocationBottomSheet(
                   selectedAddress: selectedAddress,
                   selectedType: selectedType,
                   onTypeChanged: (type) async {
@@ -99,7 +99,7 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
                     await _moveToSavedLocation(type, locations);
                   },
                   onSelectAddress: (_) {},
-                  cleaningCubit: context.read<CleaningCubit>(),
+                  paintingCubit: context.read<PaintingCubit>(),
                 ),
             ],
           ),

@@ -2,16 +2,16 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CleaningCalenderWidget extends StatefulWidget {
+class PaintingCalenderWidget extends StatefulWidget {
   final Function(DateTime)? onDateSelected;
 
-  const CleaningCalenderWidget({super.key, this.onDateSelected});
+  const PaintingCalenderWidget({super.key, this.onDateSelected});
 
   @override
-  State<CleaningCalenderWidget> createState() => _CleaningCalenderWidget();
+  State<PaintingCalenderWidget> createState() => _PaintingCalenderWidget();
 }
 
-class _CleaningCalenderWidget extends State<CleaningCalenderWidget> {
+class _PaintingCalenderWidget extends State<PaintingCalenderWidget> {
   DateTime today = DateTime.now();
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
@@ -38,11 +38,11 @@ class _CleaningCalenderWidget extends State<CleaningCalenderWidget> {
         ),
         daysOfWeekStyle: DaysOfWeekStyle(
           weekdayStyle: TextStyle(
-            color: ColorsManager.green,
+            color: ColorsManager.yellow,
             fontWeight: FontWeight.w700,
           ),
           weekendStyle: TextStyle(
-            color: ColorsManager.green,
+            color: ColorsManager.yellow,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -58,11 +58,11 @@ class _CleaningCalenderWidget extends State<CleaningCalenderWidget> {
         lastDay: DateTime.utc(2030, 12, 31),
         calendarStyle: CalendarStyle(
           todayDecoration: BoxDecoration(
-            color: ColorsManager.green.withValues(alpha: 0.7),
+            color: ColorsManager.yellow.withValues(alpha: 0.7),
             shape: BoxShape.circle,
           ),
           selectedDecoration: BoxDecoration(
-            color: ColorsManager.green,
+            color: ColorsManager.yellow,
             shape: BoxShape.circle,
           ),
           selectedTextStyle: TextStyle(color: Colors.white),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CleaningAddressTopBar extends StatelessWidget {
+class PaintingAddressTopBar extends StatelessWidget {
   final String address;
-  const CleaningAddressTopBar({super.key, required this.address});
+  const PaintingAddressTopBar({super.key, required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class CleaningAddressTopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.location_on, color: Colors.green),
+          const Icon(Icons.location_on, color: Colors.yellow),
           10.horizontalSpace,
           Expanded(
             child: Text(

@@ -13,7 +13,7 @@ class HouseSizeShimmer extends StatelessWidget {
           baseColor: Colors.grey.shade300,
           highlightColor: Colors.grey.shade100,
           child: Container(
-            height: 120.h,
+            height: 140.h,
             width: 105.w,
             decoration: BoxDecoration(
               color: Colors.grey,

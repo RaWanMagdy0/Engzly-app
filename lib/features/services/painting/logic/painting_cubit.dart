@@ -5,6 +5,7 @@ import 'package:engzly/features/profile/data/repo/get_locations_repo.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
 import 'package:engzly/features/services/house_shifting/data/repo/house_shifting_repo.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
+import 'package:engzly/features/services/painting/data/models/get_colors_response_model.dart';
 import 'package:engzly/features/services/painting/data/models/painting_booking_request_model.dart';
 import 'package:engzly/features/services/painting/data/models/painting_booking_response.dart';
 import 'package:engzly/features/services/painting/data/repo/painting_repo.dart';
@@ -23,6 +24,7 @@ class PaintingCubit extends BaseViewModel<PaintingStates> {
 
   List<HouseSizeModel> houseSizeResponse = [];
   List<LocationModel> locations = [];
+  List<GetColorsResponseModel> colorsResponse = [];
 
   HouseSizeModel? selectedHouseSize;
   int? selectedHouseSizePrice;
@@ -33,7 +35,12 @@ class PaintingCubit extends BaseViewModel<PaintingStates> {
 
   DateTime? selectedDate;
   int requiredPersons = 0;
-  int workingHours = 2;
+  GetColorsResponseModel? selectedColor;
+
+  void selectColor(GetColorsResponseModel color) {
+    selectedColor = color;
+    emit(PaintingColorSelected(color));
+  }
 
   void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
     selectedHouseSize = size;
@@ -41,13 +48,13 @@ class PaintingCubit extends BaseViewModel<PaintingStates> {
     emit(PaintingHouseSizeSelected(size));
   }
 
-  void increaseWorkingHours() {
-    workingHours++;
+  void increaserequiredPersons() {
+    requiredPersons++;
     emit(PaintingUpdated());
   }
 
-  void decreaseWorkingHours() {
-    if (workingHours > 1) workingHours--;
+  void decreaserequiredPersons() {
+    if (requiredPersons > 1) requiredPersons--;
     emit(PaintingUpdated());
   }
 
@@ -154,5 +161,20 @@ class PaintingCubit extends BaseViewModel<PaintingStates> {
     appliedPromoCode = null;
     discountPercentage = null;
     emit(PaintingPromoCodeRemoved());
+  }
+
+  Future<void> getColors() async {
+    emit(GetColorsLoading());
+
+    final result = await _paintingRepo.getColors();
+
+    if (result is Success<List<GetColorsResponseModel>>) {
+      colorsResponse = result.data ?? [];
+      emit(GetColorsSuccess(colorsResponse));
+    } else if (result is Fail) {
+      final failResult = result as Fail;
+      final errorMessage = getErrorMessageFromException(failResult.exception);
+      emit(GetColorsError(errorMessage));
+    }
   }
 }

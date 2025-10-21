@@ -2,13 +2,13 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CleaningOrderSummry extends StatelessWidget {
+class PaintingOrderSummry extends StatelessWidget {
   final String label;
   final String value;
   final bool isTotal;
   final bool isDiscount;
 
-  const CleaningOrderSummry({
+  const PaintingOrderSummry({
     super.key,
     required this.label,
     required this.value,
@@ -37,9 +37,10 @@ class CleaningOrderSummry extends StatelessWidget {
               fontSize: isTotal ? 18.sp : 14.sp,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
               color: isDiscount
-                      ? ColorsManager.green
+                      ? ColorsManager.yellow
+
                   : isTotal
-                      ? ColorsManager.green
+                      ? ColorsManager.yellow
                       : Colors.grey.shade800,
             ),
           ),

@@ -2,12 +2,12 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CleaningPromoCode extends StatefulWidget {
+class PaintingPromoCode extends StatefulWidget {
   final String? appliedPromoCode;
   final VoidCallback? onRemove;
   final Function(String)? onApply;
 
-  const CleaningPromoCode({
+  const PaintingPromoCode({
     super.key,
     this.appliedPromoCode,
     this.onRemove,
@@ -15,10 +15,10 @@ class CleaningPromoCode extends StatefulWidget {
   });
 
   @override
-  State<CleaningPromoCode> createState() => _CleaningPromoCode();
+  State<PaintingPromoCode> createState() => _PaintingPromoCode();
 }
 
-class _CleaningPromoCode extends State<CleaningPromoCode> {
+class _PaintingPromoCode extends State<PaintingPromoCode> {
   final TextEditingController _controller = TextEditingController();
   bool showInput = false;
 
@@ -45,7 +45,7 @@ class _CleaningPromoCode extends State<CleaningPromoCode> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
-                    color: ColorsManager.green.withValues(alpha: 0.1),
+                    color: ColorsManager.yellow.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
@@ -56,7 +56,7 @@ class _CleaningPromoCode extends State<CleaningPromoCode> {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
-                          color: ColorsManager.green,
+                          color: ColorsManager.yellow,
                         ),
                       ),
                       SizedBox(width: 6.w),
@@ -65,7 +65,7 @@ class _CleaningPromoCode extends State<CleaningPromoCode> {
                         child: Icon(
                           Icons.close,
                           size: 16.sp,
-                          color: ColorsManager.green,
+                          color: ColorsManager.yellow,
                         ),
                       ),
                     ],
@@ -79,9 +79,9 @@ class _CleaningPromoCode extends State<CleaningPromoCode> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: ColorsManager.green,
+                      color: ColorsManager.yellow,
                       decoration: TextDecoration.underline,
-                      decorationColor: ColorsManager.green,
+                      decorationColor: ColorsManager.yellow,
                     ),
                   ),
                 ),
@@ -136,7 +136,7 @@ class _CleaningPromoCode extends State<CleaningPromoCode> {
                     setState(() => showInput = false);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorsManager.green,
+                    backgroundColor: ColorsManager.yellow,
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                     shape: RoundedRectangleBorder(

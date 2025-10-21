@@ -2,20 +2,22 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CleaningOrderItem extends StatelessWidget {
+class PaintingOrderItem extends StatelessWidget {
   final String icon;
   final String title;
-  final String subtitle;
   final String price;
+  final String? subtitle;
+  final Widget? subtitleWidget;
   final Color backgroundColor;
 
-  const CleaningOrderItem({
+  const PaintingOrderItem({
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
     required this.price,
     required this.backgroundColor,
+    this.subtitle,
+    this.subtitleWidget,
   });
 
   @override
@@ -57,13 +59,16 @@ class CleaningOrderItem extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 4.h),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.grey.shade500,
+                if (subtitleWidget != null)
+                  subtitleWidget!
+                else if (subtitle != null)
+                  Text(
+                    subtitle!,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.grey.shade500,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -72,9 +77,9 @@ class CleaningOrderItem extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
-              color: ColorsManager.green,
+              color: ColorsManager.yellow,
             ),
-          ),
+          )
         ],
       ),
     );

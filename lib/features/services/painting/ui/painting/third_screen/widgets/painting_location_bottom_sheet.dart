@@ -1,24 +1,24 @@
-import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
+import 'package:engzly/features/services/painting/ui/painting/order_details/painting_order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:engzly/core/theming/colors.dart';
 
-class CleaningLocationBottomSheet extends StatelessWidget {
+class PaintingLocationBottomSheet extends StatelessWidget {
   final String selectedAddress;
   final String selectedType;
   final Function(String) onTypeChanged;
   final Function(String) onSelectAddress;
-  final CleaningCubit cleaningCubit;
+  final PaintingCubit paintingCubit;
 
-  const CleaningLocationBottomSheet({
+  const PaintingLocationBottomSheet({
     super.key,
     required this.selectedAddress,
     required this.selectedType,
     required this.onTypeChanged,
     required this.onSelectAddress,
-    required this.cleaningCubit,
+    required this.paintingCubit,
   });
 
   @override
@@ -46,7 +46,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(Icons.location_on, color: ColorsManager.green),
+                  Icon(Icons.location_on, color: ColorsManager.yellow),
                   8.horizontalSpace,
                   Expanded(
                     child: Text(
@@ -75,9 +75,8 @@ class CleaningLocationBottomSheet extends StatelessWidget {
               24.verticalSpace,
               ElevatedButton(
                 onPressed: () {
-                  cleaningCubit.selectLocation(selectedAddress);
-                  final cubit = context.read<CleaningCubit>();
-
+                  paintingCubit.selectLocation(selectedAddress);
+                  final cubit = context.read<PaintingCubit>();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -85,13 +84,13 @@ class CleaningLocationBottomSheet extends StatelessWidget {
                         providers: [
                           BlocProvider.value(value: cubit),
                         ],
-                        child: CleaningOrderDetails(),
+                        child: PaintingOrderDetails(),
                       ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.green,
+                  backgroundColor: ColorsManager.yellow,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -117,7 +116,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
           CircleAvatar(
             radius: 28,
             backgroundColor:
-                isSelected ? ColorsManager.green : Colors.grey.shade200,
+                isSelected ? ColorsManager.yellow : Colors.grey.shade200,
             child: Icon(icon,
                 color: isSelected ? Colors.white : Colors.black, size: 28),
           ),
@@ -127,7 +126,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              color: isSelected ? ColorsManager.green : Colors.black,
+              color: isSelected ? ColorsManager.yellow : Colors.black,
             ),
           ),
         ],

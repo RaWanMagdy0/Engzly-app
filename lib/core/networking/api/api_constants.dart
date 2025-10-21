@@ -32,7 +32,7 @@ class ApiConstants {
   static const String cleaningCheckOut = "Booking/CleaningBooking";
   static const String vehicleCheckOut = "Vehicles/VehiclesBooking";
   static const String paintingCheckOut = "Painting/paintingBooking";
-
+  static const String getColors = "Painting/colors";
 
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

@@ -2,11 +2,11 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CleaningPaymentMethod extends StatelessWidget {
+class PaintingPaymentMethod extends StatelessWidget {
   final String selectedMethod;
   final Function(String) onMethodChanged;
 
-  const CleaningPaymentMethod({
+  const PaintingPaymentMethod({
     super.key,
     required this.selectedMethod,
     required this.onMethodChanged,
@@ -105,7 +105,7 @@ class _PaymentMethodOption extends StatelessWidget {
                   width: 30.w,
                   height: 30.h,
                   decoration: BoxDecoration(
-                    color: ColorsManager.green,
+                    color: ColorsManager.yellow,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2.w),
                   ),

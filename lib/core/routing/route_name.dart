@@ -29,11 +29,10 @@ class RouteName {
   static const String cleaningOrderConfirmation = "cleaningOrderConfirmation";
   static const String vehicleOrderConfirmation = "vehicleOrderConfirmation";
   static const String notification = "notification";
-    static const String painting = "painting";
-
-
+  static const String painting = "painting";
   static const String vehicle = "vehicle";
-
   static const String contactUs = "contactUs";
   static const String questions = "questions";
+    static const String paintingOrderConfirmation  = "paintingOrderConfirmation";
+
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:engzly/core/networking/api/api_constants.dart';
+import 'package:engzly/features/services/painting/data/models/get_colors_response_model.dart';
 import 'package:engzly/features/services/painting/data/models/painting_booking_request_model.dart';
 import 'package:engzly/features/services/painting/data/models/painting_booking_response.dart';
 import 'package:injectable/injectable.dart';
@@ -18,5 +19,7 @@ abstract class PaintingApiManager {
     @Body() PaintingBookingRequestModel bookingRequestModel,
   );
 
- 
+  @GET(ApiConstants.getColors)
+  Future<List<GetColorsResponseModel>> getColors(
+      @Header("Authorization") String token);
 }

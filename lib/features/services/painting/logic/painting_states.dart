@@ -1,6 +1,7 @@
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
+import 'package:engzly/features/services/painting/data/models/get_colors_response_model.dart';
 import 'package:engzly/features/services/painting/data/models/painting_booking_response.dart';
 
 abstract class PaintingStates {}
@@ -75,4 +76,20 @@ class PaintingLocationsSuccess extends PaintingStates {
 class PaintingLocationsError extends PaintingStates {
   final String message;
   PaintingLocationsError(this.message);
+}
+class GetColorsLoading extends PaintingStates {}
+
+class GetColorsSuccess extends PaintingStates {
+  final List<GetColorsResponseModel> colors;
+  GetColorsSuccess(this.colors);
+}
+
+class GetColorsError extends PaintingStates {
+  final String error;
+  GetColorsError(this.error);
+}
+class PaintingColorSelected extends PaintingStates {
+  final GetColorsResponseModel color;
+
+  PaintingColorSelected(this.color);
 }

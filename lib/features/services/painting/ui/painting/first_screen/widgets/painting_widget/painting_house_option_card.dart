@@ -34,7 +34,7 @@ class PaintingHouseOptionCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.r),
               border: Border.all(
-                color: isSelected ? ColorsManager.green : Colors.grey.shade300,
+                color: isSelected ? ColorsManager.yellow : Colors.grey.shade300,
                 width: isSelected ? 2 : 1,
               ),
               color: Colors.white,

@@ -4,29 +4,25 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
-import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CleaningOrderConfirmation extends StatefulWidget {
-  const CleaningOrderConfirmation({super.key});
+class PaintingOrderConfirmation extends StatefulWidget {
+  const PaintingOrderConfirmation({super.key});
 
   @override
-  State<CleaningOrderConfirmation> createState() =>
-      _CleaningOrderConfirmation();
+  State<PaintingOrderConfirmation> createState() =>
+      _PaintingOrderConfirmation();
 }
 
-class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
-  late HouseShiftingBookingCubit bookingCubit;
-
+class _PaintingOrderConfirmation extends State<PaintingOrderConfirmation> {
   @override
   void initState() {
     super.initState();
-    bookingCubit = context.read<HouseShiftingBookingCubit>();
+    //  bookingCubit = context.read<HouseShiftingBookingCubit>();
   }
 
   @override
@@ -37,10 +33,10 @@ class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
       title: Text(
         "Order Confirmation",
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h,color: ColorsManager.black),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h,color: ColorsManager.black),
+      leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+          width: 22.w, height: 22.h, color: ColorsManager.black),
+      notificationIcon: Image.asset(AppImages.notificationIcon,
+          width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () {},
       onNotificationTap: () {},
       showNotificationDot: true,
@@ -76,9 +72,9 @@ class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
                         child: Text(
                           phoneNumber,
                           style: AppFonts.font14BOrangeWeight400.copyWith(
-                              color: ColorsManager.green,
+                              color: ColorsManager.yellow,
                               decoration: TextDecoration.underline,
-                              decorationColor: ColorsManager.green),
+                              decorationColor: ColorsManager.yellow),
                         ),
                       ),
                     ),
@@ -128,7 +124,7 @@ class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
                 );
               },
               text: "Go to Homepage",
-              color: ColorsManager.green,
+              color: ColorsManager.yellow,
               textStyle: AppFonts.font14BWhiteWeight700,
             ),
           ],

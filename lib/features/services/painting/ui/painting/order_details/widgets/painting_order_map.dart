@@ -6,16 +6,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 
-class CleaningOrderMap extends StatefulWidget {
+class PaintingOrderMap extends StatefulWidget {
   final String? location;
 
-  const CleaningOrderMap({super.key, this.location});
+  const PaintingOrderMap({super.key, this.location});
 
   @override
-  State<CleaningOrderMap> createState() => _CleaningOrderMap();
+  State<PaintingOrderMap> createState() => _PaintingOrderMap();
 }
 
-class _CleaningOrderMap extends State<CleaningOrderMap> {
+class _PaintingOrderMap extends State<PaintingOrderMap> {
   LatLng? endPoint;
   late LatLng startPoint;
   GoogleMapController? mapController;
@@ -31,7 +31,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
 
   Future<void> _initMap() async {
     try {
-      debugPrint("📍 User address: ${widget.location}");
+      debugPrint(" User address: ${widget.location}");
 
       startPoint = octoberStart;
 
@@ -64,7 +64,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
         });
       }
     } catch (e) {
-      debugPrint("❌ Error getting coordinates: $e");
+      debugPrint(" Error getting coordinates: $e");
       setState(() {
         startPoint = octoberStart;
         endPoint = octoberStart;
@@ -117,7 +117,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
 
     final polyline = Polyline(
       polylineId: const PolylineId('route'),
-      color: Colors.green,
+      color: Colors.yellow,
       width: 4,
       points: [startPoint, endPoint!],
     );

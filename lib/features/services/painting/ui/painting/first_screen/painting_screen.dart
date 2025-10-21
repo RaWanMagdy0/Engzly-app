@@ -3,13 +3,14 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/second_screen/cleaning_schedule_screen.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/widgets/house_size_widget/house_size_shimmer.dart';
 import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
 import 'package:engzly/features/services/painting/logic/painting_states.dart';
 import 'package:engzly/features/services/painting/ui/painting/first_screen/widgets/painting_counter_row.dart';
+import 'package:engzly/features/services/painting/ui/painting/first_screen/widgets/painting_widget/color_picker_widget.dart';
 import 'package:engzly/features/services/painting/ui/painting/first_screen/widgets/painting_widget/painting_header_section.dart';
 import 'package:engzly/features/services/painting/ui/painting/first_screen/widgets/painting_widget/paintinging_house_option_section.dart';
+import 'package:engzly/features/services/painting/ui/painting/second_screen/painting_schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,9 @@ class _PaintingScreenState extends State<PaintingScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PaintingCubit>().getHouseSize();
+      final cubit = context.read<PaintingCubit>();
+      cubit.getHouseSize();
+      cubit.getColors();
     });
   }
 
@@ -87,6 +90,7 @@ class _PaintingScreenState extends State<PaintingScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
+                  const ColorPickerWidget(),
                   20.verticalSpace,
                   Container(
                     color: ColorsManager.lightGray,
@@ -103,9 +107,9 @@ class _PaintingScreenState extends State<PaintingScreen> {
                             subtitle:
                                 'Regular cost is 5/hr. Total cost will be calculated later',
                             iconPath: AppImages.workerIcon,
-                            value: cubit.workingHours,
-                            onIncrement: cubit.increaseWorkingHours,
-                            onDecrement: cubit.decreaseWorkingHours,
+                            value: cubit.requiredPersons,
+                            onIncrement: cubit.increaserequiredPersons,
+                            onDecrement: cubit.decreaserequiredPersons,
                           ),
                         ],
                       );
@@ -132,6 +136,15 @@ class _PaintingScreenState extends State<PaintingScreen> {
                   return;
                 }
 
+                if (cubit.selectedColor == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select a color first"),
+                    ),
+                  );
+                  return;
+                }
+
                 if (cubit.requiredPersons <= 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -141,24 +154,16 @@ class _PaintingScreenState extends State<PaintingScreen> {
                   return;
                 }
 
-                if (cubit.workingHours < 1) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select valid working hours"),
-                    ),
-                  );
-                  return;
-                }
-                final cleaningCubit = context.read<PaintingCubit>();
+                final paintingCubit = context.read<PaintingCubit>();
 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => MultiBlocProvider(
                       providers: [
-                        BlocProvider.value(value: cleaningCubit),
+                        BlocProvider.value(value: paintingCubit),
                       ],
-                      child: CleaningScheduleScreen(),
+                      child: PaintingScheduleScreen(),
                     ),
                   ),
                 );

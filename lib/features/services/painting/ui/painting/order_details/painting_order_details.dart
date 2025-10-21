@@ -4,27 +4,27 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
-import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_item.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_map.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_summry.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_payment_method.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_promo_code.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
+import 'package:engzly/features/services/painting/logic/painting_states.dart';
+import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_order_item.dart';
+import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_order_map.dart';
+import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_order_summry.dart';
+import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_payment_method.dart';
+import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_promo_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CleaningOrderDetails extends StatefulWidget {
-  const CleaningOrderDetails({super.key});
+class PaintingOrderDetails extends StatefulWidget {
+  const PaintingOrderDetails({super.key});
 
   @override
-  State<CleaningOrderDetails> createState() => _CleaningOrderDetails();
+  State<PaintingOrderDetails> createState() => _PaintingOrderDetails();
 }
 
-class _CleaningOrderDetails extends State<CleaningOrderDetails>
+class _PaintingOrderDetails extends State<PaintingOrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
@@ -58,9 +58,9 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CleaningCubit, CleaningStates>(
+    return BlocConsumer<PaintingCubit, PaintingStates>(
       listener: (context, state) async {
-        if (state is CleaningCheckOutOrderSuccess) {
+        if (state is PaintingCheckOutOrderSuccess) {
           final response = state.booking.first;
           if (selectedPaymentMethod == 'online') {
             final clientSecret = response.data?.clientSecret;
@@ -75,33 +75,33 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
             if (context.mounted) {
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                RouteName.cleaningOrderConfirmation,
+                RouteName.paintingOrderConfirmation,
                 (route) => false,
               );
             }
           }
         }
 
-        if (state is CleaningCheckOutOrderError) {
+        if (state is PaintingCheckOutOrderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
         }
 
-        if (state is CleaningCheckOutOrderError) {
+        if (state is PaintingCheckOutOrderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
         }
       },
       builder: (context, state) {
-        final cubit = context.watch<CleaningCubit>();
+        final cubit = context.watch<PaintingCubit>();
         double basePrice = cubit.selectedHouseSizePrice?.toDouble() ?? 0;
         double personCost = cubit.requiredPersons * 5;
-        double hourlyRate = basePrice + personCost;
-        double totalHourCost = cubit.workingHours * hourlyRate;
+        double colorCost = 100;
+        double hourlyRate = basePrice + personCost + colorCost;
         double serviceCharge = 50;
-        double subtotal = totalHourCost + serviceCharge;
+        double subtotal = hourlyRate + serviceCharge;
 
         double discount = 0;
         if ((cubit.discountPercentage ?? 0) > 0) {
@@ -128,9 +128,9 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CleaningOrderMap(location: cubit.address ?? ''),
+                      PaintingOrderMap(location: cubit.address ?? ''),
                       10.verticalSpace,
-                      CleaningOrderItem(
+                      PaintingOrderItem(
                         icon: '🏠',
                         title: cubit.selectedHouseSize?.name ??
                             "No house selected",
@@ -140,47 +140,62 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                             : "—",
                         backgroundColor: const Color(0xFFFFE0B2),
                       ),
-                      CleaningOrderItem(
+                      PaintingOrderItem(
                         icon: '👷',
-                        title: '${cubit.requiredPersons} Cleaner',
-                        subtitle: '+\$5 for additional cleaner',
+                        title: '${cubit.requiredPersons} Person',
+                        subtitle: '+\$5 for additional Person',
                         price: "${personCost.toStringAsFixed(0)}/hr",
-                        backgroundColor: const Color(0xFFE3F2FD),
+                        backgroundColor: const Color(0xFFFFE0B2),
                       ),
-                      CleaningOrderSummry(
+                      PaintingOrderItem(
+                        icon: '🎨',
+                        title: '',
+                        subtitleWidget: Image.network(
+                          cubit.selectedColor?.colorIcon ?? '',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error, color: Colors.red),
+                        ),
+                        subtitle: '',
+                        price: "100",
+                        backgroundColor: const Color(0xFFFFE0B2),
+                      ),
+                      PaintingOrderSummry(
                         label: 'Service Charge',
                         value: '\$${serviceCharge.toStringAsFixed(0)}',
                       ),
-                      CleaningPromoCode(
+                      PaintingPromoCode(
                         appliedPromoCode: cubit.appliedPromoCode,
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                      if (state is CleaningCheckOutOrderLoading)
+                      if (state is PaintingCheckOutOrderLoading)
                         const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: CircularProgressIndicator(
-                            color: ColorsManager.green,
+                            color: ColorsManager.yellow,
                           ),
                         ),
                       Divider(color: Colors.grey.shade300),
-                      CleaningOrderSummry(
+                      PaintingOrderSummry(
                         label: 'Subtotal',
                         value: '\$${subtotal.toStringAsFixed(2)}',
                       ),
                       if (discount > 0)
-                        CleaningOrderSummry(
+                        PaintingOrderSummry(
                           label: 'Discount',
                           value: '-\$${discount.toStringAsFixed(2)}',
                         ),
                       Divider(color: Colors.grey.shade300),
-                      CleaningOrderSummry(
+                      PaintingOrderSummry(
                         label: 'Total',
                         value: '\$${totalAfterDiscount.toStringAsFixed(2)}',
                         isTotal: true,
                       ),
                       20.verticalSpace,
-                      CleaningPaymentMethod(
+                      PaintingPaymentMethod(
                         selectedMethod: selectedPaymentMethod,
                         onMethodChanged: (method) {
                           setState(() => selectedPaymentMethod = method);
@@ -201,18 +216,17 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                     textStyle: AppFonts.font14BWhiteWeight700,
                     borderRadius: 15.r,
                     height: 50.h,
-                    text: state is CleaningCheckOutOrderLoading
+                    text: state is PaintingCheckOutOrderLoading
                         ? "Processing..."
                         : "Proceed (\$${totalAfterDiscount.toStringAsFixed(0)})",
-                    color: state is CleaningCheckOutOrderLoading
+                    color: state is PaintingCheckOutOrderLoading
                         ? Colors.grey
-                        : ColorsManager.green,
-                    onPressed: state is CleaningCheckOutOrderLoading
+                        : ColorsManager.yellow,
+                    onPressed: state is PaintingCheckOutOrderLoading
                         ? null
                         : () {
                             if (cubit.selectedHouseSize == null ||
-                                cubit.address == null ||
-                                cubit.requiredPersons == 0) {
+                                cubit.address == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
@@ -223,6 +237,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                             }
 
                             cubit.checkOut(
+                              colorId: cubit.selectedColor?.id ?? 0,
                               schedule: cubit.selectedDate!,
                               totalPrice: totalAfterDiscount,
                               serviceId: 3,
@@ -260,7 +275,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          RouteName.cleaningOrderConfirmation,
+          RouteName.paintingOrderConfirmation,
           (route) => false,
         );
       }
@@ -273,7 +288,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('⚠️ Unexpected error: $e')),
+        SnackBar(content: Text('Unexpected error: $e')),
       );
     }
   }
