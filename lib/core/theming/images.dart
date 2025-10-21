@@ -39,4 +39,5 @@ abstract class AppImages {
   static const String save30 = "assets/images/save30.svg";
   static const String offers = "assets/images/offers.svg";
   static const String logo = "assets/icons/logo.svg";
+  static const String paintign = "assets/icons/painting.svg";
 }

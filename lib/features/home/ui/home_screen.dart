@@ -218,6 +218,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           case 'Vehicle':
                                             Navigator.pushNamed(
                                                 context, RouteName.vehicle);
+
+                                          case 'Painting':
+                                            Navigator.pushNamed(
+                                                context, RouteName.painting);
                                             break;
                                         }
                                       },

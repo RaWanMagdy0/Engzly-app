@@ -27,9 +27,9 @@ class RouteName {
   static const String cleaningLocation = "cleaningLocation";
   static const String cleaningOrderDetails = "cleaningOrderDetails";
   static const String cleaningOrderConfirmation = "cleaningOrderConfirmation";
-    static const String vehicleOrderConfirmation = "vehicleOrderConfirmation";
-    static const String notification = "notification";
-
+  static const String vehicleOrderConfirmation = "vehicleOrderConfirmation";
+  static const String notification = "notification";
+    static const String painting = "painting";
 
 
   static const String vehicle = "vehicle";

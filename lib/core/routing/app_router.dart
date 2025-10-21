@@ -36,6 +36,8 @@ import 'package:engzly/features/services/house_shifting/ui/house_shifting_servic
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/order_details.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/schedule_screen.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/third_screen/choose_location.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
+import 'package:engzly/features/services/painting/ui/painting/first_screen/painting_screen.dart';
 import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/first_screen/vehicle_screen.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/vehicle_order_confirmation.dart';
@@ -271,11 +273,10 @@ class AppRouter {
             child: const VehicleScreen(),
           ),
         );
-         case RouteName.vehicleOrderConfirmation:
+      case RouteName.vehicleOrderConfirmation:
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
-             
               BlocProvider(
                 create: (context) => getIt<VehicleCubit>(),
               ),
@@ -283,13 +284,25 @@ class AppRouter {
             child: const VehicleOrderConfirmation(),
           ),
         );
-         case RouteName.notification:
+      case RouteName.notification:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<NotificationCubit>(),
             child: NotificationsScreen(),
           ),
         );
+      case RouteName.painting:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<PaintingCubit>(),
+              ),
+            ],
+            child: const PaintingScreen(),
+          ),
+        );
+
       default:
         return null;
     }

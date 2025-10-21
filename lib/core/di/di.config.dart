@@ -57,6 +57,11 @@ import '../../features/services/house_shifting/data/repo/house_shifting_repo.dar
 import '../../features/services/house_shifting/logic/booking_cubit.dart'
     as _i37;
 import '../../features/services/house_shifting/logic/cubit.dart' as _i332;
+import '../../features/services/painting/data/api_manager/painting_api_manager.dart'
+    as _i357;
+import '../../features/services/painting/data/repo/painting_repo.dart'
+    as _i1025;
+import '../../features/services/painting/logic/painting_cubit.dart' as _i596;
 import '../../features/services/vehicle/data/api_manager/vehicle_api_manager.dart'
     as _i555;
 import '../../features/services/vehicle/data/repo/vehicle_repo.dart' as _i791;
@@ -98,6 +103,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i795.HouseShiftingApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i555.VehicleApiManager>(
         () => _i555.VehicleApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i357.PaintingApiManager>(
+        () => _i357.PaintingApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(
@@ -142,6 +149,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i854.VerifyEmailCubit(gh<_i78.VerifyEmailRepo>()));
     gh.factory<_i783.CleaningRepo>(
         () => _i783.CleaningRepo(gh<_i502.CleaningApiManager>()));
+    gh.factory<_i1025.PaintingRepo>(
+        () => _i1025.PaintingRepo(gh<_i357.PaintingApiManager>()));
     gh.factory<_i332.HouseShiftingCubit>(() => _i332.HouseShiftingCubit(
           gh<_i650.HouseShiftingRepo>(),
           gh<_i832.GetLocationsRepo>(),
@@ -160,6 +169,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i694.VehicleCubit>(() => _i694.VehicleCubit(
           gh<_i650.HouseShiftingRepo>(),
           gh<_i791.VehicleRepo>(),
+          gh<_i832.GetLocationsRepo>(),
+        ));
+    gh.factory<_i596.PaintingCubit>(() => _i596.PaintingCubit(
+          gh<_i650.HouseShiftingRepo>(),
+          gh<_i1025.PaintingRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
     gh.factory<_i672.CleaningCubit>(() => _i672.CleaningCubit(
