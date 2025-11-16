@@ -34,10 +34,14 @@ class CleaningOrderSummry extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              fontSize: isTotal ? 18.sp : 14.sp,
+              fontSize: isDiscount
+                  ? 16.sp
+                  : isTotal
+                      ? 18.sp
+                      : 14.sp,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
               color: isDiscount
-                      ? ColorsManager.green
+                  ? ColorsManager.red
                   : isTotal
                       ? ColorsManager.green
                       : Colors.grey.shade800,

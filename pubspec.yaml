@@ -52,7 +52,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   google_fonts: ^6.3.2
   signalr_netcore: ^1.4.4
-  flutter_local_notifications: ^19.5.0
+  flutter_local_notifications: ^17.1.2
   permission_handler: ^11.3.0
 
 

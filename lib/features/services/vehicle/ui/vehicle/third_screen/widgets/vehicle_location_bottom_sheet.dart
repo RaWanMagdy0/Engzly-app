@@ -26,7 +26,7 @@ class VehicleLocationBottomSheet extends StatelessWidget {
     return DraggableScrollableSheet(
       initialChildSize: 0.35,
       minChildSize: 0.25,
-      maxChildSize: 0.45,
+      maxChildSize: 0.30,
       builder: (context, scrollController) {
         return Container(
           padding: const EdgeInsets.all(16),

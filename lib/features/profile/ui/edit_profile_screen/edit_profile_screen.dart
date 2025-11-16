@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:engzly/core/helper/image_helper.dart';
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
-import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/logic/state.dart';
@@ -51,92 +49,95 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       builder: (context, state) {
         final viewModel = context.read<ProfileCubit>();
 
-        return CustomScaffoldScreen(
-          title: Text(
-            "Edit Profile ",
-          ),
-          leadingIcon: Icon(Icons.arrow_back, size: 28.w, color: Colors.black),
-          notificationIcon: Image.asset(
-            AppImages.notificationIcon,
-            width: 28.w,
-            height: 28.h,
-            color: ColorsManager.black,
-          ),
-          onLeadingTap: () {
-            Navigator.pushNamed(context, RouteName.homeLayout);
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, true);
+            return false;
           },
-          onNotificationTap: () {},
-          showNotificationDot: true,
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  20.verticalSpace,
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20.r),
-                        child: viewModel.selectedImage != null
-                            ? Image.file(
-                                viewModel.selectedImage!,
-                                width: 120.w,
-                                height: 120.h,
-                                fit: BoxFit.cover,
-                              )
-                            : CachedNetworkImage(
-                                imageUrl: ProfileCubit.fixImageUrl(
-                                  viewModel.imageUrl,
-                                ),
-                                width: 120.w,
-                                height: 120.h,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    width: 120.w,
-                                    height: 120.h,
-                                    color: Colors.grey.shade300,
+          child: CustomScaffoldScreen(
+            title: const Text("Edit Profile "),
+            leadingIcon:
+                Icon(Icons.arrow_back, size: 28.w, color: Colors.black),
+            notificationIcon: Image.asset(
+              AppImages.notificationIcon,
+              width: 28.w,
+              height: 28.h,
+              color: ColorsManager.black,
+            ),
+            onLeadingTap: () {
+              Navigator.pop(context, true);
+            },
+            onNotificationTap: () {},
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    20.verticalSpace,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20.r),
+                          child: viewModel.selectedImage != null
+                              ? Image.file(
+                                  viewModel.selectedImage!,
+                                  width: 120.w,
+                                  height: 120.h,
+                                  fit: BoxFit.cover,
+                                )
+                              : CachedNetworkImage(
+                                  imageUrl:
+                                      viewModel.imageUrl , // fixed
+                                  width: 120.w,
+                                  height: 120.h,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade300,
+                                    highlightColor: Colors.grey.shade100,
+                                    child: Container(
+                                      width: 120.w,
+                                      height: 120.h,
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.person,
+                                    size: 80.w,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.person,
-                                  size: 80.w,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                      ),
-                      Container(
-                        width: 120.w,
-                        height: 120.h,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.4),
-                          borderRadius: BorderRadius.circular(20.r),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          final imageFile = await ImageHelper.pickImage(
-                            source: ImageSource.gallery,
-                          );
-                          if (imageFile != null) {
-                            viewModel.setImage(imageFile);
-                          }
-                        },
-                        icon: Icon(
-                          Icons.camera_alt,
-                          color: ColorsManager.lightGray,
-                          size: 30.sp,
+                        Container(
+                          width: 120.w,
+                          height: 120.h,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.4),
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  20.verticalSpace,
-                  EditProfileForm(viewModel: viewModel),
-                  50.verticalSpace,
-                ],
+                        IconButton(
+                          onPressed: () async {
+                            final imageFile = await ImageHelper.pickImage(
+                              source: ImageSource.gallery,
+                            );
+                            if (imageFile != null) {
+                              viewModel.setImage(imageFile);
+                            }
+                          },
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: ColorsManager.lightGray,
+                            size: 30.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                    20.verticalSpace,
+                    EditProfileForm(viewModel: viewModel),
+                    50.verticalSpace,
+                  ],
+                ),
               ),
             ),
           ),

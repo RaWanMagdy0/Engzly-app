@@ -44,7 +44,6 @@ class _VehicleScreenState extends State<VehicleScreen> {
           width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Stack(
         children: [
           Padding(

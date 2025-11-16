@@ -1,16 +1,16 @@
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_app_bar.dart';
+import 'package:engzly/notification/notification_cubit.dart';
 import 'package:flutter/material.dart';
-
-/// A reusable Scaffold layout with a custom AppBar and a white container for the main content.
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomScaffoldScreen extends StatelessWidget {
-  final Widget child; // Main content of the screen inside the white container
-  final Widget title; // Widget shown in the AppBar center (Text, Row, ..)
-  final Widget leadingIcon; // Left icon widget (SvgPicture, Image, ..)
-  final Widget notificationIcon; // Right icon widget
+  final Widget child;
+  final Widget title;
+  final Widget leadingIcon;
+  final Widget notificationIcon;
   final VoidCallback? onLeadingTap;
   final VoidCallback? onNotificationTap;
-  final bool showNotificationDot;
 
   const CustomScaffoldScreen({
     super.key,
@@ -20,11 +20,12 @@ class CustomScaffoldScreen extends StatelessWidget {
     required this.notificationIcon,
     this.onLeadingTap,
     this.onNotificationTap,
-    this.showNotificationDot = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final notificationCubit = context.read<NotificationCubit>();
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -33,16 +34,12 @@ class CustomScaffoldScreen extends StatelessWidget {
         leadingIcon: leadingIcon,
         notificationIcon: notificationIcon,
         onLeadingTap: onLeadingTap,
-        onNotificationTap: onNotificationTap,
-        showNotificationDot: showNotificationDot,
+        onNotificationTap: () {
+         notificationCubit.markAllAsRead();
+          Navigator.pushNamed(context, RouteName.notification);
+        },
       ),
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: child,
-      ),
+      body: child,
     );
   }
 }

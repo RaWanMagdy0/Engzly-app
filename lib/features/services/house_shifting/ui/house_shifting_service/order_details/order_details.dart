@@ -1,4 +1,3 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -6,6 +5,7 @@ import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_states.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/house_shiffting_order_confirmation.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/order_card_map.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/order_item_card.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/order_summry.dart';
@@ -24,7 +24,8 @@ class OrderDetails extends StatefulWidget {
   State<OrderDetails> createState() => _OrderDetailsState();
 }
 
-class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver {
+class _OrderDetailsState extends State<OrderDetails>
+    with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
 
@@ -70,7 +71,6 @@ class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver 
         Navigator.pop(context);
       },
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: BlocConsumer<HouseShiftingBookingCubit, HouseShiftingBookingState>(
         listener: (context, state) async {
           if (state is CheckPromoCodeError) {
@@ -92,10 +92,17 @@ class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver 
               }
             } else {
               if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
+                final bookingCubit = context.read<HouseShiftingBookingCubit>();
+                Navigator.push(
                   context,
-                  RouteName.orderConfirmation,
-                  (route) => false,
+                  MaterialPageRoute(
+                    builder: (_) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: bookingCubit),
+                      ],
+                      child: HouseShifftingOrderConfirmation(),
+                    ),
+                  ),
                 );
               }
             }
@@ -147,7 +154,7 @@ class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver 
                       ),
                       Divider(color: Colors.grey.shade300),
                       5.verticalSpace,
-                      OrderSummaryRow(
+                      OrderSummryRow(
                         label: cubit.selectedVehicleName != null
                             ? 'Vehicle : (${cubit.selectedVehicleName})'
                             : 'Vehicle',
@@ -155,7 +162,7 @@ class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver 
                             ? '\$${cubit.selectedVehiclePrice!.toStringAsFixed(2)}'
                             : '\$0',
                       ),
-                      OrderSummaryRow(
+                      OrderSummryRow(
                         label: 'Service Charge',
                         value: '\$50.00',
                       ),
@@ -164,27 +171,22 @@ class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver 
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                      if (state is CheckPromoCodeLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(
-                            color: ColorsManager.orange,
-                          ),
-                        ),
+                    
                       10.verticalSpace,
                       Divider(color: Colors.grey.shade300, thickness: 2),
                       5.verticalSpace,
-                      OrderSummaryRow(
+                      OrderSummryRow(
                         label: 'Subtotal',
                         value: '\$${subtotal.toStringAsFixed(2)}',
                       ),
                       if (discount > 0)
-                        OrderSummaryRow(
+                        OrderSummryRow(
                           label: 'Discount',
                           value: '-\$${discount.toStringAsFixed(2)}',
+                          isDiscount: true,
                         ),
                       Divider(color: Colors.grey.shade300),
-                      OrderSummaryRow(
+                      OrderSummryRow(
                         label: 'Total',
                         value: '\$${totalAfterDiscount.toStringAsFixed(2)}',
                         isTotal: true,
@@ -271,10 +273,18 @@ class _OrderDetailsState extends State<OrderDetails>with WidgetsBindingObserver 
       await Stripe.instance.presentPaymentSheet();
 
       if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
+        final bookingCubit = context.read<HouseShiftingBookingCubit>();
+
+        Navigator.push(
           context,
-          RouteName.orderConfirmation,
-          (route) => false,
+          MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: bookingCubit),
+              ],
+              child: HouseShifftingOrderConfirmation(),
+            ),
+          ),
         );
       }
     } on StripeException catch (e) {

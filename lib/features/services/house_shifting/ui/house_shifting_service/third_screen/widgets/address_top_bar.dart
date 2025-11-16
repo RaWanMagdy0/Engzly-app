@@ -22,7 +22,7 @@ class AddressTopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.location_on, color: Colors.black),
+          const Icon(Icons.location_on, color: Colors.orange),
           10.horizontalSpace,
           Expanded(
             child: Text(

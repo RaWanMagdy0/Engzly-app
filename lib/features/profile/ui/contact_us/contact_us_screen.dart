@@ -23,7 +23,6 @@ class ContactUsScreen extends StatelessWidget {
           Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
       onLeadingTap: () {},
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(

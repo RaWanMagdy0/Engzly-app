@@ -1,6 +1,7 @@
 import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/third_screen/widgets/cleaning_location_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,17 +13,16 @@ import 'package:geocoding/geocoding.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/core/theming/colors.dart';
-import 'widgets/map_view.dart';
 import 'widgets/cleaning_address_top_bar.dart';
 
 class CleaningChooseLocation extends StatefulWidget {
   const CleaningChooseLocation({super.key});
 
   @override
-  State<CleaningChooseLocation> createState() => _CleaningChooseLocation();
+  State<CleaningChooseLocation> createState() => _CleaningChooseLocationState();
 }
 
-class _CleaningChooseLocation extends State<CleaningChooseLocation> {
+class _CleaningChooseLocationState extends State<CleaningChooseLocation> {
   GoogleMapController? _mapController;
   final Set<Marker> _markers = {};
   LatLng? selectedLocation;
@@ -51,55 +51,44 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
         final locations = cubit.locations;
 
         return CustomScaffoldScreen(
-          showNotificationDot: true,
-          title: Text(
-            "Confirm Location",
-          ),
-          leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h,color: ColorsManager.black),
+          title: const Text("Confirm Location"),
+          leadingIcon: SvgPicture.asset(AppImages.backArrow,
+              width: 30.w, height: 30.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h,color: ColorsManager.black),
-          onLeadingTap: () {
-            Navigator.pop(context);
-          },
+              width: 28.w, height: 28.h, color: ColorsManager.black),
+          onLeadingTap: () => Navigator.pop(context),
           child: Stack(
             children: [
-              if (state is CleaningLocationsLoading)
-                const Center(
-                  child: CircularProgressIndicator(
-                    color: ColorsManager.green,
+              Positioned.fill(
+                child: GoogleMap(
+                  onMapCreated: (controller) => _mapController = controller,
+                  initialCameraPosition: CameraPosition(
+                    target: selectedLocation ?? const LatLng(30.0444, 31.2357),
+                    zoom: currentZoom,
                   ),
-                )
-              else
-                Positioned.fill(
-                  child: MapView(
-                    mapController: _mapController,
-                    selectedLocation: selectedLocation,
-                    markers: _markers,
-                    currentZoom: currentZoom,
-                    onMapCreated: (controller) {
-                      _mapController = controller;
-                    },
-                    onMapTap: _handleMapTap,
-                    onCameraMove: (pos) => currentZoom = pos.zoom,
-                  ),
+                  markers: _markers,
+                  onTap: _handleMapTap,
+                  onCameraMove: (pos) => currentZoom = pos.zoom,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
                 ),
+              ),
+
               Positioned(
                 top: 20.h,
                 left: 16.w,
                 right: 16.w,
                 child: CleaningAddressTopBar(address: selectedAddress),
               ),
-              if (locations.isNotEmpty)
-                CleaningLocationBottomSheet(
-                  selectedAddress: selectedAddress,
-                  selectedType: selectedType,
-                  onTypeChanged: (type) async {
-                    setState(() => selectedType = type);
-                    await _moveToSavedLocation(type, locations);
-                  },
-                  onSelectAddress: (_) {},
-                  cleaningCubit: context.read<CleaningCubit>(),
+
+              // Bottom Sheet ديناميكي
+              if (state is! CleaningLocationsLoading)
+                (locations.isNotEmpty
+                    ? _buildLocationsBottomSheet(cubit, locations)
+                    : _buildEmptyLocationSheet(cubit)),
+              if (state is CleaningLocationsLoading)
+                const Center(
+                  child: CircularProgressIndicator(color: ColorsManager.green),
                 ),
             ],
           ),
@@ -110,13 +99,32 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
 
   Future<void> _initializeMap() async {
     try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.openLocationSettings();
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          _setDefaultLocation();
+          return;
+        }
+      }
+
       Position position = await Geolocator.getCurrentPosition(
-        // ignore: deprecated_member_use
         desiredAccuracy: LocationAccuracy.high,
       );
+
       selectedLocation = LatLng(position.latitude, position.longitude);
       String address = await _getDetailedAddress(selectedLocation!);
       _updateMarker(selectedLocation!, address);
+
+      _mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(selectedLocation!, currentZoom),
+      );
     } catch (e) {
       _setDefaultLocation();
     }
@@ -133,49 +141,16 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
           await placemarkFromCoordinates(location.latitude, location.longitude);
       if (placemarks.isEmpty) return 'Unknown Location';
       Placemark place = placemarks.first;
-      return "${place.street}, ${place.locality}, ${place.country}";
+      return "${place.street ?? ''}, ${place.locality ?? ''}, ${place.country ?? ''}";
     } catch (e) {
       return 'Location Error';
     }
   }
 
   void _handleMapTap(LatLng location) async {
-    if (selectedType == "add new") {
-      selectedLocation = location;
-      String address = await _getDetailedAddress(location);
-      _updateMarker(location, address);
-    }
-  }
-
-  Future<void> _moveToSavedLocation(
-      String type, List<LocationModel> locations) async {
-    final filtered = locations
-        .where((loc) => loc.type.toLowerCase() == type.toLowerCase())
-        .toList();
-
-    if (filtered.isNotEmpty) {
-      final loc = filtered.first;
-      final address = loc.location;
-
-      try {
-        List<Location> locationsList = await locationFromAddress(address);
-
-        if (locationsList.isNotEmpty) {
-          final newPos = LatLng(
-            locationsList.first.latitude,
-            locationsList.first.longitude,
-          );
-
-          _updateMarker(newPos, address);
-
-          _mapController?.animateCamera(
-            CameraUpdate.newLatLngZoom(newPos, currentZoom),
-          );
-        }
-      } catch (e) {
-        debugPrint(" Failed to get location for address: $address");
-      }
-    }
+    selectedLocation = location;
+    String address = await _getDetailedAddress(location);
+    _updateMarker(location, address);
   }
 
   void _updateMarker(LatLng location, String address) {
@@ -187,8 +162,91 @@ class _CleaningChooseLocation extends State<CleaningChooseLocation> {
           markerId: const MarkerId('selectedLocation'),
           position: location,
           infoWindow: InfoWindow(title: address),
+          draggable: true,
+          onDragEnd: (newPosition) async {
+            String newAddress = await _getDetailedAddress(newPosition);
+            _updateMarker(newPosition, newAddress);
+          },
         ),
       );
     });
+  }
+
+Widget _buildLocationsBottomSheet(CleaningCubit cubit, List<LocationModel> locations) {
+  return CleaningLocationBottomSheet(
+    selectedAddress: selectedAddress,
+    selectedType: selectedType,
+    cleaningCubit: cubit,
+    locations: locations,
+    onTypeChanged: (type) => setState(() => selectedType = type),
+    onSelectAddress: (address) => setState(() => selectedAddress = address),
+  );
+}
+
+  Widget _buildEmptyLocationSheet(CleaningCubit cubit) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.25,
+      minChildSize: 0.25,
+      maxChildSize: 0.35,
+      builder: (context, scrollController) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, -2),
+              ),
+            ],
+          ),
+          child: ListView(
+            controller: scrollController,
+            children: [
+              const Center(
+                child: Text(
+                  "No saved addresses",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Center(
+                child: Text(
+                  "Move the marker or tap the map to choose a new location.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              24.verticalSpace,
+              ElevatedButton(
+                onPressed: () {
+                  cubit.selectLocation(selectedAddress);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MultiBlocProvider(
+                        providers: [BlocProvider.value(value: cubit)],
+                        child: const CleaningOrderDetails(),
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorsManager.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                child: const Text("Proceed"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

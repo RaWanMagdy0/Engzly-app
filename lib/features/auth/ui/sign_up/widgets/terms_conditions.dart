@@ -61,6 +61,7 @@ class TermsAndConditionsCheckboxState
                     style: AppFonts.font12BlackWeight400.copyWith(
                       decoration: TextDecoration.underline,
                       color: ColorsManager.orange,
+                      decorationColor: ColorsManager.orange,
                     ),
                   ),
                 ),

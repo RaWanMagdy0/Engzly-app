@@ -45,7 +45,6 @@ class _CleaningScreenState extends State<CleaningScreen> {
           Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h,color: ColorsManager.black),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Stack(
         children: [
           Padding(

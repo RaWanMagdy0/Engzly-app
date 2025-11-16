@@ -15,19 +15,29 @@ class HomeCubit extends BaseViewModel<HomeState> {
   List<ServiceResponseModel> serviceResponse = [];
   List<OffersResponseModel> offersResponse = [];
 
-  Future<void> loadHomeData() async {
-    emit(HomeLoading());
+  Future<void> loadOffers() async {
+    emit(OffersLoading());
 
     final offersResult = await _homeRepo.getOffers();
+
+    if (offersResult is Success<List<OffersResponseModel>>) {
+      offersResponse = offersResult.data!;
+      emit(HomeOffersSuccess(offersResponse));
+    } else {
+      emit(OffersError("Failed to load offers"));
+    }
+  }
+
+  Future<void> loadServices() async {
+    emit(ServiceLoading());
+
     final servicesResult = await _homeRepo.getservice();
 
-    if (offersResult is Success<List<OffersResponseModel>> &&
-        servicesResult is Success<List<ServiceResponseModel>>) {
-      offersResponse = offersResult.data!;
+    if (servicesResult is Success<List<ServiceResponseModel>>) {
       serviceResponse = servicesResult.data!;
-      emit(HomeDataSuccess(offersResponse, serviceResponse));
+      emit(HomeServicesSuccess(serviceResponse));
     } else {
-      emit(HomeError("Failed to load home data"));
+      emit(ServiceError("Failed to load services"));
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:engzly/core/di/di.dart';
 import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -6,6 +7,8 @@ import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/login_cubit/states.dart';
 import 'package:engzly/features/auth/ui/login/widgets/login_form.dart';
+import 'package:engzly/notification/notification_cubit.dart';
+import 'package:engzly/notification/notification_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,6 +88,17 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                         ),
                       ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await NotificationHelper.showNotification(
+                          title: "Manual Test",
+                          body: "This is a test notification 🚀",
+                        );
+                        await getIt<NotificationCubit>()
+                            .addNotification("This is a test notification ");
+                      },
+                      child: const Text("Test Notification"),
                     ),
                   ],
                 ),

@@ -30,7 +30,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -82,6 +83,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           controller: viewModel.passwordController,
                           validator: (value) =>
                               Validators.validatePassword(value),
+                          onChanged: (value) {
+                            viewModel.setPasswordChanges(true);
+                          },
                         ),
                         15.verticalSpace,
                         CustomTextFormField(
@@ -91,6 +95,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           controller: viewModel.newPasswordController,
                           validator: (value) =>
                               Validators.validatePassword(value),
+                          onChanged: (value) {
+                            viewModel.setPasswordChanges(true);
+                          },
                         ),
                         15.verticalSpace,
                         CustomTextFormField(
@@ -100,27 +107,48 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           controller: viewModel.confirmPasswordController,
                           validator: (value) =>
                               Validators.validatePassword(value),
+                          onChanged: (value) {
+                            viewModel.setPasswordChanges(true);
+                          },
                         ),
                         30.verticalSpace,
-                        CustomButton(
-                          onPressed: () {
-                            if (viewModel.formKey.currentState!.validate()) {
-                              viewModel.forgetPassword(
-                                password: viewModel.passwordController.text,
-                                newPassword:
-                                viewModel.newPasswordController.text,
-                                confirmPassword:
-                                viewModel.confirmPasswordController.text,
-                              );
-                            }
-                            FocusScope.of(context).unfocus();
+                        BlocBuilder<ProfileCubit, ProfileState>(
+                          builder: (context, state) {
+                            final hasChanges = context
+                                .watch<ProfileCubit>()
+                                .hasPasswordChanges;
+
+                            return CustomButton(
+                              onPressed: hasChanges
+                                  ? () {
+                                      if (viewModel.formKey.currentState!
+                                          .validate()) {
+                                        viewModel.forgetPassword(
+                                          password:
+                                              viewModel.passwordController.text,
+                                          newPassword: viewModel
+                                              .newPasswordController.text,
+                                          confirmPassword: viewModel
+                                              .confirmPasswordController.text,
+                                        );
+                                        viewModel.setPasswordChanges(false);
+                                      }
+                                      FocusScope.of(context).unfocus();
+                                    }
+                                  : null,
+                              text: "Save Password",
+                              textStyle: hasChanges
+                                  ? AppFonts.font14BWhiteWeight700
+                                  : AppFonts.font14BWhiteWeight700
+                                      .copyWith(color: ColorsManager.black),
+                              color: hasChanges
+                                  ? ColorsManager.orange
+                                  : ColorsManager.lightGray,
+                              height: 60.h,
+                              width: 310.w,
+                              borderRadius: 16.r,
+                            );
                           },
-                          text: "Save Password",
-                          textStyle: AppFonts.font14BWhiteWeight700,
-                          color: ColorsManager.orange,
-                          height: 60.h,
-                          width: 310.w,
-                          borderRadius: 16.r,
                         ),
                       ],
                     ),

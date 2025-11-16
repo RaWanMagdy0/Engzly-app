@@ -14,6 +14,8 @@ import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/home_layout/home_layout_screen.dart';
+import 'package:engzly/features/offers/ui/logic/offers_cubit.dart';
+import 'package:engzly/features/offers/ui/offers.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/change_password/change_password_screen.dart';
 import 'package:engzly/features/profile/ui/contact_us/contact_us_screen.dart';
@@ -32,7 +34,7 @@ import 'package:engzly/features/services/cleaning/ui/cleaning/third_screen/clean
 import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/house_shifting_screen.dart';
-import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_confirmation.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/house_shiffting_order_confirmation.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/order_details.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/second_screen/schedule_screen.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/third_screen/choose_location.dart';
@@ -111,9 +113,24 @@ class AppRouter {
 
       case RouteName.homeScreen:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<HomeCubit>(),
-            child: HomeScreen(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<HomeCubit>(),
+              ),
+            ],
+            child: const HomeScreen(),
+          ),
+        );
+      case RouteName.offers:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<OffersCubit>(),
+              ),
+            ],
+            child: const OffersScreen(),
           ),
         );
 
@@ -182,7 +199,8 @@ class AppRouter {
           ),
         );
       case RouteName.chooseLocation:
-        return MaterialPageRoute(builder: (_) => const ChooseLocation());
+        return MaterialPageRoute(
+            builder: (_) => const HouseChooseLocationScreen());
 
       case RouteName.orderDetails:
         return MaterialPageRoute(
@@ -202,7 +220,7 @@ class AppRouter {
                 create: (context) => getIt<HouseShiftingBookingCubit>(),
               ),
             ],
-            child: const OrderConfirmation(),
+            child: const HouseShifftingOrderConfirmation(),
           ),
         );
 
@@ -288,11 +306,12 @@ class AppRouter {
         );
       case RouteName.notification:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<NotificationCubit>(),
-            child: NotificationsScreen(),
+          builder: (context) => BlocProvider.value(
+            value: getIt<NotificationCubit>(),
+            child: const NotificationsScreen(),
           ),
         );
+
       case RouteName.painting:
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(

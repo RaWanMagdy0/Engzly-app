@@ -1,3 +1,4 @@
+import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/features/home/ui/widgets/service_card.dart';
@@ -32,17 +33,26 @@ class ServiceRow extends StatelessWidget {
             iconBackgroundColor: ColorsManager.ovalOrangeColor,
             iconColor: Colors.orange,
             title: "Office\nShifting",
-            onTab: () {},
+            onTab: () {
+              AppDialogs.showErrorDialog(
+                  context: context,
+                  errorMassage: "This service is coming soon");
+            },
           ),
         ),
         12.horizontalSpace,
+        
         Expanded(
           child: ServiceCard(
             icon: Icons.business,
             backgroundColor: ColorsManager.babyBlue,
             iconBackgroundColor: ColorsManager.ovalBlueColor,
             iconColor: Colors.blue,
-            onTab: () {},
+            onTab: () {
+              AppDialogs.showErrorDialog(
+                  context: context,
+                  errorMassage: "This service is coming soon");
+            },
             title: "Commercial\nShifting",
           ),
         ),

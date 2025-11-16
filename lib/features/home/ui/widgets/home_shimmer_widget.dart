@@ -20,8 +20,8 @@ class HomeShimmerWidgets {
         separatorBuilder: (_, __) => 8.horizontalSpace,
         itemBuilder: (_, __) => shimmerWrapper(
           Container(
-            width: 80.w,
-            height: 40.h,
+            width: 70.w,
+            height: 20.h,
             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(15.r),
@@ -34,7 +34,7 @@ class HomeShimmerWidgets {
 
   static Widget buildOffersShimmer() {
     return SizedBox(
-      height: 150.h,
+      height: 140.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: 3,
@@ -68,11 +68,11 @@ class HomeShimmerWidgets {
 
   static Widget buildServicesShimmer() {
     return SizedBox(
-      height: 120.h,
+      height: 100.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        separatorBuilder: (_, __) => SizedBox(width: 12.w),
+        itemCount: 4,
+        separatorBuilder: (_, __) => SizedBox(width: 15.w),
         itemBuilder: (context, index) => Column(
           children: [
             shimmerWrapper(

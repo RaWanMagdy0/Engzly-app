@@ -27,6 +27,9 @@ abstract class AppImages {
       "assets/animations/house_shifting_success.json";
   static const String cleaningSubmitCheck =
       "assets/animations/cleaning_success.json";
+        static const String paintingSubmitCheck =
+      "assets/animations/yellow_success_anim.json";
+
 
   static const String cleaningIcon = "assets/icons/cleaning_icon.png";
   static const String labourIcon = "assets/icons/labour_icon.png";

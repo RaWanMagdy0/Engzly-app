@@ -12,6 +12,8 @@ class RouteName {
   static const String editProfile = "editProfile";
   static const String profile = "profile";
   static const String homeScreen = "homeScreen";
+    static const String offers = "offers";
+
 
   static const String changePassword = "changePassword";
   static const String addLocation = "addLocation";

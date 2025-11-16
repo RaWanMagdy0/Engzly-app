@@ -6,16 +6,26 @@ abstract class HomeState {}
 
 class HomeInitial extends HomeState {}
 
-class HomeLoading extends HomeState {}
+class OffersLoading extends HomeState {}
+class ServiceLoading extends HomeState {}
 
-class HomeDataSuccess extends HomeState {
+class HomeOffersSuccess extends HomeState {
   final List<OffersResponseModel> offers;
-  final List<ServiceResponseModel> services;
 
-  HomeDataSuccess(this.offers, this.services);
+  HomeOffersSuccess(this.offers);
 }
 
-class HomeError extends HomeState {
+class HomeServicesSuccess extends HomeState {
+  final List<ServiceResponseModel> services;
+
+  HomeServicesSuccess(this.services);
+}
+
+class OffersError extends HomeState {
   final String error;
-  HomeError(this.error);
+  OffersError(this.error);
+}
+class ServiceError extends HomeState {
+  final String error;
+  ServiceError(this.error);
 }

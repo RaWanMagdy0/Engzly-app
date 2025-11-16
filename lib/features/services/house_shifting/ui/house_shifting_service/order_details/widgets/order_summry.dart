@@ -2,13 +2,13 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class OrderSummaryRow extends StatelessWidget {
+class OrderSummryRow extends StatelessWidget {
   final String label;
   final String value;
   final bool isTotal;
   final bool isDiscount;
 
-  const OrderSummaryRow({
+  const OrderSummryRow({
     super.key,
     required this.label,
     required this.value,
@@ -34,10 +34,14 @@ class OrderSummaryRow extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              fontSize: isTotal ? 18.sp : 14.sp,
+              fontSize: isDiscount
+                  ? 16.sp
+                  : isTotal
+                      ? 18.sp
+                      : 14.sp,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
               color: isDiscount
-                      ? ColorsManager.green
+                  ? ColorsManager.red
                   : isTotal
                       ? ColorsManager.orange
                       : Colors.grey.shade800,

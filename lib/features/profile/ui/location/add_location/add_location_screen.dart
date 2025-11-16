@@ -2,7 +2,6 @@
 
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
-import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/logic/state.dart';
@@ -42,7 +41,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffoldScreen(
-      showNotificationDot: true,
       title: Text(
         "Select Location",
       ),

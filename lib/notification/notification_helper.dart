@@ -1,6 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
 
 class NotificationHelper {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -8,15 +6,7 @@ class NotificationHelper {
   static Future<void> init() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: android);
-
     await _notifications.initialize(settings);
-
-    if (Platform.isAndroid) {
-      final status = await Permission.notification.status;
-      if (!status.isGranted) {
-        await Permission.notification.request();
-      }
-    }
   }
 
   static Future<void> showNotification({
@@ -24,13 +14,13 @@ class NotificationHelper {
     required String body,
   }) async {
     const androidDetails = AndroidNotificationDetails(
-      'engzly_channel',
+      'engzly_channel_id',
       'Engzly Notifications',
-      importance: Importance.high,
+      importance: Importance.max,
       priority: Priority.high,
     );
+    const notificationDetails = NotificationDetails(android: androidDetails);
 
-    const details = NotificationDetails(android: androidDetails);
-    await _notifications.show(0, title, body, details);
+    await _notifications.show(0, title, body, notificationDetails);
   }
 }

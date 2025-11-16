@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -9,6 +10,7 @@ import 'package:engzly/features/home/ui/widgets/home_shimmer_widget.dart';
 import 'package:engzly/features/home/ui/widgets/offers_tabs.dart';
 import 'package:engzly/features/home/ui/widgets/service_row.dart';
 import 'package:engzly/features/home/ui/widgets/other_services_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,23 +32,64 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     cubit = context.read<HomeCubit>();
-    cubit.loadHomeData();
+    cubit.loadOffers();
+    cubit.loadServices();
     _checkAndRequestLocationPermission();
   }
 
   Future<void> _checkAndRequestLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return;
 
-    permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-
     if (permission == LocationPermission.deniedForever) return;
+  }
+
+  Widget buildOfferImage(String iconUrl) {
+    final safeUrl = iconUrl.trim();
+
+    if (safeUrl.isEmpty || !safeUrl.startsWith('http')) {
+      return HomeShimmerWidgets.shimmerWrapper(
+        Container(
+          width: 260.w,
+          height: 150.h,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: safeUrl,
+      width: 260.w,
+      height: 150.h,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => HomeShimmerWidgets.shimmerWrapper(
+        Container(
+          width: 260.w,
+          height: 150.h,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: 260.w,
+        height: 150.h,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(15.r),
+        ),
+        child: const Icon(Icons.broken_image, color: Colors.grey, size: 48),
+      ),
+    );
   }
 
   @override
@@ -75,8 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
         AppImages.categoryIcon,
         width: 22.w,
         height: 22.h,
-        // ignore: deprecated_member_use
-        color: ColorsManager.white,
+        color: ColorsManager.black,
       ),
       notificationIcon: Image.asset(
         AppImages.notificationIcon,
@@ -88,164 +130,164 @@ class _HomeScreenState extends State<HomeScreen> {
       onNotificationTap: () {
         Navigator.pushNamed(context, RouteName.notification);
       },
-      showNotificationDot: true,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    15.verticalSpace,
-                    Row(
-                      children: [
-                        Text("Welcome ",
-                            style: AppFonts.font36BlackWeight700
-                                .copyWith(fontSize: 26.sp)),
-                        Image.asset(
-                          AppImages.hand,
-                          height: 30.h,
-                          width: 30.w,
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Need a helping hand today?",
-                            style: AppFonts.font24greykWeight400),
-                      ],
-                    ),
-                    8.verticalSpace,
-                    ServiceRow(),
-                    20.verticalSpace,
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Offers & News",
-                        style: AppFonts.font14BWhiteWeight700.copyWith(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                        ),
-                      ),
-                    ),
-                    8.verticalSpace,
-                    BlocBuilder<HomeCubit, HomeState>(
-                      builder: (context, state) {
-                        if (state is HomeLoading) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              HomeShimmerWidgets.buildTabsShimmer(),
-                              8.verticalSpace,
-                              HomeShimmerWidgets.buildOffersShimmer(),
-                              16.verticalSpace,
-                              HomeShimmerWidgets.buildServicesShimmer(),
-                            ],
-                          );
-                        } else if (state is HomeDataSuccess) {
-                          final offers = state.offers;
-
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (offers.isNotEmpty) ...[
-                                OffersTabs(
-                                  tabs: offers.map((e) => e.type).toList(),
-                                  selectedIndex: selectedTab,
-                                  onTabSelected: (index) {
-                                    setState(() => selectedTab = index);
-                                  },
-                                ),
-                                8.verticalSpace,
-                                SizedBox(
-                                  height: 150.h,
-                                  child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        offers[selectedTab].offers.length,
-                                    separatorBuilder: (_, __) =>
-                                        SizedBox(width: 12.w),
-                                    itemBuilder: (context, index) {
-                                      final offer =
-                                          offers[selectedTab].offers[index];
-                                      return ClipRRect(
-                                        borderRadius: BorderRadiusGeometry.all(
-                                            Radius.circular(15.r)),
-                                        child: Image.network(
-                                          offer.icon ?? "",
-                                          width: 260.w,
-                                          height: 150.h,
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) =>
-                                              Icon(Icons.broken_image),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ] else
-                                const Text("No offers found"),
-                              20.verticalSpace,
-                              Text("Other Services",
-                                  style:
-                                      AppFonts.font14BWhiteWeight700.copyWith(
-                                    color: Colors.black,
-                                    fontSize: 18.sp,
-                                  )),
-                              8.verticalSpace,
-                              SizedBox(
-                                height: 120.h,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      OtherServiceCard.staticServices.length,
-                                  separatorBuilder: (_, __) =>
-                                      SizedBox(width: 25.w),
-                                  itemBuilder: (context, index) {
-                                    final service =
-                                        OtherServiceCard.staticServices[index];
-                                    return OtherServiceCard(
-                                      title: service['title'],
-                                      iconPath: service['iconPath'],
-                                      backgroundColor:
-                                          service['backgroundColor'],
-                                      onTap: () {
-                                        switch (service['title']) {
-                                          case 'Cleaning':
-                                            Navigator.pushNamed(
-                                                context, RouteName.cleaning);
-                                          case 'Vehicle':
-                                            Navigator.pushNamed(
-                                                context, RouteName.vehicle);
-
-                                          case 'Painting':
-                                            Navigator.pushNamed(
-                                                context, RouteName.painting);
-                                            break;
-                                        }
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        } else if (state is HomeError) {
-                          return Center(
-                            child: Text(state.error,
-                                style: const TextStyle(color: Colors.red)),
-                          );
-                        }
-
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                    30.verticalSpace,
-                  ],
+            Row(
+              children: [
+                Text(
+                  "Welcome ",
+                  style:
+                      AppFonts.font36BlackWeight700.copyWith(fontSize: 26.sp),
+                ),
+                Image.asset(
+                  AppImages.hand,
+                  height: 30.h,
+                  width: 30.w,
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Need a helping hand today?",
+                  style: AppFonts.font24greykWeight400,
+                ),
+              ],
+            ),
+            6.verticalSpace,
+            ServiceRow(),
+            15.verticalSpace,
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Offers & News",
+                style: AppFonts.font14BWhiteWeight700.copyWith(
+                  color: Colors.black,
+                  fontSize: 18.sp,
                 ),
               ),
-            )
+            ),
+            5.verticalSpace,
+            BlocBuilder<HomeCubit, HomeState>(
+              buildWhen: (previous, current) =>
+                  current is HomeOffersSuccess || current is OffersLoading,
+              builder: (context, state) {
+                if (state is HomeOffersSuccess) {
+                  final offers = state.offers;
+                  if (offers.isEmpty) {
+                    return HomeShimmerWidgets.buildOffersShimmer();
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      OffersTabs(
+                        tabs: offers.map((e) => e.type).toList(),
+                        selectedIndex: selectedTab.clamp(0, offers.length - 1),
+                        onTabSelected: (index) {
+                          setState(() => selectedTab = index);
+                        },
+                      ),
+                      10.verticalSpace,
+                      if (selectedTab < offers.length)
+                        SizedBox(
+                          height: 150.h,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: offers[selectedTab].offers.length,
+                            separatorBuilder: (_, __) => SizedBox(width: 12.w),
+                            itemBuilder: (context, index) {
+                              final offerItem =
+                                  offers[selectedTab].offers[index];
+                              final iconUrl = (offerItem.icon ?? "")
+                                  .trim()
+                                  .replaceAll("\n", "");
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(15.r),
+                                child: buildOfferImage(iconUrl),
+                              );
+                            },
+                          ),
+                        )
+                      else
+                        const Center(child: Text("No offers available")),
+                    ],
+                  );
+                }
+                // لو لسه جاري التحميل، شيمر للـ tabs + الصور
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HomeShimmerWidgets.buildTabsShimmer(),
+                    10.verticalSpace,
+                    HomeShimmerWidgets.buildOffersShimmer(),
+                  ],
+                );
+              },
+            ),
+            18.verticalSpace,
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Other Services",
+                style: AppFonts.font14BWhiteWeight700.copyWith(
+                  color: Colors.black,
+                  fontSize: 18.sp,
+                ),
+              ),
+            ),
+            5.verticalSpace,
+            BlocBuilder<HomeCubit, HomeState>(
+              buildWhen: (previous, current) =>
+                  current is HomeServicesSuccess || current is ServiceLoading,
+              builder: (context, state) {
+                if (state is HomeServicesSuccess) {
+                  final services = state.services;
+                  if (services.isEmpty) {
+                    return HomeShimmerWidgets.buildServicesShimmer();
+                  }
+
+                  return SizedBox(
+                    height: 110.h,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: services.length,
+                      separatorBuilder: (_, __) => SizedBox(width: 8.w),
+                      itemBuilder: (context, index) {
+                        final service = services[index];
+                        return OtherServiceCard(
+                          title: service.name,
+                          iconPath: service.imageUrl,
+                          backgroundColor: Colors.transparent,
+                          onTap: () {
+                            switch (service.name.toLowerCase()) {
+                              case "cleaning":
+                                Navigator.pushNamed(
+                                    context, RouteName.cleaning);
+                                break;
+                              case "vehicle":
+                                Navigator.pushNamed(context, RouteName.vehicle);
+                                break;
+                              case "painting":
+                                Navigator.pushNamed(
+                                    context, RouteName.painting);
+                                break;
+                              default:
+                                if (kDebugMode) {
+                                  print("Unknown service: ${service.name}");
+                                }
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }
+                return HomeShimmerWidgets.buildServicesShimmer();
+              },
+            ),
           ],
         ),
       ),

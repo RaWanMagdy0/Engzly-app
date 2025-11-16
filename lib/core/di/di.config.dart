@@ -38,6 +38,7 @@ import '../../features/history/logic/cubit.dart' as _i61;
 import '../../features/home/data/home_api/home_api_manger.dart' as _i224;
 import '../../features/home/data/repo/home_repo.dart' as _i429;
 import '../../features/home/logic/cubit.dart' as _i563;
+import '../../features/offers/ui/logic/offers_cubit.dart' as _i1059;
 import '../../features/profile/data/profile_api/profile_api_manager.dart'
     as _i113;
 import '../../features/profile/data/repo/change_password_repo.dart' as _i602;
@@ -85,9 +86,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final dioModule = _$DioModule();
     gh.factory<_i777.DioFactory>(() => _i777.DioFactory());
-    gh.factory<_i426.NotificationCubit>(() => _i426.NotificationCubit());
     gh.singleton<_i1040.AppProvider>(() => _i1040.AppProvider());
     gh.singleton<_i44.AppProvider>(() => _i44.AppProvider());
+    gh.lazySingleton<_i426.NotificationCubit>(() => _i426.NotificationCubit());
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
         () => _i1060.AuthApiManager(gh<_i361.Dio>()));
@@ -101,10 +102,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i502.CleaningApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i795.HouseShiftingApiManager>(
         () => _i795.HouseShiftingApiManager(gh<_i361.Dio>()));
-    gh.lazySingleton<_i555.VehicleApiManager>(
-        () => _i555.VehicleApiManager(gh<_i361.Dio>()));
     gh.lazySingleton<_i357.PaintingApiManager>(
         () => _i357.PaintingApiManager(gh<_i361.Dio>()));
+    gh.lazySingleton<_i555.VehicleApiManager>(
+        () => _i555.VehicleApiManager(gh<_i361.Dio>()));
     gh.factory<_i896.ForgetPasswordRepo>(
         () => _i896.ForgetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i688.ResetPasswordRepo>(
@@ -135,6 +136,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i834.ConfirmEmailRepo>(),
         ));
     gh.factory<_i563.HomeCubit>(() => _i563.HomeCubit(gh<_i429.HomeRepo>()));
+    gh.factory<_i1059.OffersCubit>(
+        () => _i1059.OffersCubit(gh<_i429.HomeRepo>()));
     gh.factory<_i602.ChangePasswordRepo>(
         () => _i602.ChangePasswordRepo(gh<_i113.ProfileApiManager>()));
     gh.factory<_i832.GetLocationsRepo>(

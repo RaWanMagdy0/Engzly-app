@@ -1,7 +1,17 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -29,17 +39,10 @@ android {
 
     signingConfigs {
         create("release") {
-            val storeFilePath = project.findProperty("MYAPP_UPLOAD_STORE_FILE")?.toString()
-            val storePassword = project.findProperty("MYAPP_UPLOAD_STORE_PASSWORD")?.toString()
-            val keyAlias = project.findProperty("MYAPP_UPLOAD_KEY_ALIAS")?.toString()
-            val keyPassword = project.findProperty("MYAPP_UPLOAD_KEY_PASSWORD")?.toString()
-
-            if (storeFilePath != null) {
-                storeFile = file(storeFilePath)
-            }
-            this.storePassword = storePassword
-            this.keyAlias = keyAlias
-            this.keyPassword = keyPassword
+            keyAlias = keystoreProperties["keyAlias"]?.toString()
+            keyPassword = keystoreProperties["keyPassword"]?.toString()
+            storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) }
+            storePassword = keystoreProperties["storePassword"]?.toString()
         }
     }
 

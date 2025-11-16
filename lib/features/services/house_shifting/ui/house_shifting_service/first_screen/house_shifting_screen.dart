@@ -43,7 +43,6 @@ class HouseShiftingScreen extends StatelessWidget {
         Navigator.pop(context);
       },
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Stack(
         children: [
           Padding(

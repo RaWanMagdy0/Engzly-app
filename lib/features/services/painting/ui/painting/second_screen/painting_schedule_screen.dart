@@ -29,10 +29,8 @@ class PaintingScheduleScreen extends StatelessWidget {
           width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Column(
         children: [
-          20.verticalSpace,
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: PaintingCalenderWidget(
@@ -41,7 +39,7 @@ class PaintingScheduleScreen extends StatelessWidget {
               },
             ),
           ),
-          300.verticalSpace,
+          const Spacer(),
           CustomButton(
             borderRadius: 15.r,
             height: 50.h,
@@ -70,6 +68,7 @@ class PaintingScheduleScreen extends StatelessWidget {
             color: ColorsManager.yellow,
             textStyle: AppFonts.font14BWhiteWeight700,
           ),
+          20.verticalSpace
         ],
       ),
     );

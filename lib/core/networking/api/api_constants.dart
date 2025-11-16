@@ -17,7 +17,7 @@ class ApiConstants {
   static const String changePassword = "User/ChangePassword";
 
   static const String selectLocation = "User/addLocation";
-  static const String getLocations = "HouseShifting/UserLocations";
+  static const String getLocations = "User/UserLocations";
 
   // --------------------  Home  -----------------
 

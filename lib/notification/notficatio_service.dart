@@ -23,17 +23,14 @@ class SignalRService {
     _hubConnection.on("ReceiveNotification", (arguments) {
       if (arguments != null && arguments.isNotEmpty) {
         final message = arguments.first.toString();
-        print(" New notification: $message");
         onNotificationReceived?.call(message);
       }
     });
 
     await _hubConnection.start();
-    print(" Connected to SignalR hub");
   }
 
   Future<void> stopConnection() async {
     await _hubConnection.stop();
-    print(" Disconnected from SignalR hub");
   }
 }

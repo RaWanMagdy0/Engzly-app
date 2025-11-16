@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../core/shared_widgets/custom_scaffold.dart';
-import '../../../core/theming/fonts.dart';
 import '../../../core/theming/images.dart';
 import 'package:engzly/features/history/logic/cubit.dart';
 import 'package:engzly/features/history/logic/state.dart';
@@ -32,7 +31,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 100) {
-        viewModel.loadMoreHistory();
+        if (mounted) {
+          viewModel.loadMoreHistory();
+        }
       }
     });
   }
@@ -57,7 +58,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
               width: 28.w, height: 28.h, color: ColorsManager.black),
           onLeadingTap: () {},
           onNotificationTap: () {},
-          showNotificationDot: true,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Builder(
@@ -80,16 +80,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 return ListView.builder(
                   controller: _scrollController,
                   itemCount: viewModel.historyResponse.length +
-                      (viewModel.isLoadingMore && viewModel.hasMoreData
-                          ? 2
-                          : 0),
+                      (viewModel.isLoadingMore && viewModel.hasMoreData ? 2 : 0),
                   itemBuilder: (context, index) {
                     if (index >= viewModel.historyResponse.length) {
                       return const HistoryCardShimmer();
                     }
 
                     final item = viewModel.historyResponse[index];
+
                     return HistoryServiceCard(
+                      key: ValueKey(item.id),
                       status: item.status,
                       serviceName: item.serviceName,
                       schedule: item.schedule,

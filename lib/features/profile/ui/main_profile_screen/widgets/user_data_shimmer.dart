@@ -37,7 +37,7 @@ class UserDataShimmerWidget extends StatelessWidget {
           ),
           SizedBox(height: 5.h),
           Shimmer.fromColors(
-            baseColor: ColorsManager.lightGray.withOpacity(0.3),
+            baseColor: ColorsManager.lightGray.withValues(alpha:0.3),
             highlightColor: Colors.white,
             child: Container(
               width: 160.w,

@@ -38,10 +38,8 @@ class ScheduleScreen extends StatelessWidget {
         Navigator.pop(context);
       },
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Column(
         children: [
-          20.verticalSpace,
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TableCalenderWidget(
@@ -126,7 +124,7 @@ class ScheduleScreen extends StatelessWidget {
               return const SizedBox();
             },
           ),
-          60.verticalSpace,
+          const Spacer(),
           CustomButton(
             borderRadius: 15.r,
             height: 50.h,
@@ -148,12 +146,13 @@ class ScheduleScreen extends StatelessWidget {
                 return;
               }
 
-              navigateWithBookingCubit(context, const ChooseLocation());
+              navigateWithBookingCubit(context, const HouseChooseLocationScreen());
             },
             text: "Process",
             color: ColorsManager.orange,
             textStyle: AppFonts.font14BWhiteWeight700,
           ),
+          20.verticalSpace
         ],
       ),
     );

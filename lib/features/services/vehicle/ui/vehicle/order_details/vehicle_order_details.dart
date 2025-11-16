@@ -1,4 +1,3 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -11,6 +10,7 @@ import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/widget
 import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/widgets/vehicle_order_summry.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/widgets/vehicle_payment_method.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/widgets/vehicle_promo_code.dart';
+import 'package:engzly/features/services/vehicle/ui/vehicle/vehicle_order_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,10 +73,18 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
             }
           } else {
             if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(
+              final bookingCubit = context.read<VehicleCubit>();
+
+              Navigator.push(
                 context,
-                RouteName.vehicleOrderConfirmation,
-                (route) => false,
+                MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: bookingCubit),
+                    ],
+                    child: VehicleOrderConfirmation(),
+                  ),
+                ),
               );
             }
           }
@@ -108,10 +116,10 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
           title: Text(
             "Order Details",
           ),
-          leadingIcon:
-              SvgPicture.asset(AppImages.backArrow, width: 22.w, height: 22.h,color: ColorsManager.black),
+          leadingIcon: SvgPicture.asset(AppImages.backArrow,
+              width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
-              width: 28.w, height: 28.h,color: ColorsManager.black),
+              width: 28.w, height: 28.h, color: ColorsManager.black),
           child: Stack(
             children: [
               Padding(
@@ -142,13 +150,7 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                      if (state is VehicleCheckOutOrderLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(
-                            color: ColorsManager.orange,
-                          ),
-                        ),
+                    
                       Divider(color: Colors.grey.shade300),
                       VehicleOrderSummry(
                         label: 'Subtotal',
@@ -158,6 +160,7 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
                         VehicleOrderSummry(
                           label: 'Discount',
                           value: '-\$${discount.toStringAsFixed(2)}',
+                          isDiscount: true,
                         ),
                       Divider(color: Colors.grey.shade300),
                       VehicleOrderSummry(
@@ -243,10 +246,18 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
       await Stripe.instance.presentPaymentSheet();
 
       if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
+        final bookingCubit = context.read<VehicleCubit>();
+
+        Navigator.push(
           context,
-          RouteName.vehicleOrderConfirmation,
-          (route) => false,
+          MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: bookingCubit),
+              ],
+              child: VehicleOrderConfirmation(),
+            ),
+          ),
         );
       }
     } on StripeException catch (e) {

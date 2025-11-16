@@ -45,9 +45,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             width: 22.w, height: 22.h, color: ColorsManager.black),
         notificationIcon: Image.asset(AppImages.notificationIcon,
             width: 28.w, height: 28.h, color: ColorsManager.black),
-        onLeadingTap: () {},
+        onLeadingTap: () {
+          //     Navigator.pushNamed(context, RouteName.homeLayout);
+        },
         onNotificationTap: () {},
-        showNotificationDot: true,
         child: Column(children: [
           Expanded(
             child: SingleChildScrollView(
@@ -78,18 +79,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     text: "Edit",
                     onPressed: () async {
                       final cubit = context.read<ProfileCubit>();
-
                       if (cubit.state is UserDataSuccess) {
-                        Navigator.pushNamed(context, RouteName.editProfile);
+                        final result = await Navigator.pushNamed(
+                            context, RouteName.editProfile);
+
+                        if (result == true) {
+                          await cubit.getUserData();
+                        }
                       } else {
                         await cubit.getUserData();
                         if (cubit.state is UserDataSuccess) {
-                          Navigator.pushNamed(context, RouteName.editProfile);
+                          final result = await Navigator.pushNamed(
+                              context, RouteName.editProfile);
+                          if (result == true) {
+                            await cubit.getUserData();
+                          }
                         } else if (cubit.state is UserDataError) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content:
-                                    Text((cubit.state as UserDataError).error)),
+                              content:
+                                  Text((cubit.state as UserDataError).error),
+                            ),
                           );
                         }
                       }

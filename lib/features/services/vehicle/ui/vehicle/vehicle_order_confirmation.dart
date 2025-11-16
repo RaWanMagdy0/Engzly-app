@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,13 +39,12 @@ class _VehicleOrderConfirmation extends State<VehicleOrderConfirmation> {
       title: Text(
         "Order Confirmation",
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.categoryIcon, width: 22.w, height: 22.h,color: ColorsManager.black),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h,color: ColorsManager.black),
+      leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+          width: 22.w, height: 22.h, color: ColorsManager.black),
+      notificationIcon: Image.asset(AppImages.notificationIcon,
+          width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () {},
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
         child: Column(
@@ -101,12 +103,11 @@ class _VehicleOrderConfirmation extends State<VehicleOrderConfirmation> {
             ),
             5.verticalSpace,
             Text(
-              'EEEE, MMM dd, yyyy @ h:mm a',
-              //  selectedDate != null
-              //    ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
-              //      .format(selectedDate)
-              //: "No date selected",
-              style: AppFonts.font16BlackWeight400,
+              bookingCubit.selectedDate != null
+                  ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
+                      .format(bookingCubit.selectedDate!)
+                  : "No date selected",
+              style: AppFonts.font20BlackWeight700.copyWith(fontSize: 16.sp),
             ),
             40.verticalSpace,
             Container(

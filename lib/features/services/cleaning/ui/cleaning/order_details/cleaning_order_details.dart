@@ -1,4 +1,3 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -6,6 +5,7 @@ import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/cleaning_order_confirmation.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_item.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_map.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_summry.dart';
@@ -73,21 +73,22 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
             }
           } else {
             if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(
+              final bookingCubit = context.read<CleaningCubit>();
+
+              Navigator.push(
                 context,
-                RouteName.cleaningOrderConfirmation,
-                (route) => false,
+                MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: bookingCubit),
+                    ],
+                    child: CleaningOrderConfirmation(),
+                  ),
+                ),
               );
             }
           }
         }
-
-        if (state is CleaningCheckOutOrderError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-
         if (state is CleaningCheckOutOrderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
@@ -156,13 +157,6 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                      if (state is CleaningCheckOutOrderLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(
-                            color: ColorsManager.green,
-                          ),
-                        ),
                       Divider(color: Colors.grey.shade300),
                       CleaningOrderSummry(
                         label: 'Subtotal',
@@ -172,6 +166,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                         CleaningOrderSummry(
                           label: 'Discount',
                           value: '-\$${discount.toStringAsFixed(2)}',
+                          isDiscount: true,
                         ),
                       Divider(color: Colors.grey.shade300),
                       CleaningOrderSummry(
@@ -258,10 +253,18 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       await Stripe.instance.presentPaymentSheet();
 
       if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
+        final bookingCubit = context.read<CleaningCubit>();
+
+        Navigator.push(
           context,
-          RouteName.cleaningOrderConfirmation,
-          (route) => false,
+          MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: bookingCubit),
+              ],
+              child: CleaningOrderConfirmation(),
+            ),
+          ),
         );
       }
     } on StripeException catch (e) {
@@ -273,7 +276,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('⚠️ Unexpected error: $e')),
+        SnackBar(content: Text(' Unexpected error: $e')),
       );
     }
   }

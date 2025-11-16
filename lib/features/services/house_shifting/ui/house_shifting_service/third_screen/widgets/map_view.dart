@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MapView extends StatelessWidget {
+class SimpleMapView extends StatelessWidget {
   final GoogleMapController? mapController;
   final LatLng? selectedLocation;
   final Set<Marker> markers;
@@ -11,7 +10,7 @@ class MapView extends StatelessWidget {
   final Function(LatLng) onMapTap;
   final Function(CameraPosition) onCameraMove;
 
-  const MapView({
+  const SimpleMapView({
     super.key,
     required this.mapController,
     required this.selectedLocation,
@@ -24,23 +23,17 @@ class MapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(40.r),
-        topRight: Radius.circular(40.r),
+    return GoogleMap(
+      initialCameraPosition: CameraPosition(
+        target: selectedLocation ?? const LatLng(30.0444, 31.2357),
+        zoom: currentZoom,
       ),
-      child: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: selectedLocation ?? const LatLng(30.0444, 31.2357),
-          zoom: currentZoom,
-        ),
-        markers: markers,
-        onTap: onMapTap,
-        onCameraMove: onCameraMove,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: false,
-        onMapCreated: onMapCreated,
-      ),
+      markers: markers,
+      onTap: onMapTap,
+      onCameraMove: onCameraMove,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
+      onMapCreated: onMapCreated,
     );
   }
 }

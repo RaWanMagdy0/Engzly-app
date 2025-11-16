@@ -1,4 +1,3 @@
-import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -11,6 +10,7 @@ import 'package:engzly/features/services/painting/ui/painting/order_details/widg
 import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_order_summry.dart';
 import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_payment_method.dart';
 import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_promo_code.dart';
+import 'package:engzly/features/services/painting/ui/painting/painting_order_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,10 +73,18 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
             }
           } else {
             if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(
+              final bookingCubit = context.read<PaintingCubit>();
+
+              Navigator.push(
                 context,
-                RouteName.paintingOrderConfirmation,
-                (route) => false,
+                MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: bookingCubit),
+                    ],
+                    child: PaintingOrderConfirmation(),
+                  ),
+                ),
               );
             }
           }
@@ -171,13 +179,7 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                      if (state is PaintingCheckOutOrderLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(
-                            color: ColorsManager.yellow,
-                          ),
-                        ),
+                     
                       Divider(color: Colors.grey.shade300),
                       PaintingOrderSummry(
                         label: 'Subtotal',
@@ -187,6 +189,7 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                         PaintingOrderSummry(
                           label: 'Discount',
                           value: '-\$${discount.toStringAsFixed(2)}',
+                          isDiscount: true,
                         ),
                       Divider(color: Colors.grey.shade300),
                       PaintingOrderSummry(
@@ -273,10 +276,18 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
       await Stripe.instance.presentPaymentSheet();
 
       if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
+        final bookingCubit = context.read<PaintingCubit>();
+
+        Navigator.push(
           context,
-          RouteName.paintingOrderConfirmation,
-          (route) => false,
+          MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: bookingCubit),
+              ],
+              child: PaintingOrderConfirmation(),
+            ),
+          ),
         );
       }
     } on StripeException catch (e) {

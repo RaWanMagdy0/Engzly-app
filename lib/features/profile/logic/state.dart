@@ -75,3 +75,5 @@ class LogoutError extends ProfileState {
   final String message;
   LogoutError(this.message);
 }
+class ProfileHasChangesState extends ProfileState {}
+class ProfileHasPasswordChangesState extends ProfileState {}

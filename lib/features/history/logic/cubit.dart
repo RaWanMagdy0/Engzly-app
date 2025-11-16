@@ -18,7 +18,7 @@ class HistoryCubit extends BaseViewModel<HistoryState> {
 
   Future<void> getHistory({
     bool loadMore = false,
-    int pageSize = 2,
+    int pageSize = 3,
     String sortDirection = "desc",
   }) async {
     if (loadMore) {
@@ -37,6 +37,7 @@ class HistoryCubit extends BaseViewModel<HistoryState> {
       pageSize: pageSize,
       sortDirection: sortDirection,
     );
+    if (isClosed) return;
 
     if (result is Success<List<HistoryResponseModel>>) {
       final newItems = result.data ?? [];

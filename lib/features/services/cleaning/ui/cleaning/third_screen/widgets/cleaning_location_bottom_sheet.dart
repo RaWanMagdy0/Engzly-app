@@ -1,3 +1,4 @@
+import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
   final Function(String) onTypeChanged;
   final Function(String) onSelectAddress;
   final CleaningCubit cleaningCubit;
+  final List<LocationModel> locations; // <- تم إضافة locations
 
   const CleaningLocationBottomSheet({
     super.key,
@@ -19,6 +21,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
     required this.onTypeChanged,
     required this.onSelectAddress,
     required this.cleaningCubit,
+    required this.locations,
   });
 
   @override
@@ -26,7 +29,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
     return DraggableScrollableSheet(
       initialChildSize: 0.35,
       minChildSize: 0.25,
-      maxChildSize: 0.45,
+      maxChildSize: 0.30,
       builder: (context, scrollController) {
         return Container(
           padding: const EdgeInsets.all(16),
@@ -72,20 +75,18 @@ class CleaningLocationBottomSheet extends StatelessWidget {
                       selectedType, onTypeChanged),
                 ],
               ),
-              24.verticalSpace,
+              16.verticalSpace,
               ElevatedButton(
                 onPressed: () {
                   cleaningCubit.selectLocation(selectedAddress);
-                  final cubit = context.read<CleaningCubit>();
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => MultiBlocProvider(
                         providers: [
-                          BlocProvider.value(value: cubit),
+                          BlocProvider.value(value: cleaningCubit),
                         ],
-                        child: CleaningOrderDetails(),
+                        child: const CleaningOrderDetails(),
                       ),
                     ),
                   );

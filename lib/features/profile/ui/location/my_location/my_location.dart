@@ -34,7 +34,6 @@ class MyLocation extends StatelessWidget {
           ),
           onLeadingTap: () {},
           onNotificationTap: () {},
-          showNotificationDot: true,
           child: Column(
             children: [
               20.verticalSpace,

@@ -29,9 +29,13 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
   final LocationRepo _addLocationRepo;
   final GetLocationsRepo _getLocationsRepo;
 
-  ProfileCubit(this._changePasswordRepo, this._getUserDataRepo,
-      this._updateUserDataRepo, this._addLocationRepo, this._getLocationsRepo)
-      : super(ProfileInitial());
+  ProfileCubit(
+    this._changePasswordRepo,
+    this._getUserDataRepo,
+    this._updateUserDataRepo,
+    this._addLocationRepo,
+    this._getLocationsRepo,
+  ) : super(ProfileInitial());
 
   final formKey = GlobalKey<FormState>();
   final appProvider = getIt.get<AppProvider>();
@@ -45,14 +49,45 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
   final addressController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final imageController = TextEditingController();
-  String imageUrl = "";
 
+  String imageUrl = "";
   // ignore: prefer_typing_uninitialized_variables
   var user;
-
   File? selectedImage;
 
   List<LocationModel> locations = [];
+  bool hasChanges = false;
+  bool hasPasswordChanges = false;
+
+  String? _originalName;
+  String? _originalPhone;
+  String? _originalAddress;
+
+  void setPasswordChanges(bool value) {
+    hasPasswordChanges = value;
+    emit(ProfileHasPasswordChangesState());
+  }
+
+  void setHasChanges(bool value) {
+    if (hasChanges != value) {
+      hasChanges = value;
+      emit(ProfileHasChangesState());
+    }
+  }
+
+  void checkForChanges() {
+    final isNameChanged =
+        fullNameController.text.trim() != (_originalName ?? "");
+    final isPhoneChanged =
+        phoneNumberController.text.trim() != (_originalPhone ?? "");
+    final isAddressChanged =
+        addressController.text.trim() != (_originalAddress ?? "");
+    final isImageChanged = selectedImage != null;
+
+    final hasAnyChange =
+        isNameChanged || isPhoneChanged || isAddressChanged || isImageChanged;
+    setHasChanges(hasAnyChange);
+  }
 
   Future<void> forgetPassword({
     required String password,
@@ -95,6 +130,10 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
 
       imageUrl = fixImageUrl(response.imageUrl);
 
+      _originalName = response.fullName ?? "";
+      _originalPhone = response.phoneNumber ?? "";
+      _originalAddress = response.address ?? "";
+
       emit(UserDataSuccess(response));
     } else if (result is Fail) {
       final failResult = result as Fail;
@@ -124,6 +163,12 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     if (result is Success<String>) {
       emit(UpdateUserDataSuccess(
           result.data ?? "User Data Updated Successfully"));
+
+      _originalName = fullNameController.text;
+      _originalPhone = phoneNumberController.text;
+      _originalAddress = addressController.text;
+
+      setHasChanges(false);
     } else if (result is Fail) {
       emit(UpdateUserDataError(
         getErrorMessageFromException((result as Fail).exception),
@@ -171,20 +216,18 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
     emit(LogoutLoading());
     try {
       await _updateUserDataRepo.revoke();
-      
+
       await TokenManager.deleteToken();
-    //  await TokenManager.clearRefreshToken();
       await SecureStorageFactory.deleteData(key: 'token');
       await SecureStorageFactory.deleteData(key: 'rememberMe');
       await SecureStorageFactory.deleteData(key: 'savedEmail');
       await SecureStorageFactory.deleteData(key: 'savedPassword');
-      
+
       emit(LogoutSuccess());
     } catch (e) {
       emit(LogoutError(e.toString()));
     }
   }
-
 
   static String fixImageUrl(String? url) {
     if (url == null || url.isEmpty) return "";
@@ -196,6 +239,7 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
 
   void setImage(File file) {
     selectedImage = file;
+    checkForChanges();
     emit(ProfileImagePicked());
   }
 }

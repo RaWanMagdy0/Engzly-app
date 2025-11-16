@@ -1,6 +1,8 @@
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
+import 'package:engzly/notification/notification_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -9,7 +11,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget notificationIcon;
   final VoidCallback? onLeadingTap;
   final VoidCallback? onNotificationTap;
-  final bool showNotificationDot;
 
   const CustomAppBar({
     super.key,
@@ -18,11 +19,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.notificationIcon,
     this.onLeadingTap,
     this.onNotificationTap,
-    this.showNotificationDot = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasUnread = context.watch<NotificationCubit>().hasUnread;
+
     return AppBar(
       titleTextStyle: AppFonts.font20BlackWeight700.copyWith(fontSize: 18.sp),
       iconTheme: const IconThemeData(color: ColorsManager.black),
@@ -53,14 +55,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: notificationIcon,
                 color: ColorsManager.black,
               ),
-              if (showNotificationDot)
+              if (hasUnread)
                 Positioned(
                   right: 10,
                   top: 10,
                   child: Container(
-                    width: 6.w,
-                    height: 6.h,
-                    decoration: BoxDecoration(
+                    width: 8.w,
+                    height: 8.h,
+                    decoration: const BoxDecoration(
                       color: ColorsManager.red,
                       shape: BoxShape.circle,
                     ),

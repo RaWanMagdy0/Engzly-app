@@ -142,7 +142,6 @@ class QuestionsScreen extends StatelessWidget {
           Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Padding(
         padding: EdgeInsets.all(18.sp),
         child: Column(

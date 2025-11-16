@@ -4,9 +4,12 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,10 +22,12 @@ class PaintingOrderConfirmation extends StatefulWidget {
 }
 
 class _PaintingOrderConfirmation extends State<PaintingOrderConfirmation> {
+  late PaintingCubit bookingCubit;
+
   @override
   void initState() {
     super.initState();
-    //  bookingCubit = context.read<HouseShiftingBookingCubit>();
+    bookingCubit = context.read<PaintingCubit>();
   }
 
   @override
@@ -39,7 +44,6 @@ class _PaintingOrderConfirmation extends State<PaintingOrderConfirmation> {
           width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () {},
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
         child: Column(
@@ -48,7 +52,7 @@ class _PaintingOrderConfirmation extends State<PaintingOrderConfirmation> {
             SizedBox(
               height: 300.h,
               width: 200.w,
-              child: Lottie.asset(AppImages.cleaningSubmitCheck),
+              child: Lottie.asset(AppImages.paintingSubmitCheck),
             ),
             Text(
               "Order Placed",
@@ -98,12 +102,11 @@ class _PaintingOrderConfirmation extends State<PaintingOrderConfirmation> {
             ),
             5.verticalSpace,
             Text(
-              'EEEE, MMM dd, yyyy @ h:mm a',
-              //  selectedDate != null
-              //    ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
-              //      .format(selectedDate)
-              //: "No date selected",
-              style: AppFonts.font16BlackWeight400,
+              bookingCubit.selectedDate != null
+                  ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
+                      .format(bookingCubit.selectedDate!)
+                  : "No date selected",
+              style: AppFonts.font20BlackWeight700.copyWith(fontSize: 16.sp),
             ),
             40.verticalSpace,
             Container(

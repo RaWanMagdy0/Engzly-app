@@ -52,6 +52,7 @@ class EngzlyApp extends StatelessWidget {
               actionsIconTheme: const IconThemeData(color: Colors.black),
             ),
           ),
+
           initialRoute: initialRoute,
           onGenerateRoute: AppRouter.generateRoute,
         );

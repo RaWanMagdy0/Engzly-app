@@ -22,13 +22,12 @@ class VehicleScheduleScreen extends StatelessWidget {
       title: Text(
         "Schedule Vehcile",
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h,color: ColorsManager.black),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h,color: ColorsManager.black),
+      leadingIcon: SvgPicture.asset(AppImages.backArrow,
+          width: 30.w, height: 30.h, color: ColorsManager.black),
+      notificationIcon: Image.asset(AppImages.notificationIcon,
+          width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
-      showNotificationDot: true,
       child: Column(
         children: [
           20.verticalSpace,
@@ -40,7 +39,7 @@ class VehicleScheduleScreen extends StatelessWidget {
               },
             ),
           ),
-          300.verticalSpace,
+          const Spacer(),
           CustomButton(
             borderRadius: 15.r,
             height: 50.h,
@@ -69,6 +68,7 @@ class VehicleScheduleScreen extends StatelessWidget {
             color: ColorsManager.orange,
             textStyle: AppFonts.font14BWhiteWeight700,
           ),
+          20.verticalSpace
         ],
       ),
     );

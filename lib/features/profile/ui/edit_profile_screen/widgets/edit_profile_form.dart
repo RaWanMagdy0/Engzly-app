@@ -5,7 +5,9 @@ import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
 import 'package:engzly/core/shared_widgets/custom_text_form_field.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
+import 'package:engzly/features/profile/logic/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfileForm extends StatelessWidget {
@@ -13,7 +15,9 @@ class EditProfileForm extends StatelessWidget {
     super.key,
     required this.viewModel,
   });
+
   final ProfileCubit viewModel;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -30,6 +34,7 @@ class EditProfileForm extends StatelessWidget {
                 validator: (value) => Validators.validateName(value),
                 keyBordType: TextInputType.text,
                 controller: viewModel.fullNameController,
+                onChanged: (_) => viewModel.checkForChanges(),
               ),
               15.verticalSpace,
               CustomTextFormField(
@@ -38,6 +43,7 @@ class EditProfileForm extends StatelessWidget {
                 validator: (value) => Validators.validatePhoneNumber(value),
                 keyBordType: TextInputType.phone,
                 controller: viewModel.phoneNumberController,
+                onChanged: (_) => viewModel.checkForChanges(),
               ),
               15.verticalSpace,
               CustomTextFormField(
@@ -47,6 +53,7 @@ class EditProfileForm extends StatelessWidget {
                 controller: viewModel.addressController,
                 validator: (value) =>
                     Validators.validateNotEmpty(title: "Address", value: value),
+                onChanged: (_) => viewModel.checkForChanges(),
               ),
               15.verticalSpace,
               CustomTextFormField(
@@ -63,24 +70,15 @@ class EditProfileForm extends StatelessWidget {
                 padding: EdgeInsets.only(left: 10.w),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Note: You can't change your email ",
-                      style: AppFonts.font14BOrangeWeight400.copyWith(
-                        color: ColorsManager.red,
-                      )),
+                  child: Text(
+                    "Note: You can't change your email ",
+                    style: AppFonts.font14BOrangeWeight400.copyWith(
+                      color: ColorsManager.red,
+                    ),
+                  ),
                 ),
               ),
               25.verticalSpace,
-              /*********  CustomTextFormField(
-                hintText: "**************",
-                labelText: "Password",
-                controller: viewModel.passwordController,
-                readOnly: true,
-                obscureText: true,
-                validator: (value) => null,
-                keyBordType: TextInputType.text,
-              ),
-              15.verticalSpace,*/
-
               CustomButton(
                 onPressed: () {
                   Navigator.pushNamed(context, RouteName.changePassword);
@@ -95,21 +93,35 @@ class EditProfileForm extends StatelessWidget {
                 borderColor: ColorsManager.lightGray,
               ),
               15.verticalSpace,
-              CustomButton(
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
+              BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) {
+                  final hasChanges = context.watch<ProfileCubit>().hasChanges;
 
-                  if (viewModel.formKey.currentState!.validate()) {
-                    viewModel.updateUserData();
-                  }
+                  return CustomButton(
+                    onPressed: hasChanges
+                        ? () {
+                            FocusScope.of(context).unfocus();
+                            if (viewModel.formKey.currentState!.validate()) {
+                              viewModel.updateUserData();
+                              viewModel.setHasChanges(false);
+                            }
+                          }
+                        : null,
+                    text: "Save Changes",
+                    textStyle: AppFonts.font14BWhiteWeight700.copyWith(
+                      color: hasChanges
+                          ? ColorsManager.white
+                          : ColorsManager.black.withValues(alpha: 0.5),
+                    ),
+                    color: hasChanges
+                        ? ColorsManager.orange
+                        : ColorsManager.lightGray,
+                    height: 60.h,
+                    width: 310.w,
+                    borderRadius: 16.r,
+                  );
                 },
-                text: "Save Changes",
-                textStyle: AppFonts.font14BWhiteWeight700,
-                color: ColorsManager.orange,
-                height: 60.h,
-                width: 310.w,
-                borderRadius: 16.r,
-              )
+              ),
             ],
           ),
         ),
