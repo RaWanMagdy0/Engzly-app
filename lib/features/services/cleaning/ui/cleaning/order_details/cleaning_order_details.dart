@@ -11,10 +11,10 @@ import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widg
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_order_summry.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_payment_method.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_promo_code.dart';
+import 'package:engzly/features/payment/service_payment_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CleaningOrderDetails extends StatefulWidget {
@@ -46,8 +46,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
   void didChangeMetrics() {
     super.didChangeMetrics();
     final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
-    final keyboardVisible = bottomInset > 0.0;
-    if (keyboardVisible) {
+    if (bottomInset > 0.0) {
       Future.delayed(const Duration(milliseconds: 250), () {
         if (_scrollController.hasClients) {
           _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -60,35 +59,29 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
   Widget build(BuildContext context) {
     return BlocConsumer<CleaningCubit, CleaningStates>(
       listener: (context, state) async {
-        if (state is CleaningCheckOutOrderSuccess) {
-          final response = state.booking.first;
-          if (selectedPaymentMethod == 'online') {
-            final clientSecret = response.data?.clientSecret;
-            if (clientSecret != null) {
-              await handleStripePayment(context, clientSecret);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment data not found')),
-              );
-            }
-          } else {
-            if (context.mounted) {
-              final bookingCubit = context.read<CleaningCubit>();
+        final cubit = context.read<CleaningCubit>();
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: bookingCubit),
-                    ],
-                    child: CleaningOrderConfirmation(),
-                  ),
-                ),
-              );
-            }
+        if (state is CleaningCheckOutOrderSuccess) {
+          final data = state.booking.first.data;
+
+          final paymentData = CheckoutPaymentData(
+            clientSecret: data?.clientSecret,
+            paymentUrl: data?.stripePaymentIntentId,
+            paymentMethod: selectedPaymentMethod,
+            onlinePaymentType: cubit.selectedPaymentType,
+          );
+
+          final paymentSuccess = await PaymentService.processPayment(
+            context: context,
+            paymentData: paymentData,
+            merchantName: 'Engzly App',
+          );
+
+          if (paymentSuccess && context.mounted) {
+            navigateToConfirmation(context, cubit);
           }
         }
+
         if (state is CleaningCheckOutOrderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
@@ -97,10 +90,12 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       },
       builder: (context, state) {
         final cubit = context.watch<CleaningCubit>();
+
         double basePrice = cubit.selectedHouseSizePrice?.toDouble() ?? 0;
         double personCost = cubit.requiredPersons * 5;
         double hourlyRate = basePrice + personCost;
         double totalHourCost = cubit.workingHours * hourlyRate;
+
         double serviceCharge = 50;
         double subtotal = totalHourCost + serviceCharge;
 
@@ -112,9 +107,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
         double totalAfterDiscount = subtotal - discount;
 
         return CustomScaffoldScreen(
-          title: Text(
-            "Order Details",
-          ),
+          title: Text("Order Details"),
           leadingIcon: SvgPicture.asset(AppImages.backArrow,
               width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
@@ -133,8 +126,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                       10.verticalSpace,
                       CleaningOrderItem(
                         icon: '🏠',
-                        title: cubit.selectedHouseSize?.name ??
-                            "No house selected",
+                        title: cubit.selectedHouseSize?.name ?? "No house selected",
                         subtitle: '1 Kitchen Included',
                         price: cubit.selectedHouseSizePrice != null
                             ? "${cubit.selectedHouseSizePrice}/hr"
@@ -204,27 +196,39 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                         : ColorsManager.green,
                     onPressed: state is CleaningCheckOutOrderLoading
                         ? null
-                        : () {
+                        : () async {
                             if (cubit.selectedHouseSize == null ||
                                 cubit.address == null ||
                                 cubit.requiredPersons == 0) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                      "Please complete all required fields"),
+                                  content: Text("Please complete all required fields"),
                                 ),
                               );
                               return;
                             }
 
+                            final paymentData = await PaymentService.selectPaymentMethod(
+                              context: context,
+                              selectedPaymentMethod: selectedPaymentMethod,
+                            );
+
+                            if (paymentData == null) return;
+
+                            cubit.selectedPaymentType = paymentData.onlinePaymentType;
+
+                            int paymentId = PaymentHandler.getPaymentMethodId(
+                              paymentMethod: selectedPaymentMethod,
+                              onlinePaymentType: paymentData.onlinePaymentType,
+                            );
+
                             cubit.checkOut(
                               schedule: cubit.selectedDate!,
                               totalPrice: totalAfterDiscount,
-                              serviceId: 3,
+                              serviceId: cubit.selectedServiceId ?? 1,
                               location: cubit.address!,
                               promoCodes: cubit.appliedPromoCode ?? '',
-                              paymentMethodId:
-                                  selectedPaymentMethod == 'online' ? 1 : 2,
+                              paymentMethodId: paymentId,
                               houseSizeId: cubit.selectedHouseSize!.id,
                             );
                           },
@@ -238,46 +242,16 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
     );
   }
 
-  Future<void> handleStripePayment(
-      BuildContext context, String clientSecret) async {
-    try {
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: 'Engzly App',
-          style: ThemeMode.light,
-          allowsDelayedPaymentMethods: true,
+  void navigateToConfirmation(BuildContext context, CleaningCubit cubit) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: cubit,
+          child: CleaningOrderConfirmation(cubit: cubit),
         ),
-      );
-
-      await Stripe.instance.presentPaymentSheet();
-
-      if (context.mounted) {
-        final bookingCubit = context.read<CleaningCubit>();
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: bookingCubit),
-              ],
-              child: CleaningOrderConfirmation(),
-            ),
-          ),
-        );
-      }
-    } on StripeException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Payment failed: ${e.error.localizedMessage}'),
-          backgroundColor: ColorsManager.red,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(' Unexpected error: $e')),
-      );
-    }
+      ),
+      (route) => false,
+    );
   }
 }

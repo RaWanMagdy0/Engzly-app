@@ -37,6 +37,13 @@ class LocationSelected extends HouseShiftingBookingState {
     required this.address,
   });
 }
+class HouseShiftingBookingServiceSelected extends HouseShiftingBookingState {
+  final int serviceId;
+
+  HouseShiftingBookingServiceSelected( {
+    required this.serviceId,
+  });
+}
 
 class CheckPromoCodeLoading extends HouseShiftingBookingState {}
 

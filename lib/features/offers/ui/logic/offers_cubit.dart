@@ -1,4 +1,3 @@
-// offers_cubit.dart
 import 'package:engzly/features/home/data/repo/home_repo.dart';
 import 'package:engzly/features/offers/ui/logic/offers_states.dart';
 import 'package:injectable/injectable.dart';

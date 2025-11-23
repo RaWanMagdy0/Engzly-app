@@ -3,6 +3,7 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/payment/service_payment_handler.dart';
 import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
 import 'package:engzly/features/services/vehicle/logic/vehicle_states.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/widgets/vehicle_order_item.dart';
@@ -14,7 +15,6 @@ import 'package:engzly/features/services/vehicle/ui/vehicle/vehicle_order_confir
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class VehicleOrderDetails extends StatefulWidget {
@@ -60,33 +60,26 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
   Widget build(BuildContext context) {
     return BlocConsumer<VehicleCubit, VehicleStates>(
       listener: (context, state) async {
-        if (state is VehicleCheckOutOrderSuccess) {
-          final response = state.booking.first;
-          if (selectedPaymentMethod == 'online') {
-            final clientSecret = response.data?.clientSecret;
-            if (clientSecret != null) {
-              await handleStripePayment(context, clientSecret);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment data not found')),
-              );
-            }
-          } else {
-            if (context.mounted) {
-              final bookingCubit = context.read<VehicleCubit>();
+        final cubit = context.read<VehicleCubit>();
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: bookingCubit),
-                    ],
-                    child: VehicleOrderConfirmation(),
-                  ),
-                ),
-              );
-            }
+        if (state is VehicleCheckOutOrderSuccess) {
+          final data = state.booking.first.data;
+
+          final paymentData = CheckoutPaymentData(
+            clientSecret: data?.clientSecret,
+            paymentUrl: data?.stripePaymentIntentId,
+            paymentMethod: selectedPaymentMethod,
+            onlinePaymentType: cubit.selectedPaymentType,
+          );
+
+          final paymentSuccess = await PaymentService.processPayment(
+            context: context,
+            paymentData: paymentData,
+            merchantName: 'Engzly App',
+          );
+
+          if (paymentSuccess && context.mounted) {
+            navigateToConfirmation(context, cubit);
           }
         }
 
@@ -113,9 +106,7 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
         double totalAfterDiscount = subtotal - discount;
 
         return CustomScaffoldScreen(
-          title: Text(
-            "Order Details",
-          ),
+          title: Text("Order Details"),
           leadingIcon: SvgPicture.asset(AppImages.backArrow,
               width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
@@ -150,7 +141,6 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                    
                       Divider(color: Colors.grey.shade300),
                       VehicleOrderSummry(
                         label: 'Subtotal',
@@ -198,7 +188,7 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
                         : ColorsManager.orange,
                     onPressed: state is VehicleCheckOutOrderLoading
                         ? null
-                        : () {
+                        : () async {
                             if (cubit.selectedVehcile == null ||
                                 cubit.address == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -210,14 +200,29 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
                               return;
                             }
 
+                            final paymentData =
+                                await PaymentService.selectPaymentMethod(
+                              context: context,
+                              selectedPaymentMethod: selectedPaymentMethod,
+                            );
+
+                            if (paymentData == null) return;
+
+                            cubit.selectedPaymentType =
+                                paymentData.onlinePaymentType;
+
+                            int paymentId = PaymentHandler.getPaymentMethodId(
+                              paymentMethod: selectedPaymentMethod,
+                              onlinePaymentType: paymentData.onlinePaymentType,
+                            );
+
                             cubit.checkOut(
                               schedule: cubit.selectedDate!,
                               totalPrice: totalAfterDiscount,
-                              serviceId: 3,
+                              serviceId: cubit.selectedServiceId ?? 2,
                               location: cubit.address!,
                               promoCodes: cubit.appliedPromoCode ?? '',
-                              paymentMethodId:
-                                  selectedPaymentMethod == 'online' ? 1 : 2,
+                              paymentMethodId: paymentId,
                               vehicleId: cubit.selectedVehcile!.id,
                             );
                           },
@@ -231,46 +236,18 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
     );
   }
 
-  Future<void> handleStripePayment(
-      BuildContext context, String clientSecret) async {
-    try {
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: 'Engzly App',
-          style: ThemeMode.light,
-          allowsDelayedPaymentMethods: true,
+  void navigateToConfirmation(BuildContext context, VehicleCubit cubit) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: cubit),
+          ],
+          child: VehicleOrderConfirmation(),
         ),
-      );
-
-      await Stripe.instance.presentPaymentSheet();
-
-      if (context.mounted) {
-        final bookingCubit = context.read<VehicleCubit>();
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: bookingCubit),
-              ],
-              child: VehicleOrderConfirmation(),
-            ),
-          ),
-        );
-      }
-    } on StripeException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Payment failed: ${e.error.localizedMessage}'),
-          backgroundColor: ColorsManager.red,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('⚠️ Unexpected error: $e')),
-      );
-    }
+      ),
+      (route) => false,
+    );
   }
 }

@@ -2,6 +2,8 @@ class ApiConstants {
   static const String baseUrl = "http://engezly.runasp.net/api/";
   // --------------------  auth  -----------------
   static const String login = "Auth/login";
+  static const String googleLogin = "Auth/google-login";
+
   static const String register = "Auth/Register";
   static const String confirmEmail = "Auth/confirm-email";
 
@@ -33,7 +35,6 @@ class ApiConstants {
   static const String vehicleCheckOut = "Vehicles/VehiclesBooking";
   static const String paintingCheckOut = "Painting/paintingBooking";
   static const String getColors = "Painting/colors";
-
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";
   static const String revokeToken = "Auth/revoke";

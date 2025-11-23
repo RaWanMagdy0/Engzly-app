@@ -33,11 +33,12 @@ class VehicleCubit extends BaseViewModel<VehicleStates> {
   String? address;
   String? appliedPromoCode;
   double? discountPercentage;
+  int? selectedServiceId;
 
   DateTime? selectedDate;
   int requiredPersons = 0;
   int workingHours = 2;
-
+String? selectedPaymentType;
   void selectVehicle(
       VehicleModel vehicle, double vehiclePrice, String icon, double capacity) {
     selectedVehcile = vehicle;
@@ -58,6 +59,11 @@ class VehicleCubit extends BaseViewModel<VehicleStates> {
   void selectDate(DateTime date) {
     selectedDate = date;
     emit(VehcileDateSelected(date));
+  }
+
+  void selectService(int serviceId) {
+    selectedServiceId = serviceId;
+    emit(VehicleBookingServiceSelected(serviceId: serviceId));
   }
 
   Future<void> getVehicles() async {

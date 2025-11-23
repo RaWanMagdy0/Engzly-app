@@ -7,10 +7,16 @@ import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/logic/state.dart';
 import 'package:engzly/features/home/ui/widgets/home_shimmer_widget.dart';
+import 'package:engzly/features/home/ui/widgets/offer_card.dart';
 import 'package:engzly/features/home/ui/widgets/offers_tabs.dart';
 import 'package:engzly/features/home/ui/widgets/service_row.dart';
 import 'package:engzly/features/home/ui/widgets/other_services_card.dart';
-import 'package:flutter/foundation.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
+import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/cleaning_screen.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
+import 'package:engzly/features/services/painting/ui/painting/first_screen/painting_screen.dart';
+import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
+import 'package:engzly/features/services/vehicle/ui/vehicle/first_screen/vehicle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -193,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       10.verticalSpace,
                       if (selectedTab < offers.length)
                         SizedBox(
-                          height: 150.h,
+                          height: 140.h,
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: offers[selectedTab].offers.length,
@@ -201,13 +207,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemBuilder: (context, index) {
                               final offerItem =
                                   offers[selectedTab].offers[index];
-                              final iconUrl = (offerItem.icon ?? "")
-                                  .trim()
-                                  .replaceAll("\n", "");
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(15.r),
-                                child: buildOfferImage(iconUrl),
-                              );
+
+                              return OfferCard(offer: offerItem);
                             },
                           ),
                         )
@@ -216,7 +217,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   );
                 }
-                // لو لسه جاري التحميل، شيمر للـ tabs + الصور
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -244,7 +244,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   current is HomeServicesSuccess || current is ServiceLoading,
               builder: (context, state) {
                 if (state is HomeServicesSuccess) {
-                  final services = state.services;
+                  final services = state.services.where((s) {
+                    return s.name.toLowerCase() != "house shifting";
+                  }).toList();
+
                   if (services.isEmpty) {
                     return HomeShimmerWidgets.buildServicesShimmer();
                   }
@@ -264,20 +267,49 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             switch (service.name.toLowerCase()) {
                               case "cleaning":
-                                Navigator.pushNamed(
-                                    context, RouteName.cleaning);
+                                final cleaningCubit =
+                                    context.read<CleaningCubit>();
+                                cleaningCubit.selectService(service.id);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: cleaningCubit,
+                                      child: const CleaningScreen(),
+                                    ),
+                                  ),
+                                );
                                 break;
+
                               case "vehicle":
-                                Navigator.pushNamed(context, RouteName.vehicle);
+                                final vehicleCubit =
+                                    context.read<VehicleCubit>();
+                                vehicleCubit.selectService(service.id);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: vehicleCubit,
+                                      child: const VehicleScreen(),
+                                    ),
+                                  ),
+                                );
                                 break;
+
                               case "painting":
-                                Navigator.pushNamed(
-                                    context, RouteName.painting);
+                                final paintingCubit =
+                                    context.read<PaintingCubit>();
+                                paintingCubit.selectService(service.id);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: paintingCubit,
+                                      child: const PaintingScreen(),
+                                    ),
+                                  ),
+                                );
                                 break;
-                              default:
-                                if (kDebugMode) {
-                                  print("Unknown service: ${service.name}");
-                                }
                             }
                           },
                         );
@@ -287,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 return HomeShimmerWidgets.buildServicesShimmer();
               },
-            ),
+            )
           ],
         ),
       ),

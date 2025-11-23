@@ -27,7 +27,7 @@ class HouseOptionCard extends StatelessWidget {
         return GestureDetector(
           onTap: () => cubit.selectHouseSize(houseSize, houseSizePrice),
           child: Container(
-            height: 140.h,
+            height: 150.h,
             width: 110.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.r),
@@ -50,6 +50,12 @@ class HouseOptionCard extends StatelessWidget {
                 Text(houseSize.name,
                     textAlign: TextAlign.center,
                     style: AppFonts.font13BlackWeight500),
+                Text(
+                  "\$${houseSize.price}",
+                  style: AppFonts.font13BlackWeight500.copyWith(
+                    color: ColorsManager.orange,
+                  ),
+                ),
               ],
             ),
           ),

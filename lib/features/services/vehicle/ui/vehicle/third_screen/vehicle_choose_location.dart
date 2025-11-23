@@ -66,7 +66,6 @@ class _VehicleChooseLocationState extends State<VehicleChooseLocation> {
           onLeadingTap: () => Navigator.pop(context),
           child: Stack(
             children: [
-              /// 🗺️ الماب دايمًا موجودة في الخلفية
               Positioned.fill(
                 child: GoogleMap(
                   onMapCreated: (controller) => _mapController = controller,
@@ -82,7 +81,6 @@ class _VehicleChooseLocationState extends State<VehicleChooseLocation> {
                 ),
               ),
 
-              /// 📍 العنوان الحالي فوق
               Positioned(
                 top: 20.h,
                 left: 16.w,
@@ -90,14 +88,12 @@ class _VehicleChooseLocationState extends State<VehicleChooseLocation> {
                 child: VehicleAddressTopBar(address: selectedAddress),
               ),
 
-              /// 🔄 الحالة: تحميل
               if (state is VehicleLocationsLoading)
                 const Center(
                   child: CircularProgressIndicator(color: ColorsManager.orange),
                 )
               else
 
-                /// 📦 فيه عناوين؟ استخدم BottomSheet المناسب
                 (locations.isNotEmpty
                     ? VehicleLocationBottomSheet(
                         selectedAddress: selectedAddress,
@@ -178,7 +174,6 @@ class _VehicleChooseLocationState extends State<VehicleChooseLocation> {
     });
   }
 
-  /// 🔸 لما مفيش عناوين
   Widget _buildEmptyLocationSheet(BuildContext context) {
     return DraggableScrollableSheet(
       initialChildSize: 0.3,

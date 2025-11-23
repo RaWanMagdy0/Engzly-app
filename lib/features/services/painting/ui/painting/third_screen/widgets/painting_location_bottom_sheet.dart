@@ -24,9 +24,9 @@ class PaintingLocationBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.35,
-      minChildSize: 0.25,
-      maxChildSize: 0.30,
+      initialChildSize: 0.33,
+      minChildSize: 0.33,
+      maxChildSize: 0.33,
       builder: (context, scrollController) {
         return Container(
           padding: const EdgeInsets.all(16),

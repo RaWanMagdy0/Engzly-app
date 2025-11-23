@@ -54,6 +54,8 @@ dependencies:
   signalr_netcore: ^1.4.4
   flutter_local_notifications: ^17.1.2
   permission_handler: ^11.3.0
+  webview_flutter: ^4.13.0
+  google_sign_in: ^6.1.0
 
 
 dev_dependencies:

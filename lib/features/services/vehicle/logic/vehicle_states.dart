@@ -69,7 +69,13 @@ class VehicleSelected extends VehicleStates {
   VehicleSelected(this.vehicle);
 }
 
+class VehicleBookingServiceSelected extends VehicleStates {
+  final int serviceId;
 
+  VehicleBookingServiceSelected( {
+    required this.serviceId,
+  });
+}
 
 class VehcileDateSelected extends VehicleStates {
   final DateTime date;

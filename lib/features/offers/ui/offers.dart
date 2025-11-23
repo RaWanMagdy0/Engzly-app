@@ -4,6 +4,7 @@ import 'package:engzly/features/home/ui/widgets/home_shimmer_widget.dart';
 import 'package:engzly/features/home/data/models/offers/offers_response_model.dart';
 import 'package:engzly/features/offers/ui/logic/offers_cubit.dart';
 import 'package:engzly/features/offers/ui/logic/offers_states.dart';
+import 'package:engzly/features/home/ui/widgets/offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -89,12 +90,11 @@ class _OffersScreenState extends State<OffersScreen> {
         child: BlocBuilder<OffersCubit, OffersState>(
           builder: (context, state) {
             if (state is OffersLoading) {
-              // هنا بنستخدم شيمر كامل للشاشة
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
-                    3, // عدد المجموعات الوهمية
+                    3,
                     (_) => buildOfferGroupShimmer(),
                   ),
                 ),
@@ -103,6 +103,7 @@ class _OffersScreenState extends State<OffersScreen> {
               return Center(child: Text(state.message));
             } else if (state is OffersSuccess) {
               final offers = state.offers;
+
               if (offers.isEmpty) {
                 return const Center(child: Text("No offers available"));
               }
@@ -111,6 +112,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 itemCount: offers.length,
                 itemBuilder: (context, index) {
                   final OffersResponseModel offerGroup = offers[index];
+
                   return Padding(
                     padding: EdgeInsets.only(bottom: 15.h),
                     child: Column(
@@ -125,7 +127,7 @@ class _OffersScreenState extends State<OffersScreen> {
                         ),
                         10.verticalSpace,
                         SizedBox(
-                          height: 160.h,
+                          height: 150.h,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: offerGroup.offers.length,
@@ -133,25 +135,9 @@ class _OffersScreenState extends State<OffersScreen> {
                               final offer = offerGroup.offers[i];
                               return Container(
                                 margin: EdgeInsets.only(right: 12.w),
-                                width: 250.w,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.r),
-                                  color: ColorsManager.lightGray,
+                                child: OfferCard(
+                                  offer: offer,
                                 ),
-                                clipBehavior: Clip.hardEdge,
-                                child: offer.icon != null
-                                    ? Image.network(
-                                        offer.icon!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          offer.type ?? "No Title",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
                               );
                             },
                           ),
@@ -162,6 +148,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 },
               );
             }
+
             return SizedBox.shrink();
           },
         ),

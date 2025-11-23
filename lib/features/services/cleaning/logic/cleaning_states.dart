@@ -13,6 +13,13 @@ class CleaningHouseSizeSelected extends CleaningStates {
 }
 
 
+class  CleaningBookingServiceSelected extends CleaningStates {
+  final int serviceId;
+
+  CleaningBookingServiceSelected( {
+    required this.serviceId,
+  });
+}
 
 class CleaningDateSelected extends CleaningStates {
   final DateTime date;

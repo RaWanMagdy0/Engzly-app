@@ -17,6 +17,13 @@ class PaintingDateSelected extends PaintingStates {
   final DateTime date;
   PaintingDateSelected(this.date);
 }
+class PaintingBookingServiceSelected extends PaintingStates {
+  final int serviceId;
+
+  PaintingBookingServiceSelected( {
+    required this.serviceId,
+  });
+}
 
 class PaintingLocationSelected extends PaintingStates {
   final String address;

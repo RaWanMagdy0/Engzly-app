@@ -8,7 +8,7 @@ class CleaningBookingRequestModel {
   final double totalPrice;
   final String location;
   final int serviceId;
-  final String promoCodes;
+  final String? promoCodes;
   final int paymentMethodId;
   final int houseSizeId;
 
@@ -17,7 +17,7 @@ class CleaningBookingRequestModel {
     required this.totalPrice,
     required this.location,
     required this.serviceId,
-    required this.promoCodes,
+    this.promoCodes,
     required this.paymentMethodId,
     required this.houseSizeId,
   });
@@ -25,5 +25,11 @@ class CleaningBookingRequestModel {
   factory CleaningBookingRequestModel.fromJson(Map<String, dynamic> json) =>
       _$CleaningBookingRequestModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CleaningBookingRequestModelToJson(this);
+  Map<String, dynamic> toJson() {
+    final map = _$CleaningBookingRequestModelToJson(this);
+    if (promoCodes == null || promoCodes!.isEmpty) {
+      map.remove('promoCodes');
+    }
+    return map;
+  }
 }

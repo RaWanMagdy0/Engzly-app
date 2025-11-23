@@ -16,7 +16,6 @@ class HouseShiftingBookingCubit
 
   HouseShiftingBookingCubit(this._repo) : super(HouseShiftingBookingInitial());
 
-  
   HouseSizeModel? selectedHouseSize;
   int? selectedHouseSizePrice;
   Map<FurnitureModel, int> selectedFurnitureCounts = {};
@@ -28,9 +27,11 @@ class HouseShiftingBookingCubit
   String? address;
 
   DateTime? selectedDate;
+  int? selectedServiceId;
+  String? selectedPaymentType;
 
   String? appliedPromoCode;
- double? discountPercentage;
+  double? discountPercentage;
   double get totalPrice {
     double total = 0;
 
@@ -76,6 +77,11 @@ class HouseShiftingBookingCubit
       final errorMessage = getErrorMessageFromException(failResult.exception);
       emit(CheckPromoCodeError(errorMessage));
     }
+  }
+
+  void selectService(int serviceId) {
+    selectedServiceId = serviceId;
+    emit(HouseShiftingBookingServiceSelected(serviceId: serviceId));
   }
 
   void removePromoCode() {
@@ -136,9 +142,9 @@ class HouseShiftingBookingCubit
   }
 
   void selectLocation(String newAddress) {
-  address = newAddress;
-  emit(LocationSelected(address: newAddress));
-}
+    address = newAddress;
+    emit(LocationSelected(address: newAddress));
+  }
 
   Future<void> checkOut({
     required DateTime schedule,

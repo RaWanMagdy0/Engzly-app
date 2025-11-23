@@ -19,7 +19,8 @@ import '../../features/auth/data/repo/forget_password/reset_password_repo.dart'
     as _i688;
 import '../../features/auth/data/repo/forget_password/verify_email_repo.dart'
     as _i78;
-import '../../features/auth/data/repo/login_repo.dart' as _i869;
+import '../../features/auth/data/repo/login/google_repo.dart' as _i832;
+import '../../features/auth/data/repo/login/login_repo.dart' as _i1003;
 import '../../features/auth/data/repo/register/confirm_email_repo.dart'
     as _i834;
 import '../../features/auth/data/repo/register/register_repo.dart' as _i109;
@@ -29,8 +30,12 @@ import '../../features/auth/logic/forget_password/reset_pass_cubit/cubit.dart'
     as _i1003;
 import '../../features/auth/logic/forget_password/verify_email/cubit.dart'
     as _i854;
-import '../../features/auth/logic/login_cubit/cubit.dart' as _i302;
+import '../../features/auth/logic/login_cubit/google.dart/google_cubit.dart'
+    as _i282;
+import '../../features/auth/logic/login_cubit/login/cubit.dart' as _i173;
 import '../../features/auth/logic/register_cubit/cubit.dart' as _i690;
+import '../../features/auth/ui/login/google_login/google_auth_service.dart'
+    as _i873;
 import '../../features/history/data/history_api/history_api_manager.dart'
     as _i50;
 import '../../features/history/data/repo/history_repo.dart' as _i625;
@@ -86,6 +91,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final dioModule = _$DioModule();
     gh.factory<_i777.DioFactory>(() => _i777.DioFactory());
+    gh.factory<_i873.GoogleAuthService>(() => _i873.GoogleAuthService());
     gh.singleton<_i1040.AppProvider>(() => _i1040.AppProvider());
     gh.singleton<_i44.AppProvider>(() => _i44.AppProvider());
     gh.lazySingleton<_i426.NotificationCubit>(() => _i426.NotificationCubit());
@@ -112,13 +118,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i688.ResetPasswordRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i78.VerifyEmailRepo>(
         () => _i78.VerifyEmailRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i869.LoginRepo>(
-        () => _i869.LoginRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i832.GoogleLoginRepo>(
+        () => _i832.GoogleLoginRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i1003.LoginRepo>(
+        () => _i1003.LoginRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i834.ConfirmEmailRepo>(
         () => _i834.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i109.RegisterRepo>(
         () => _i109.RegisterRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i302.LoginCubit>(() => _i302.LoginCubit(gh<_i869.LoginRepo>()));
     gh.factory<_i1003.ResetPasswordCubit>(
         () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
     gh.factory<_i791.VehicleRepo>(
@@ -129,6 +136,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i625.HistoryRepository(gh<_i50.HistoryApiManager>()));
     gh.factory<_i61.HistoryCubit>(
         () => _i61.HistoryCubit(gh<_i625.HistoryRepository>()));
+    gh.factory<_i282.GoogleLoginCubit>(() => _i282.GoogleLoginCubit(
+          gh<_i832.GoogleLoginRepo>(),
+          gh<_i873.GoogleAuthService>(),
+        ));
     gh.factory<_i650.HouseShiftingRepo>(
         () => _i650.HouseShiftingRepo(gh<_i795.HouseShiftingApiManager>()));
     gh.factory<_i690.RegisterCubit>(() => _i690.RegisterCubit(
@@ -158,6 +169,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i650.HouseShiftingRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
+    gh.factory<_i173.LoginCubit>(
+        () => _i173.LoginCubit(gh<_i1003.LoginRepo>()));
     gh.factory<_i37.HouseShiftingBookingCubit>(
         () => _i37.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
     gh.factory<_i13.ForgetPasswordCubit>(

@@ -6,131 +6,129 @@ import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CleaningOrderConfirmation extends StatefulWidget {
-  const CleaningOrderConfirmation({super.key});
+class CleaningOrderConfirmation extends StatelessWidget {
+  final CleaningCubit cubit;
 
-  @override
-  State<CleaningOrderConfirmation> createState() =>
-      _CleaningOrderConfirmation();
-}
-
-class _CleaningOrderConfirmation extends State<CleaningOrderConfirmation> {
-  late CleaningCubit bookingCubit;
-
-  @override
-  void initState() {
-    super.initState();
-    bookingCubit = context.read<CleaningCubit>();
-  }
+  const CleaningOrderConfirmation({super.key, required this.cubit});
 
   @override
   Widget build(BuildContext context) {
     final phoneNumber = "01048733684";
 
-    return CustomScaffoldScreen(
-      title: Text(
-        "Order Confirmation",
-      ),
-      leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
-          width: 22.w, height: 22.h, color: ColorsManager.black),
-      notificationIcon: Image.asset(AppImages.notificationIcon,
-          width: 28.w, height: 28.h, color: ColorsManager.black),
-      onLeadingTap: () {},
-      onNotificationTap: () {},
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 300.h,
-              width: 200.w,
-              child: Lottie.asset(AppImages.cleaningSubmitCheck),
-            ),
-            Text(
-              "Order Placed",
-              style: AppFonts.font36BlackWeight700,
-            ),
-            10.verticalSpace,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: AppFonts.font16BlackWeight400,
-                  children: [
-                    const TextSpan(
-                      text:
-                          "Your order has been successfully placed. Our logistics team will contact you soon.\n\nFor any help, call ",
-                    ),
-                    WidgetSpan(
-                      child: GestureDetector(
-                        onTap: () => _makePhoneCall(phoneNumber),
-                        child: Text(
-                          phoneNumber,
-                          style: AppFonts.font14BOrangeWeight400.copyWith(
+    return BlocProvider.value(
+      value: cubit,
+      child: CustomScaffoldScreen(
+        title: Text("Order Confirmation"),
+        leadingIcon: SvgPicture.asset(
+          AppImages.categoryIcon,
+          width: 22.w,
+          height: 22.h,
+          color: ColorsManager.black,
+        ),
+        notificationIcon: Image.asset(
+          AppImages.notificationIcon,
+          width: 28.w,
+          height: 28.h,
+          color: ColorsManager.black,
+        ),
+        onLeadingTap: () {},
+        onNotificationTap: () {},
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 300.h,
+                width: 200.w,
+                child: Lottie.asset(AppImages.cleaningSubmitCheck),
+              ),
+              Text(
+                "Order Placed",
+                style: AppFonts.font36BlackWeight700,
+              ),
+              10.verticalSpace,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: AppFonts.font16BlackWeight400,
+                    children: [
+                      const TextSpan(
+                        text:
+                            "Your order has been successfully placed. Our logistics team will contact you soon.\n\nFor any help, call ",
+                      ),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () => _makePhoneCall(phoneNumber),
+                          child: Text(
+                            phoneNumber,
+                            style: AppFonts.font14BOrangeWeight400.copyWith(
                               color: ColorsManager.green,
                               decoration: TextDecoration.underline,
-                              decorationColor: ColorsManager.green),
+                              decorationColor: ColorsManager.green,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            40.verticalSpace,
-            Container(
-              width: double.infinity,
-              height: 2.h,
-              color: Colors.grey.shade200,
-            ),
-            20.verticalSpace,
-            Text(
-              "SCHEDULE",
-              style: AppFonts.font16BlackWeight400.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
+              40.verticalSpace,
+              Container(
+                width: double.infinity,
+                height: 2.h,
+                color: Colors.grey.shade200,
               ),
-            ),
-            5.verticalSpace,
-            Text(
-              bookingCubit.selectedDate != null
-                  ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
-                      .format(bookingCubit.selectedDate!)
-                  : "No date selected",
-              style: AppFonts.font20BlackWeight700.copyWith(fontSize: 16.sp),
-            ),
-            40.verticalSpace,
-            Container(
-              width: double.infinity,
-              height: 2.h,
-              color: Colors.grey.shade200,
-            ),
-            20.verticalSpace,
-            CustomButton(
-              borderRadius: 15.r,
-              height: 50.h,
-              width: 300.w,
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  RouteName.homeLayout,
-                  (route) => false,
-                );
-              },
-              text: "Go to Homepage",
-              color: ColorsManager.green,
-              textStyle: AppFonts.font14BWhiteWeight700,
-            ),
-          ],
+              20.verticalSpace,
+              Text(
+                "SCHEDULE",
+                style: AppFonts.font16BlackWeight400.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              5.verticalSpace,
+              Text(
+                cubit.selectedDate != null
+                    ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
+                        .format(cubit.selectedDate!)
+                    : "No date selected",
+                style: AppFonts.font20BlackWeight700.copyWith(fontSize: 16.sp),
+              ),
+              40.verticalSpace,
+              Container(
+                width: double.infinity,
+                height: 2.h,
+                color: Colors.grey.shade200,
+              ),
+              20.verticalSpace,
+              CustomButton(
+                borderRadius: 15.r,
+                height: 50.h,
+                width: 300.w,
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RouteName.homeLayout,
+                    (route) => false,
+                  );
+                },
+                text: "Go to Homepage",
+                color: ColorsManager.green,
+                textStyle: AppFonts.font14BWhiteWeight700,
+              ),
+            ],
+          ),
         ),
       ),
     );

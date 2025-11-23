@@ -22,8 +22,6 @@ class _MotionTabBarWidgetState extends State<MotionTabBarWidget> {
       icons: const [
         Icons.home,
         Icons.description,
-        //  Icons.confirmation_num,
-        //  Icons.card_giftcard,
         Icons.local_activity,
         Icons.person,
       ],

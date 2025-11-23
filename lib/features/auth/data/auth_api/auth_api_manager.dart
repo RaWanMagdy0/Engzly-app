@@ -4,6 +4,7 @@ import 'package:engzly/features/auth/data/models/confirm_email/confirm_email_req
 import 'package:engzly/features/auth/data/models/confirm_email/confirm_email_response_model.dart';
 import 'package:engzly/features/auth/data/models/forget_password/forget_password_request_body.dart';
 import 'package:engzly/features/auth/data/models/forget_password/forget_password_response_model.dart';
+import 'package:engzly/features/auth/data/models/login/google_login_respose_model.dart';
 import 'package:engzly/features/auth/data/models/login/login_response_model.dart';
 import 'package:engzly/features/auth/data/models/reset_password/reset_password_request_body.dart';
 import 'package:engzly/features/auth/data/models/reset_password/reset_password_response_model.dart';
@@ -51,5 +52,9 @@ abstract class AuthApiManager {
   @PUT(ApiConstants.resetPassword)
   Future<ResetPasswordResponseModel> resetPassword(
     @Body() ResetPasswordRequestBody confirmEmailRequestBody,
+  );
+  @POST(ApiConstants.googleLogin)
+  Future<GoogleLoginResposeModel> googleLogin(
+    @Header("Authorization") String authorization,
   );
 }

@@ -39,10 +39,10 @@ class _CleaningScreenState extends State<CleaningScreen> {
       title: Text(
         "Cleaning Service",
       ),
-      leadingIcon:
-          SvgPicture.asset(AppImages.backArrow, width: 30.w, height: 30.h,color: ColorsManager.black),
-      notificationIcon:
-          Image.asset(AppImages.notificationIcon, width: 28.w, height: 28.h,color: ColorsManager.black),
+      leadingIcon: SvgPicture.asset(AppImages.backArrow,
+          width: 30.w, height: 30.h, color: ColorsManager.black),
+      notificationIcon: Image.asset(AppImages.notificationIcon,
+          width: 28.w, height: 28.h, color: ColorsManager.black),
       onLeadingTap: () => Navigator.pop(context),
       onNotificationTap: () {},
       child: Stack(
@@ -162,10 +162,8 @@ class _CleaningScreenState extends State<CleaningScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value: cleaningCubit),
-                      ],
+                    builder: (_) => BlocProvider.value(
+                      value: cleaningCubit,
                       child: CleaningScheduleScreen(),
                     ),
                   ),

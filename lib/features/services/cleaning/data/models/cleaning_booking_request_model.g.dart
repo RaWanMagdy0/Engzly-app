@@ -13,7 +13,7 @@ CleaningBookingRequestModel _$CleaningBookingRequestModelFromJson(
       totalPrice: (json['totalPrice'] as num).toDouble(),
       location: json['location'] as String,
       serviceId: (json['serviceId'] as num).toInt(),
-      promoCodes: json['promoCodes'] as String,
+      promoCodes: json['promoCodes'] as String?,
       paymentMethodId: (json['paymentMethodId'] as num).toInt(),
       houseSizeId: (json['houseSizeId'] as num).toInt(),
     );

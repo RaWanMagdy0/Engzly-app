@@ -10,6 +10,7 @@ import 'package:engzly/features/services/house_shifting/data/models/promo_code_r
 import 'package:engzly/features/services/house_shifting/data/repo/house_shifting_repo.dart';
 import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio/dio.dart';
 
 @injectable
 class CleaningCubit extends BaseViewModel<CleaningStates> {
@@ -26,6 +27,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
 
   HouseSizeModel? selectedHouseSize;
   int? selectedHouseSizePrice;
+  int? selectedServiceId;
 
   String? address;
   String? appliedPromoCode;
@@ -34,6 +36,11 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
   DateTime? selectedDate;
   int requiredPersons = 0;
   int workingHours = 2;
+  String? selectedPaymentType;
+
+  List<LocationModel> homeLocations = [];
+  List<LocationModel> workLocations = [];
+  CleaningBookingRequestModel? lastRequest;
 
   void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
     selectedHouseSize = size;
@@ -71,6 +78,14 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     emit(CleaningLocationSelected(address: newAddress));
   }
 
+  void selectService(int serviceId) {
+    selectedServiceId = serviceId;
+
+
+    emit(CleaningBookingServiceSelected(serviceId: serviceId));
+  }
+
+  // ================= FETCH HOUSE SIZE ==================
   Future<void> getHouseSize() async {
     emit(GetHouseSizeLoading());
 
@@ -86,9 +101,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     }
   }
 
-  List<LocationModel> homeLocations = [];
-  List<LocationModel> workLocations = [];
-
+  // ================= FETCH LOCATIONS ==================
   Future<void> getLocations() async {
     emit(CleaningLocationsLoading());
 
@@ -108,6 +121,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     }
   }
 
+  // ================= CHECKOUT ==================
   Future<void> checkOut({
     required DateTime schedule,
     required double totalPrice,
@@ -129,28 +143,45 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
       houseSizeId: houseSizeId,
     );
 
-    final result = await _cleaningRepo.checkOut(bookingRequest);
+    lastRequest = bookingRequest;
 
-    if (result is Success<CleaningBookingResponse>) {
-      final response = result.data;
-      emit(CleaningCheckOutOrderSuccess([response!]));
-    } else if (result is Fail) {
-      final failResult = result as Fail;
-      final errorMessage = getErrorMessageFromException(failResult.exception);
-      emit(CleaningCheckOutOrderError(errorMessage));
+    try {
+      final result = await _cleaningRepo.checkOut(bookingRequest);
+
+      if (result is Success<CleaningBookingResponse>) {
+        emit(CleaningCheckOutOrderSuccess([result.data!]));
+      } else if (result is Fail) {
+        final failResult = result as Fail;
+
+        // LOGGING THE REAL API ERROR (IMPORTANT!)
+        if (failResult.exception is DioException) {
+          final error = failResult.exception as DioException;
+
+          print("═══════════ CLEANING CHECKOUT ERROR ═══════════");
+          print("Status Code: ${error.response?.statusCode}");
+          print("API Response: ${error.response?.data}");
+          print("Request Sent: ${bookingRequest.toJson()}");
+          print("════════════════════════════════════════════════");
+        }
+
+        final errorMessage = getErrorMessageFromException(failResult.exception);
+        emit(CleaningCheckOutOrderError(errorMessage));
+      }
+    } catch (e) {
+      emit(CleaningCheckOutOrderError("Unexpected Error: $e"));
     }
   }
 
+  // ================= PROMO CODE ==================
   Future<void> checkPromoCode(String code) async {
     emit(CleaningPromoCodeLoading());
 
     final result = await _houseShiftingRepo.checkPromoCode(code);
 
     if (result is Success<PromoCodeResponse>) {
-      final response = result.data!;
       appliedPromoCode = code;
-      discountPercentage = response.discountPercentage.toDouble();
-      emit(CleaningPromoCodeSuccess(response));
+      discountPercentage = result.data!.discountPercentage.toDouble();
+      emit(CleaningPromoCodeSuccess(result.data!));
     } else if (result is Fail) {
       final failResult = result as Fail;
       final errorMessage = getErrorMessageFromException(failResult.exception);

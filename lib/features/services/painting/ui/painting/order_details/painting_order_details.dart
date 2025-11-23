@@ -3,6 +3,7 @@ import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
+import 'package:engzly/features/payment/service_payment_handler.dart';
 import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
 import 'package:engzly/features/services/painting/logic/painting_states.dart';
 import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_order_item.dart';
@@ -14,7 +15,6 @@ import 'package:engzly/features/services/painting/ui/painting/painting_order_con
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PaintingOrderDetails extends StatefulWidget {
@@ -60,40 +60,27 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
   Widget build(BuildContext context) {
     return BlocConsumer<PaintingCubit, PaintingStates>(
       listener: (context, state) async {
+        final cubit = context.read<PaintingCubit>();
+
         if (state is PaintingCheckOutOrderSuccess) {
-          final response = state.booking.first;
-          if (selectedPaymentMethod == 'online') {
-            final clientSecret = response.data?.clientSecret;
-            if (clientSecret != null) {
-              await handleStripePayment(context, clientSecret);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment data not found')),
-              );
-            }
-          } else {
-            if (context.mounted) {
-              final bookingCubit = context.read<PaintingCubit>();
+          final data = state.booking.first.data;
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: bookingCubit),
-                    ],
-                    child: PaintingOrderConfirmation(),
-                  ),
-                ),
-              );
-            }
-          }
-        }
-
-        if (state is PaintingCheckOutOrderError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          final paymentData = CheckoutPaymentData(
+            clientSecret: data?.clientSecret,
+            paymentUrl: data?.stripePaymentIntentId,
+            paymentMethod: selectedPaymentMethod,
+            onlinePaymentType: cubit.selectedPaymentType,
           );
+
+          final paymentSuccess = await PaymentService.processPayment(
+            context: context,
+            paymentData: paymentData,
+            merchantName: 'Engzly App',
+          );
+
+          if (paymentSuccess && context.mounted) {
+            navigateToConfirmation(context, cubit);
+          }
         }
 
         if (state is PaintingCheckOutOrderError) {
@@ -119,9 +106,7 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
         double totalAfterDiscount = subtotal - discount;
 
         return CustomScaffoldScreen(
-          title: Text(
-            "Order Details",
-          ),
+          title: Text("Order Details"),
           leadingIcon: SvgPicture.asset(AppImages.backArrow,
               width: 22.w, height: 22.h, color: ColorsManager.black),
           notificationIcon: Image.asset(AppImages.notificationIcon,
@@ -179,7 +164,6 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                         onApply: (code) => cubit.checkPromoCode(code),
                         onRemove: () => cubit.removePromoCode(),
                       ),
-                     
                       Divider(color: Colors.grey.shade300),
                       PaintingOrderSummry(
                         label: 'Subtotal',
@@ -227,7 +211,7 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                         : ColorsManager.yellow,
                     onPressed: state is PaintingCheckOutOrderLoading
                         ? null
-                        : () {
+                        : () async {
                             if (cubit.selectedHouseSize == null ||
                                 cubit.address == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -239,15 +223,28 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                               return;
                             }
 
+                            final paymentData = await PaymentService.selectPaymentMethod(
+                              context: context,
+                              selectedPaymentMethod: selectedPaymentMethod,
+                            );
+
+                            if (paymentData == null) return;
+
+                            cubit.selectedPaymentType = paymentData.onlinePaymentType;
+
+                            int paymentId = PaymentHandler.getPaymentMethodId(
+                              paymentMethod: selectedPaymentMethod,
+                              onlinePaymentType: paymentData.onlinePaymentType,
+                            );
+
                             cubit.checkOut(
                               colorId: cubit.selectedColor?.id ?? 0,
                               schedule: cubit.selectedDate!,
                               totalPrice: totalAfterDiscount,
-                              serviceId: 3,
+                              serviceId: cubit.selectedServiceId ?? 3,
                               location: cubit.address!,
                               promoCodes: cubit.appliedPromoCode ?? '',
-                              paymentMethodId:
-                                  selectedPaymentMethod == 'online' ? 1 : 2,
+                              paymentMethodId: paymentId,
                               houseSizeId: cubit.selectedHouseSize!.id,
                             );
                           },
@@ -261,46 +258,18 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
     );
   }
 
-  Future<void> handleStripePayment(
-      BuildContext context, String clientSecret) async {
-    try {
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: 'Engzly App',
-          style: ThemeMode.light,
-          allowsDelayedPaymentMethods: true,
+  void navigateToConfirmation(BuildContext context, PaintingCubit cubit) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: cubit),
+          ],
+          child: PaintingOrderConfirmation(),
         ),
-      );
-
-      await Stripe.instance.presentPaymentSheet();
-
-      if (context.mounted) {
-        final bookingCubit = context.read<PaintingCubit>();
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: bookingCubit),
-              ],
-              child: PaintingOrderConfirmation(),
-            ),
-          ),
-        );
-      }
-    } on StripeException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Payment failed: ${e.error.localizedMessage}'),
-          backgroundColor: ColorsManager.red,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unexpected error: $e')),
-      );
-    }
+      ),
+      (route) => false,
+    );
   }
 }

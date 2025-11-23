@@ -7,6 +7,10 @@ import 'package:engzly/features/offers/ui/logic/offers_cubit.dart';
 import 'package:engzly/features/offers/ui/offers.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
+import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
+import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
+import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_tab_bar_v2/motion-tab-controller.dart';
@@ -36,9 +40,19 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen>
       setState(() {});
     });
     _screens = [
-      BlocProvider(
-        create: (context) => getIt<HomeCubit>(),
-        child: HomeScreen(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => getIt<HomeCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => getIt<HouseShiftingBookingCubit>(),
+          ),
+          BlocProvider(create: (context) => getIt<CleaningCubit>()),
+          BlocProvider(create: (context) => getIt<VehicleCubit>()),
+          BlocProvider(create: (context) => getIt<PaintingCubit>()),
+        ],
+        child: const HomeScreen(),
       ),
       BlocProvider(
         create: (context) => getIt<HistoryCubit>(),

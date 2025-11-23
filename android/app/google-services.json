@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "142132889476",
+    "project_id": "engzlyapp",
+    "storage_bucket": "engzlyapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142132889476:android:3584ba2ee32825facc7fd1",
+        "android_client_info": {
+          "package_name": "com.example.engzly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142132889476-605iauu8osgie38h84ih78rv1gt7ohms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfwOTnabCE8cAT_kmYHcGjuMVrpqa-WDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142132889476-605iauu8osgie38h84ih78rv1gt7ohms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

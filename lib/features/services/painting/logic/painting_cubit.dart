@@ -32,7 +32,8 @@ class PaintingCubit extends BaseViewModel<PaintingStates> {
   String? address;
   String? appliedPromoCode;
   double? discountPercentage;
-
+  int? selectedServiceId;
+String? selectedPaymentType;
   DateTime? selectedDate;
   int requiredPersons = 0;
   GetColorsResponseModel? selectedColor;
@@ -40,6 +41,11 @@ class PaintingCubit extends BaseViewModel<PaintingStates> {
   void selectColor(GetColorsResponseModel color) {
     selectedColor = color;
     emit(PaintingColorSelected(color));
+  }
+
+  void selectService(int serviceId) {
+    selectedServiceId = serviceId;
+    emit(PaintingBookingServiceSelected(serviceId: serviceId));
   }
 
   void selectHouseSize(HouseSizeModel size, int houseSizePrice) {

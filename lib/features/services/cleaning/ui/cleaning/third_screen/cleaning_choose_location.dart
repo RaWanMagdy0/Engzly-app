@@ -81,7 +81,6 @@ class _CleaningChooseLocationState extends State<CleaningChooseLocation> {
                 child: CleaningAddressTopBar(address: selectedAddress),
               ),
 
-              // Bottom Sheet ديناميكي
               if (state is! CleaningLocationsLoading)
                 (locations.isNotEmpty
                     ? _buildLocationsBottomSheet(cubit, locations)
@@ -172,16 +171,17 @@ class _CleaningChooseLocationState extends State<CleaningChooseLocation> {
     });
   }
 
-Widget _buildLocationsBottomSheet(CleaningCubit cubit, List<LocationModel> locations) {
-  return CleaningLocationBottomSheet(
-    selectedAddress: selectedAddress,
-    selectedType: selectedType,
-    cleaningCubit: cubit,
-    locations: locations,
-    onTypeChanged: (type) => setState(() => selectedType = type),
-    onSelectAddress: (address) => setState(() => selectedAddress = address),
-  );
-}
+  Widget _buildLocationsBottomSheet(
+      CleaningCubit cubit, List<LocationModel> locations) {
+    return CleaningLocationBottomSheet(
+      selectedAddress: selectedAddress,
+      selectedType: selectedType,
+      cleaningCubit: cubit,
+      locations: locations,
+      onTypeChanged: (type) => setState(() => selectedType = type),
+      onSelectAddress: (address) => setState(() => selectedAddress = address),
+    );
+  }
 
   Widget _buildEmptyLocationSheet(CleaningCubit cubit) {
     return DraggableScrollableSheet(

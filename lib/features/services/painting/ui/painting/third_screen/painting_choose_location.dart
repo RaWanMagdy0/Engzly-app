@@ -66,7 +66,6 @@ class _PaintingChooseLocationState extends State<PaintingChooseLocation> {
           onLeadingTap: () => Navigator.pop(context),
           child: Stack(
             children: [
-              /// 🗺️ الماب دايمًا موجودة في الخلفية
               Positioned.fill(
                 child: GoogleMap(
                   onMapCreated: (controller) => _mapController = controller,
@@ -81,8 +80,6 @@ class _PaintingChooseLocationState extends State<PaintingChooseLocation> {
                   onCameraMove: (pos) => currentZoom = pos.zoom,
                 ),
               ),
-
-              /// 📍 شريط العنوان أعلى الشاشة
               Positioned(
                 top: 20.h,
                 left: 16.w,
@@ -90,14 +87,12 @@ class _PaintingChooseLocationState extends State<PaintingChooseLocation> {
                 child: PaintingAddressTopBar(address: selectedAddress),
               ),
 
-              /// 🔄 حالة تحميل البيانات
               if (state is PaintingLocationsLoading)
                 const Center(
                   child: CircularProgressIndicator(color: ColorsManager.yellow),
                 )
               else
 
-                /// ✅ لو فيه عناوين استخدم البوتوم شيت
                 (locations.isNotEmpty
                     ? PaintingLocationBottomSheet(
                         selectedAddress: selectedAddress,
@@ -193,74 +188,72 @@ class _PaintingChooseLocationState extends State<PaintingChooseLocation> {
     });
   }
 
-  /// 🔸 لما مفيش عناوين محفوظة
-  Widget _buildEmptyLocationSheet(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.3,
-      minChildSize: 0.25,
-      maxChildSize: 0.4,
-      builder: (context, scrollController) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
-              ),
-            ],
+ Widget _buildEmptyLocationSheet(BuildContext context) {
+  return Positioned(
+    left: 0,
+    right: 0,
+    bottom: 0,
+    child: Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, -2),
           ),
-          child: ListView(
-            controller: scrollController,
-            children: [
-              const Center(
-                child: Text(
-                  "No saved addresses",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Center(
+            child: Text(
+              "No saved addresses",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Center(
+            child: Text(
+              "Move the marker or tap on the map to choose a new location.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+          SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+              context.read<PaintingCubit>().selectLocation(selectedAddress);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<PaintingCubit>(),
+                    child: const PaintingOrderDetails(),
                   ),
                 ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ColorsManager.yellow,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              const SizedBox(height: 8),
-              const Center(
-                child: Text(
-                  "Move the marker or tap on the map to choose a new location.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              24.verticalSpace,
-              ElevatedButton(
-                onPressed: () {
-                  context.read<PaintingCubit>().selectLocation(selectedAddress);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<PaintingCubit>(),
-                        child: const PaintingOrderDetails(),
-                      ),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.yellow,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-                child: const Text("Proceed"),
-              ),
-            ],
+            ),
+            child: const Text("Proceed"),
           ),
-        );
-      },
-    );
-  }
+        ],
+      ),
+    ),
+  );
+}
+
 }

@@ -12,7 +12,7 @@ class CleaningLocationBottomSheet extends StatelessWidget {
   final Function(String) onTypeChanged;
   final Function(String) onSelectAddress;
   final CleaningCubit cleaningCubit;
-  final List<LocationModel> locations; // <- تم إضافة locations
+  final List<LocationModel> locations;
 
   const CleaningLocationBottomSheet({
     super.key,
@@ -27,22 +27,15 @@ class CleaningLocationBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.35,
-      minChildSize: 0.25,
-      maxChildSize: 0.30,
+      initialChildSize: 0.33,
+      minChildSize: 0.33,
+      maxChildSize: 0.33,
       builder: (context, scrollController) {
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
-              ),
-            ],
           ),
           child: ListView(
             controller: scrollController,

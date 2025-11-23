@@ -3,9 +3,9 @@ import 'package:engzly/core/helper/local/token_manger.dart';
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/features/auth/data/models/login/login_request_model.dart';
 import 'package:engzly/features/auth/data/models/login/login_response_model.dart';
-import 'package:engzly/features/auth/data/repo/login_repo.dart';
+import 'package:engzly/features/auth/data/repo/login/login_repo.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
-import 'package:engzly/features/auth/logic/login_cubit/states.dart';
+import 'package:engzly/features/auth/logic/login_cubit/login/states.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable

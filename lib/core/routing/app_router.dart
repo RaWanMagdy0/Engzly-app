@@ -3,12 +3,13 @@ import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/features/auth/logic/forget_password/forget_pass_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/forget_password/reset_pass_cubit/cubit.dart';
 import 'package:engzly/features/auth/logic/forget_password/verify_email/cubit.dart';
-import 'package:engzly/features/auth/logic/login_cubit/cubit.dart';
+import 'package:engzly/features/auth/logic/login_cubit/login/cubit.dart';
+import 'package:engzly/features/auth/logic/login_cubit/google.dart/google_cubit.dart';
 import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
 import 'package:engzly/features/auth/ui/forgot_password/email_verification_screen.dart';
 import 'package:engzly/features/auth/ui/forgot_password/forget_password_screen.dart';
 import 'package:engzly/features/auth/ui/forgot_password/reset_password_screen.dart';
-import 'package:engzly/features/auth/ui/login/login_screen.dart';
+import 'package:engzly/features/auth/ui/login/login/login_screen.dart';
 import 'package:engzly/features/auth/ui/sign_up/widgets/email_confirmation.dart';
 import 'package:engzly/features/auth/ui/sign_up/sign_up_page.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
@@ -26,7 +27,6 @@ import 'package:engzly/features/profile/ui/location/my_location/my_location.dart
     show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/cleaning_order_confirmation.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/cleaning_screen.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/second_screen/cleaning_schedule_screen.dart';
@@ -60,14 +60,21 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
 
       //----------- login Screen -----------
+     
       case RouteName.login:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<LoginCubit>(),
-            child: LogInScreen(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<GoogleLoginCubit>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<LoginCubit>(),
+              ),
+            ],
+            child: const LogInScreen(),
           ),
         );
-
       case RouteName.signUp:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -118,6 +125,12 @@ class AppRouter {
               BlocProvider(
                 create: (context) => getIt<HomeCubit>(),
               ),
+              BlocProvider(
+                create: (context) => getIt<HouseShiftingBookingCubit>(),
+              ),
+              BlocProvider(create: (context) => getIt<CleaningCubit>()),
+              BlocProvider(create: (context) => getIt<VehicleCubit>()),
+              BlocProvider(create: (context) => getIt<PaintingCubit>()),
             ],
             child: const HomeScreen(),
           ),
@@ -268,12 +281,13 @@ class AppRouter {
             child: const CleaningOrderDetails(),
           ),
         );
-      case RouteName.cleaningOrderConfirmation:
+/***************
+ *       case RouteName.cleaningOrderConfirmation:
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => getIt<HouseShiftingCubit>(),
+                create: (context) => getIt<CleaningCubit>(),
               ),
               BlocProvider(
                 create: (context) => getIt<HouseShiftingBookingCubit>(),
@@ -282,6 +296,7 @@ class AppRouter {
             child: const CleaningOrderConfirmation(),
           ),
         );
+ */
       case RouteName.vehicle:
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
@@ -334,6 +349,7 @@ class AppRouter {
             child: const PaintingOrderConfirmation(),
           ),
         );
+
       default:
         return null;
     }

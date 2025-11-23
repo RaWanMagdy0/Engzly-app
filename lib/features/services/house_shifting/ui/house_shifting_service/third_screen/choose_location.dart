@@ -183,61 +183,59 @@ class _HouseChooseLocationScreenState extends State<HouseChooseLocationScreen> {
   Widget _buildEmptyLocationSheet(BuildContext context) {
     final bookingCubit = context.read<HouseShiftingBookingCubit>();
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.3,
-      minChildSize: 0.25,
-      maxChildSize: 0.4,
-      builder: (context, scrollController) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 10),
+            const Text(
+              "No saved addresses",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
-            ],
-          ),
-          child: ListView(
-            controller: scrollController,
-            children: [
-              const Center(
-                child: Text(
-                  "No saved addresses",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Move the marker or tap on the map to choose a new location.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+            24.verticalSpace,
+            ElevatedButton(
+              onPressed: () {
+                bookingCubit.selectLocation(selectedAddress);
+                navigateWithBookingCubit(context, const OrderDetails());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorsManager.orange,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
-              const SizedBox(height: 8),
-              const Center(
-                child: Text(
-                  "Move the marker or tap on the map to choose a new location.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              24.verticalSpace,
-              ElevatedButton(
-                onPressed: () {
-                  bookingCubit.selectLocation(selectedAddress);
-                  navigateWithBookingCubit(context, const OrderDetails());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.orange,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-                child: const Text("Proceed"),
-              ),
-            ],
-          ),
-        );
-      },
+              child: const Text("Proceed"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
