@@ -9,18 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../core/theming/images.dart';
+import '../../../../core/theming/images.dart';
 
 class OffersScreen extends StatefulWidget {
   const OffersScreen({super.key});
-
   @override
   State<OffersScreen> createState() => _OffersScreenState();
 }
 
 class _OffersScreenState extends State<OffersScreen> {
   late OffersCubit viewModel;
-
   @override
   void initState() {
     super.initState();
@@ -103,16 +101,13 @@ class _OffersScreenState extends State<OffersScreen> {
               return Center(child: Text(state.message));
             } else if (state is OffersSuccess) {
               final offers = state.offers;
-
               if (offers.isEmpty) {
                 return const Center(child: Text("No offers available"));
               }
-
               return ListView.builder(
                 itemCount: offers.length,
                 itemBuilder: (context, index) {
                   final OffersResponseModel offerGroup = offers[index];
-
                   return Padding(
                     padding: EdgeInsets.only(bottom: 15.h),
                     child: Column(
@@ -148,7 +143,6 @@ class _OffersScreenState extends State<OffersScreen> {
                 },
               );
             }
-
             return SizedBox.shrink();
           },
         ),

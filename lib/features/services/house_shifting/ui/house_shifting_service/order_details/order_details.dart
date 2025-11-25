@@ -12,6 +12,7 @@ import 'package:engzly/features/services/house_shifting/ui/house_shifting_servic
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/order_summry.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/payment_method_selector.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/promo_code.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/service_charge_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +29,7 @@ class _OrderDetailsState extends State<OrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
+  double? distanceInMeters;
 
   @override
   void initState() {
@@ -106,11 +108,18 @@ class _OrderDetailsState extends State<OrderDetails>
         },
         builder: (context, state) {
           final cubit = context.watch<HouseShiftingBookingCubit>();
-          final double subtotal = cubit.totalPrice;
+          
+          final double serviceCharge = distanceInMeters != null
+              ? ServiceChargeCalculator.calculateFromMeters(distanceInMeters!)
+              : 50.0;
+          
+          
+          final double subtotalBeforeService = cubit.totalPrice;
+          final double subtotal = subtotalBeforeService + serviceCharge;
           final double discount = (cubit.discountPercentage ?? 0) > 0
               ? subtotal * (cubit.discountPercentage! / 100)
               : 0;
-          final double totalAfterDiscount = cubit.totalPriceAfterDiscount;
+          final double totalAfterDiscount = subtotal - discount;
 
           return Stack(
             children: [
@@ -122,7 +131,14 @@ class _OrderDetailsState extends State<OrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      OrderCardMap(location: cubit.address ?? ''),
+                      OrderCardMap(
+                        location: cubit.address ?? '',
+                        onDistanceCalculated: (distance) {
+                          setState(() {
+                            distanceInMeters = distance;
+                          });
+                        },
+                      ),
                       10.verticalSpace,
                       OrderItemCard(
                         icon: '🏠',
@@ -154,7 +170,7 @@ class _OrderDetailsState extends State<OrderDetails>
                       ),
                       OrderSummryRow(
                         label: 'Service Charge',
-                        value: '\$50.00',
+                        value: '\$${serviceCharge.toStringAsFixed(2)}',
                       ),
                       PromoCodeInput(
                         appliedPromoCode: cubit.appliedPromoCode,

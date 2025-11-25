@@ -12,6 +12,7 @@ import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widg
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_payment_method.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/widgets/cleaning_promo_code.dart';
 import 'package:engzly/features/payment/service_payment_handler.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/service_charge_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +29,7 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
-
+  double? distanceInMeters;
   @override
   void initState() {
     super.initState();
@@ -91,12 +92,19 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
       builder: (context, state) {
         final cubit = context.watch<CleaningCubit>();
 
+
+
+
+
         double basePrice = cubit.selectedHouseSizePrice?.toDouble() ?? 0;
         double personCost = cubit.requiredPersons * 5;
         double hourlyRate = basePrice + personCost;
         double totalHourCost = cubit.workingHours * hourlyRate;
 
-        double serviceCharge = 50;
+        double serviceCharge = distanceInMeters != null
+            ? ServiceChargeCalculator.calculateFromMeters(distanceInMeters!)
+            : 50.0;
+            
         double subtotal = totalHourCost + serviceCharge;
 
         double discount = 0;
@@ -122,7 +130,11 @@ class _CleaningOrderDetails extends State<CleaningOrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CleaningOrderMap(location: cubit.address ?? ''),
+                      CleaningOrderMap(location: cubit.address ?? '',   onDistanceCalculated: (distance) {
+                          setState(() {
+                            distanceInMeters = distance;
+                          });
+                        },),
                       10.verticalSpace,
                       CleaningOrderItem(
                         icon: '🏠',

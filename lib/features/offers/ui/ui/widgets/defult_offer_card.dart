@@ -1,37 +1,41 @@
-import 'package:engzly/features/home/data/models/offers/offer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class OfferCard extends StatelessWidget {
-  final OfferModel offer;
+class DefaultOfferCard extends StatelessWidget {
+  final dynamic offer;
   final VoidCallback? onTap;
-  const OfferCard({
+  final List<Color> gradient;
+
+  const DefaultOfferCard({
     super.key,
     required this.offer,
     this.onTap,
+    required this.gradient,
   });
+
   @override
   Widget build(BuildContext context) {
-    final gradients = [
-      [Color(0xffA874F1), Color(0xffC084FC)],
-      [Color(0xffFF8C42), Color(0xffFFB36A)],
-      [Color(0xff4CC9F0), Color(0xff72E3FF)],
-      [Color(0xffFF6B6B), Color(0xffFF8E8E)],
-      [Color.fromRGBO(107, 203, 119, 1), Color(0xff95E8A1)],
-    ];
-    final randomIndex = offer.id % gradients.length;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 240.w,
+        height: 250.h,
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: gradients[randomIndex],
+            colors: gradient,
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: gradient[0].withOpacity(0.4),
+              blurRadius: 20,
+              offset: Offset(0, 10),
+              spreadRadius: -5,
+            ),
+          ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,6 +43,7 @@ class OfferCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "${offer.percentage.toInt()}% OFF",
@@ -48,7 +53,6 @@ class OfferCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 4.h),
                   Text(
                     offer.title,
                     style: TextStyle(
@@ -68,7 +72,7 @@ class OfferCard extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(width: 2.w),
+                      SizedBox(width: 4.w),
                       Flexible(
                         child: Text(
                           offer.promoCode,

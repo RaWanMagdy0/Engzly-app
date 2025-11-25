@@ -8,8 +8,13 @@ import 'package:geocoding/geocoding.dart';
 
 class OrderCardMap extends StatefulWidget {
   final String? location;
+  final ValueChanged<double>? onDistanceCalculated;
 
-  const OrderCardMap({super.key, this.location});
+  const OrderCardMap({
+    super.key, 
+    this.location,
+    this.onDistanceCalculated,
+  });
 
   @override
   State<OrderCardMap> createState() => _OrderCardMapState();
@@ -42,6 +47,7 @@ class _OrderCardMapState extends State<OrderCardMap> {
           endPoint = startPoint;
           isLoading = false;
         });
+        widget.onDistanceCalculated?.call(0);
         return;
       }
 
@@ -54,6 +60,9 @@ class _OrderCardMapState extends State<OrderCardMap> {
           isLoading = false;
         });
 
+        final distance = _calculateDistanceInMeters(startPoint, end);
+        widget.onDistanceCalculated?.call(distance);
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _fitMapToBounds();
         });
@@ -62,6 +71,7 @@ class _OrderCardMapState extends State<OrderCardMap> {
           endPoint = startPoint;
           isLoading = false;
         });
+        widget.onDistanceCalculated?.call(0);
       }
     } catch (e) {
       debugPrint("❌ Error getting coordinates: $e");
@@ -70,6 +80,7 @@ class _OrderCardMapState extends State<OrderCardMap> {
         endPoint = octoberStart;
         isLoading = false;
       });
+      widget.onDistanceCalculated?.call(0);
     }
   }
 
@@ -93,11 +104,17 @@ class _OrderCardMapState extends State<OrderCardMap> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return SizedBox(
+        height: 240.h,
+        child: const Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (endPoint == null) {
-      return const Center(child: Text("No map data available"));
+      return SizedBox(
+        height: 240.h,
+        child: const Center(child: Text("No map data available")),
+      );
     }
 
     final markers = <Marker>{
@@ -166,7 +183,7 @@ class _OrderCardMapState extends State<OrderCardMap> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha:0.6),
+                  color: Colors.black.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -201,3 +218,4 @@ class _OrderCardMapState extends State<OrderCardMap> {
     return earthRadius * c;
   }
 }
+

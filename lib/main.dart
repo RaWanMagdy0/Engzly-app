@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,13 +25,13 @@ Future<void> _requestNotificationPermission() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   await NotificationHelper.init();
   await _requestNotificationPermission();
 
   Bloc.observer = AppBlocObserver();
   configureDependencies();
-
   Stripe.publishableKey =
       'pk_test_51SA7jDA6rtRTWn7mEnguFl9Mzp7e98QsoHTkvcbYbMexDrcG5YM7yfhaCjDOFhyY5MY9Lw6CP1pfQXsU1pGQNBN200kUhoYNrt';
   await Stripe.instance.applySettings();

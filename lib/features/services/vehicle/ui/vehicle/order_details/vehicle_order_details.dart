@@ -4,6 +4,7 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/payment/service_payment_handler.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/service_charge_calculator.dart';
 import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
 import 'package:engzly/features/services/vehicle/logic/vehicle_states.dart';
 import 'package:engzly/features/services/vehicle/ui/vehicle/order_details/widgets/vehicle_order_item.dart';
@@ -28,7 +29,7 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
-
+  double? distanceInMeters;
   @override
   void initState() {
     super.initState();
@@ -95,7 +96,11 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
         double personCost = cubit.requiredPersons * 5;
         double hourlyRate = basePrice + personCost;
         double totalHourCost = cubit.workingHours * hourlyRate;
-        double serviceCharge = 50;
+
+        double serviceCharge = distanceInMeters != null
+            ? ServiceChargeCalculator.calculateFromMeters(distanceInMeters!)
+            : 50.0;
+
         double subtotal = totalHourCost + serviceCharge;
 
         double discount = 0;
@@ -121,7 +126,14 @@ class _VehicleOrderDetails extends State<VehicleOrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      VehicleOrderMap(location: cubit.address ?? ''),
+                      VehicleOrderMap(
+                        location: cubit.address ?? '',
+                        onDistanceCalculated: (distance) {
+                          setState(() {
+                            distanceInMeters = distance;
+                          });
+                        },
+                      ),
                       10.verticalSpace,
                       VehicleOrderItem(
                         icon: cubit.selectedIcon ?? "",

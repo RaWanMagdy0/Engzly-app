@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "142132889476",
-    "project_id": "engzlyapp",
-    "storage_bucket": "engzlyapp.firebasestorage.app"
+    "project_number": "337921898654",
+    "project_id": "engzly-c7b18",
+    "storage_bucket": "engzly-c7b18.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:142132889476:android:3584ba2ee32825facc7fd1",
+        "mobilesdk_app_id": "1:337921898654:android:8d927d15f82a465a66a38f",
         "android_client_info": {
           "package_name": "com.example.engzly"
         }
       },
       "oauth_client": [
         {
-          "client_id": "142132889476-605iauu8osgie38h84ih78rv1gt7ohms.apps.googleusercontent.com",
+          "client_id": "337921898654-6nngdfccdb05r94bq8p4u3na1rqkr55a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBfwOTnabCE8cAT_kmYHcGjuMVrpqa-WDY"
+          "current_key": "AIzaSyAtQ2gpCPrssjCemslxKT9AZqPAN2Dxhns"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "142132889476-605iauu8osgie38h84ih78rv1gt7ohms.apps.googleusercontent.com",
+              "client_id": "337921898654-6nngdfccdb05r94bq8p4u3na1rqkr55a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,4 +1,5 @@
-import 'dart:math' show cos, sin, sqrt, atan2, pi, max, min;
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,13 @@ import 'package:geocoding/geocoding.dart';
 
 class PaintingOrderMap extends StatefulWidget {
   final String? location;
+  final ValueChanged<double>? onDistanceCalculated;
 
-  const PaintingOrderMap({super.key, this.location});
+  const PaintingOrderMap({
+    super.key,
+    this.location,
+    this.onDistanceCalculated,
+  });
 
   @override
   State<PaintingOrderMap> createState() => _PaintingOrderMap();
@@ -21,7 +27,7 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
   GoogleMapController? mapController;
   bool isLoading = true;
 
-  static const LatLng octoberStart = LatLng(29.9715, 30.9486); 
+  static const LatLng octoberStart = LatLng(29.9715, 30.9486);
 
   @override
   void initState() {
@@ -42,6 +48,7 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
           endPoint = startPoint;
           isLoading = false;
         });
+        widget.onDistanceCalculated?.call(0);
         return;
       }
 
@@ -54,6 +61,9 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
           isLoading = false;
         });
 
+        final distance = _calculateDistanceInMeters(startPoint, end);
+        widget.onDistanceCalculated?.call(distance);
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _fitMapToBounds();
         });
@@ -62,6 +72,7 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
           endPoint = startPoint;
           isLoading = false;
         });
+        widget.onDistanceCalculated?.call(0);
       }
     } catch (e) {
       debugPrint(" Error getting coordinates: $e");
@@ -70,6 +81,7 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
         endPoint = octoberStart;
         isLoading = false;
       });
+      widget.onDistanceCalculated?.call(0);
     }
   }
 
@@ -93,11 +105,17 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return SizedBox(
+        height: 240.h,
+        child: const Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (endPoint == null) {
-      return const Center(child: Text("No map data available"));
+      return SizedBox(
+        height: 240.h,
+        child: const Center(child: Text("No map data available")),
+      );
     }
 
     final markers = <Marker>{
@@ -166,7 +184,7 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha:0.6),
+                  color: Colors.black.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -189,7 +207,7 @@ class _PaintingOrderMap extends State<PaintingOrderMap> {
   }
 
   double _calculateDistanceInMeters(LatLng start, LatLng end) {
-    const earthRadius = 6371000; 
+    const earthRadius = 6371000;
     final dLat = (end.latitude - start.latitude) * (pi / 180);
     final dLon = (end.longitude - start.longitude) * (pi / 180);
     final a = sin(dLat / 2) * sin(dLat / 2) +

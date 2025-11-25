@@ -40,12 +40,15 @@ class _LogInScreenState extends State<LogInScreen> {
                 child: Column(
                   children: [
                     50.verticalSpace,
-                    Image.asset(
+                    /******8
+                     *          Image.asset(
                       'assets/icons/unlock.png',
                       height: 100.h,
                       width: 100.w,
                       fit: BoxFit.contain,
                     ),
+                     */
+
                     20.verticalSpace,
                     Text(
                       "Let's Sign You In",

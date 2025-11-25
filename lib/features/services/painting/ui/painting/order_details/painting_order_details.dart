@@ -4,6 +4,7 @@ import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/payment/service_payment_handler.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/order_details/widgets/service_charge_calculator.dart';
 import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
 import 'package:engzly/features/services/painting/logic/painting_states.dart';
 import 'package:engzly/features/services/painting/ui/painting/order_details/widgets/painting_order_item.dart';
@@ -28,7 +29,7 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
     with WidgetsBindingObserver {
   String selectedPaymentMethod = 'online';
   final ScrollController _scrollController = ScrollController();
-
+  double? distanceInMeters;
   @override
   void initState() {
     super.initState();
@@ -95,10 +96,16 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
         double personCost = cubit.requiredPersons * 5;
         double colorCost = 100;
         double hourlyRate = basePrice + personCost + colorCost;
-        double serviceCharge = 50;
+        double serviceCharge = distanceInMeters != null
+            ? ServiceChargeCalculator.calculateFromMeters(distanceInMeters!)
+            : 50.0;
+
         double subtotal = hourlyRate + serviceCharge;
 
         double discount = 0;
+        if ((cubit.discountPercentage ?? 0) > 0) {
+          discount = subtotal * (cubit.discountPercentage! / 100);
+        }
         if ((cubit.discountPercentage ?? 0) > 0) {
           discount = subtotal * (cubit.discountPercentage! / 100);
         }
@@ -121,7 +128,11 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      PaintingOrderMap(location: cubit.address ?? ''),
+                      PaintingOrderMap(location: cubit.address ?? '',   onDistanceCalculated: (distance) {
+                          setState(() {
+                            distanceInMeters = distance;
+                          });
+                        },),
                       10.verticalSpace,
                       PaintingOrderItem(
                         icon: '🏠',
@@ -157,7 +168,7 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                       ),
                       PaintingOrderSummry(
                         label: 'Service Charge',
-                        value: '\$${serviceCharge.toStringAsFixed(0)}',
+                       value: '\$${serviceCharge.toStringAsFixed(2)}',
                       ),
                       PaintingPromoCode(
                         appliedPromoCode: cubit.appliedPromoCode,
@@ -223,14 +234,16 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                               return;
                             }
 
-                            final paymentData = await PaymentService.selectPaymentMethod(
+                            final paymentData =
+                                await PaymentService.selectPaymentMethod(
                               context: context,
                               selectedPaymentMethod: selectedPaymentMethod,
                             );
 
                             if (paymentData == null) return;
 
-                            cubit.selectedPaymentType = paymentData.onlinePaymentType;
+                            cubit.selectedPaymentType =
+                                paymentData.onlinePaymentType;
 
                             int paymentId = PaymentHandler.getPaymentMethodId(
                               paymentMethod: selectedPaymentMethod,

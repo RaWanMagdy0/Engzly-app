@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:engzly/core/di/di.dart';
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
 import 'package:engzly/core/theming/colors.dart';
@@ -13,6 +14,9 @@ import 'package:engzly/features/home/ui/widgets/service_row.dart';
 import 'package:engzly/features/home/ui/widgets/other_services_card.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/cleaning_screen.dart';
+import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
+import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
+import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/house_shifting_screen.dart';
 import 'package:engzly/features/services/painting/logic/painting_cubit.dart';
 import 'package:engzly/features/services/painting/ui/painting/first_screen/painting_screen.dart';
 import 'package:engzly/features/services/vehicle/logic/vehicle_cubit.dart';
@@ -208,7 +212,87 @@ class _HomeScreenState extends State<HomeScreen> {
                               final offerItem =
                                   offers[selectedTab].offers[index];
 
-                              return OfferCard(offer: offerItem);
+                              return OfferCard(
+                                offer: offerItem,
+                                onTap: () {
+                                  final name =
+                                      offerItem.serviceName.toLowerCase();
+
+                                  switch (name) {
+                                    case "vehicle":
+                                      final cubit =
+                                          context.read<VehicleCubit>();
+                                      cubit.selectService(offerItem.id);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: cubit,
+                                            child: const VehicleScreen(),
+                                          ),
+                                        ),
+                                      );
+                                      break;
+
+                                    case "cleaning":
+                                      final cubit =
+                                          context.read<CleaningCubit>();
+                                      cubit.selectService(offerItem.id);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: cubit,
+                                            child: const CleaningScreen(),
+                                          ),
+                                        ),
+                                      );
+                                      break;
+                                    case "house shifting":
+                                      final bookingCubit = context
+                                          .read<HouseShiftingBookingCubit>();
+                                      bookingCubit.selectService(offerItem.id);
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider.value(
+                                                value: bookingCubit,
+                                              ),
+                                              BlocProvider(
+                                                create: (_) =>
+                                                    getIt<HouseShiftingCubit>(),
+                                              ),
+                                            ],
+                                            child: const HouseShiftingScreen(),
+                                          ),
+                                        ),
+                                      );
+                                      break;
+
+                                    case "painting":
+                                      final cubit =
+                                          context.read<PaintingCubit>();
+                                      cubit.selectService(offerItem.id);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: cubit,
+                                            child: const PaintingScreen(),
+                                          ),
+                                        ),
+                                      );
+                                      break;
+
+                                    default:
+                                      print(
+                                          "Unknown service: ${offerItem.serviceName}");
+                                  }
+                                },
+                              );
                             },
                           ),
                         )
@@ -257,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: services.length,
-                      separatorBuilder: (_, __) => SizedBox(width: 8.w),
+                      separatorBuilder: (_, __) => SizedBox(width: 10.w),
                       itemBuilder: (context, index) {
                         final service = services[index];
                         return OtherServiceCard(

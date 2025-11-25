@@ -1,4 +1,5 @@
-import 'dart:math' show cos, sin, sqrt, atan2, pi, max, min;
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,13 @@ import 'package:geocoding/geocoding.dart';
 
 class CleaningOrderMap extends StatefulWidget {
   final String? location;
+  final ValueChanged<double>? onDistanceCalculated;
 
-  const CleaningOrderMap({super.key, this.location});
+  const CleaningOrderMap({
+    super.key,
+    this.location,
+    this.onDistanceCalculated,
+  });
 
   @override
   State<CleaningOrderMap> createState() => _CleaningOrderMap();
@@ -21,7 +27,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
   GoogleMapController? mapController;
   bool isLoading = true;
 
-  static const LatLng octoberStart = LatLng(29.9715, 30.9486); 
+  static const LatLng octoberStart = LatLng(29.9715, 30.9486);
 
   @override
   void initState() {
@@ -31,7 +37,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
 
   Future<void> _initMap() async {
     try {
-      debugPrint("📍 User address: ${widget.location}");
+      debugPrint(" User address: ${widget.location}");
 
       startPoint = octoberStart;
 
@@ -42,6 +48,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
           endPoint = startPoint;
           isLoading = false;
         });
+        widget.onDistanceCalculated?.call(0);
         return;
       }
 
@@ -54,6 +61,9 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
           isLoading = false;
         });
 
+        final distance = _calculateDistanceInMeters(startPoint, end);
+        widget.onDistanceCalculated?.call(distance);
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _fitMapToBounds();
         });
@@ -62,14 +72,16 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
           endPoint = startPoint;
           isLoading = false;
         });
+        widget.onDistanceCalculated?.call(0);
       }
     } catch (e) {
-      debugPrint("❌ Error getting coordinates: $e");
+      debugPrint(" Error getting coordinates: $e");
       setState(() {
         startPoint = octoberStart;
         endPoint = octoberStart;
         isLoading = false;
       });
+      widget.onDistanceCalculated?.call(0);
     }
   }
 
@@ -93,11 +105,17 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return SizedBox(
+        height: 240.h,
+        child: const Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (endPoint == null) {
-      return const Center(child: Text("No map data available"));
+      return SizedBox(
+        height: 240.h,
+        child: const Center(child: Text("No map data available")),
+      );
     }
 
     final markers = <Marker>{
@@ -117,7 +135,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
 
     final polyline = Polyline(
       polylineId: const PolylineId('route'),
-      color: Colors.green,
+      color: Colors.yellow,
       width: 4,
       points: [startPoint, endPoint!],
     );
@@ -166,7 +184,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha:0.6),
+                  color: Colors.black.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -189,7 +207,7 @@ class _CleaningOrderMap extends State<CleaningOrderMap> {
   }
 
   double _calculateDistanceInMeters(LatLng start, LatLng end) {
-    const earthRadius = 6371000; 
+    const earthRadius = 6371000;
     final dLat = (end.latitude - start.latitude) * (pi / 180);
     final dLon = (end.longitude - start.longitude) * (pi / 180);
     final a = sin(dLat / 2) * sin(dLat / 2) +

@@ -16,7 +16,7 @@ import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/home_layout/home_layout_screen.dart';
 import 'package:engzly/features/offers/ui/logic/offers_cubit.dart';
-import 'package:engzly/features/offers/ui/offers.dart';
+import 'package:engzly/features/offers/ui/ui/offers.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/change_password/change_password_screen.dart';
 import 'package:engzly/features/profile/ui/contact_us/contact_us_screen.dart';

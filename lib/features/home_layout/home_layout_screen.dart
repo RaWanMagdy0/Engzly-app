@@ -4,7 +4,7 @@ import 'package:engzly/features/history/ui/history.dart';
 import 'package:engzly/features/home/logic/cubit.dart';
 import 'package:engzly/features/home/ui/home_screen.dart';
 import 'package:engzly/features/offers/ui/logic/offers_cubit.dart';
-import 'package:engzly/features/offers/ui/offers.dart';
+import 'package:engzly/features/offers/ui/ui/offers.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
