@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaintingOrderItem extends StatelessWidget {
-  final String icon;
+  final String? icon;
+  final Widget? iconWidget;
   final String title;
   final String price;
   final String? subtitle;
@@ -12,13 +13,15 @@ class PaintingOrderItem extends StatelessWidget {
 
   const PaintingOrderItem({
     super.key,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.title,
     required this.price,
     required this.backgroundColor,
     this.subtitle,
     this.subtitleWidget,
-  });
+  }) : assert(icon != null || iconWidget != null,
+            'Either icon or iconWidget must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +42,11 @@ class PaintingOrderItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Center(
-              child: Text(
-                icon,
-                style: TextStyle(fontSize: 28.sp),
-              ),
+              child: iconWidget ??
+                  Text(
+                    icon!,
+                    style: TextStyle(fontSize: 28.sp),
+                  ),
             ),
           ),
           SizedBox(width: 12.w),

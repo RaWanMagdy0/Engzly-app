@@ -13,7 +13,7 @@ import 'package:engzly/features/home/ui/widgets/offers_tabs.dart';
 import 'package:engzly/features/home/ui/widgets/service_row.dart';
 import 'package:engzly/features/home/ui/widgets/other_services_card.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/first_screen/cleaning_screen.dart';
+import 'package:engzly/features/services/cleaning/ui/ui/first_screen/cleaning_screen.dart';
 import 'package:engzly/features/services/house_shifting/logic/booking_cubit.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:engzly/features/services/house_shifting/ui/house_shifting_service/first_screen/house_shifting_screen.dart';

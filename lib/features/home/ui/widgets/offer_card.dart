@@ -5,11 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class OfferCard extends StatelessWidget {
   final OfferModel offer;
   final VoidCallback? onTap;
+  
   const OfferCard({
     super.key,
     required this.offer,
     this.onTap,
   });
+  
   @override
   Widget build(BuildContext context) {
     final gradients = [
@@ -20,6 +22,7 @@ class OfferCard extends StatelessWidget {
       [Color.fromRGBO(107, 203, 119, 1), Color(0xff95E8A1)],
     ];
     final randomIndex = offer.id % gradients.length;
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -96,6 +99,38 @@ class OfferCard extends StatelessWidget {
                   child: Image.network(
                     offer.icon,
                     fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Icon(
+                          Icons.local_offer_outlined,
+                          color: Colors.white.withOpacity(0.8),
+                          size: 40.sp,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

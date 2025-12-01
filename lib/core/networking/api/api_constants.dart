@@ -17,7 +17,6 @@ class ApiConstants {
   static const String getUserData = "User/GetUserDataForEdit";
   static const String updateUserData = "User/Put User data for Update";
   static const String changePassword = "User/ChangePassword";
-
   static const String selectLocation = "User/addLocation";
   static const String getLocations = "User/UserLocations";
 
@@ -26,14 +25,14 @@ class ApiConstants {
   static const String getOffers = "Home/GetOffer&News";
   static const String getservice = "Home/GetOtherServices";
   static const String getHistory = "User/bookings";
-  static const String getHouseSize = "HouseShifting/HouseSize";
+  static const String getHouseSize = "SharedServices/HouseSize";
   static const String getFurnitures = "HouseShifting/Furnitures";
-  static const String getVehicles = "HouseShifting/Vehicles";
-  static const String checkPromoCode = "HouseShifting/check-promocode";
+  static const String getVehicles = "SharedServices/Vehicles";
+  static const String checkPromoCode = "SharedServices/check-promocode";
   static const String houseShiftingCheckOut = "Booking/HouseShifting";
   static const String cleaningCheckOut = "Booking/CleaningBooking";
-  static const String vehicleCheckOut = "Vehicles/VehiclesBooking";
-  static const String paintingCheckOut = "Painting/paintingBooking";
+  static const String vehicleCheckOut = "Booking/VehiclesBooking";
+  static const String paintingCheckOut = "Booking/paintingBooking";
   static const String getColors = "Painting/colors";
   static const String resendResetOtp = "auth/resend-reset-otp";
   static const String refreshToken = "Auth/refresh";

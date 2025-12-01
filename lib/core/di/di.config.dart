@@ -74,7 +74,6 @@ import '../../features/services/vehicle/data/repo/vehicle_repo.dart' as _i791;
 import '../../features/services/vehicle/logic/vehicle_cubit.dart' as _i694;
 import '../../notification/notification_cubit.dart' as _i426;
 import '../helper/functions/providers/app_provider.dart' as _i1040;
-import '../helper/local/app_provider.dart' as _i44;
 import '../networking/api/dio/dio_factory.dart' as _i777;
 import '../networking/api/dio/dio_module.dart' as _i713;
 
@@ -91,9 +90,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final dioModule = _$DioModule();
     gh.factory<_i777.DioFactory>(() => _i777.DioFactory());
-    gh.factory<_i873.GoogleAuthService>(() => _i873.GoogleAuthService());
+    gh.factory<_i873.AuthService>(() => _i873.AuthService());
     gh.singleton<_i1040.AppProvider>(() => _i1040.AppProvider());
-    gh.singleton<_i44.AppProvider>(() => _i44.AppProvider());
     gh.lazySingleton<_i426.NotificationCubit>(() => _i426.NotificationCubit());
     gh.lazySingleton<_i361.Dio>(() => dioModule.dio(gh<_i777.DioFactory>()));
     gh.lazySingleton<_i1060.AuthApiManager>(
@@ -126,6 +124,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i834.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i109.RegisterRepo>(
         () => _i109.RegisterRepo(gh<_i1060.AuthApiManager>()));
+    gh.factory<_i282.GoogleLoginCubit>(() => _i282.GoogleLoginCubit(
+          gh<_i832.GoogleLoginRepo>(),
+          gh<_i873.AuthService>(),
+        ));
     gh.factory<_i1003.ResetPasswordCubit>(
         () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
     gh.factory<_i791.VehicleRepo>(
@@ -136,10 +138,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i625.HistoryRepository(gh<_i50.HistoryApiManager>()));
     gh.factory<_i61.HistoryCubit>(
         () => _i61.HistoryCubit(gh<_i625.HistoryRepository>()));
-    gh.factory<_i282.GoogleLoginCubit>(() => _i282.GoogleLoginCubit(
-          gh<_i832.GoogleLoginRepo>(),
-          gh<_i873.GoogleAuthService>(),
-        ));
     gh.factory<_i650.HouseShiftingRepo>(
         () => _i650.HouseShiftingRepo(gh<_i795.HouseShiftingApiManager>()));
     gh.factory<_i690.RegisterCubit>(() => _i690.RegisterCubit(
@@ -187,14 +185,11 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i791.VehicleRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
+    gh.factory<_i672.CleaningCubit>(
+        () => _i672.CleaningCubit(gh<_i783.CleaningRepo>()));
     gh.factory<_i596.PaintingCubit>(() => _i596.PaintingCubit(
           gh<_i650.HouseShiftingRepo>(),
           gh<_i1025.PaintingRepo>(),
-          gh<_i832.GetLocationsRepo>(),
-        ));
-    gh.factory<_i672.CleaningCubit>(() => _i672.CleaningCubit(
-          gh<_i650.HouseShiftingRepo>(),
-          gh<_i783.CleaningRepo>(),
           gh<_i832.GetLocationsRepo>(),
         ));
     return this;

@@ -34,103 +34,121 @@ class _PaintingOrderConfirmation extends State<PaintingOrderConfirmation> {
   Widget build(BuildContext context) {
     final phoneNumber = "01048733684";
 
-    return CustomScaffoldScreen(
-      title: Text(
-        "Order Confirmation",
-      ),
-      leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
-          width: 22.w, height: 22.h, color: ColorsManager.black),
-      notificationIcon: Image.asset(AppImages.notificationIcon,
-          width: 28.w, height: 28.h, color: ColorsManager.black),
-      onLeadingTap: () {},
-      onNotificationTap: () {},
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 300.h,
-              width: 200.w,
-              child: Lottie.asset(AppImages.paintingSubmitCheck),
-            ),
-            Text(
-              "Order Placed",
-              style: AppFonts.font36BlackWeight700,
-            ),
-            10.verticalSpace,
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: AppFonts.font16BlackWeight400,
-                  children: [
-                    const TextSpan(
-                      text:
-                          "Your order has been successfully placed. Our logistics team will contact you soon.\n\nFor any help, call ",
-                    ),
-                    WidgetSpan(
-                      child: GestureDetector(
-                        onTap: () => _makePhoneCall(phoneNumber),
-                        child: Text(
-                          phoneNumber,
-                          style: AppFonts.font14BOrangeWeight400.copyWith(
-                              color: ColorsManager.yellow,
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorsManager.yellow),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteName.homeLayout,
+            (route) => false,
+          );
+        }
+      },
+      child: CustomScaffoldScreen(
+        title: Text(
+          "Order Confirmation",
+        ),
+        leadingIcon: SvgPicture.asset(AppImages.categoryIcon,
+            width: 22.w, height: 22.h, color: ColorsManager.white),
+        notificationIcon: Image.asset(AppImages.notificationIcon,
+            width: 28.w, height: 28.h, color: ColorsManager.black),
+        onLeadingTap: () {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteName.homeLayout,
+            (route) => false,
+          );
+        },
+        onNotificationTap: () {},
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 300.h,
+                width: 200.w,
+                child: Lottie.asset(AppImages.paintingSubmitCheck),
+              ),
+              Text(
+                "Order Placed",
+                style: AppFonts.font36BlackWeight700,
+              ),
+              10.verticalSpace,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: AppFonts.font16BlackWeight400,
+                    children: [
+                      const TextSpan(
+                        text:
+                            "Your order has been successfully placed. Our logistics team will contact you soon.\n\nFor any help, call ",
+                      ),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () => _makePhoneCall(phoneNumber),
+                          child: Text(
+                            phoneNumber,
+                            style: AppFonts.font14BOrangeWeight400.copyWith(
+                                color: ColorsManager.yellow,
+                                decoration: TextDecoration.underline,
+                                decorationColor: ColorsManager.yellow),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            40.verticalSpace,
-            Container(
-              width: double.infinity,
-              height: 2.h,
-              color: Colors.grey.shade200,
-            ),
-            20.verticalSpace,
-            Text(
-              "SCHEDULE",
-              style: AppFonts.font16BlackWeight400.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
+              40.verticalSpace,
+              Container(
+                width: double.infinity,
+                height: 2.h,
+                color: Colors.grey.shade200,
               ),
-            ),
-            5.verticalSpace,
-            Text(
-              bookingCubit.selectedDate != null
-                  ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
-                      .format(bookingCubit.selectedDate!)
-                  : "No date selected",
-              style: AppFonts.font20BlackWeight700.copyWith(fontSize: 16.sp),
-            ),
-            40.verticalSpace,
-            Container(
-              width: double.infinity,
-              height: 2.h,
-              color: Colors.grey.shade200,
-            ),
-            20.verticalSpace,
-            CustomButton(
-              borderRadius: 15.r,
-              height: 50.h,
-              width: 300.w,
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  RouteName.homeLayout,
-                  (route) => false,
-                );
-              },
-              text: "Go to Homepage",
-              color: ColorsManager.yellow,
-              textStyle: AppFonts.font14BWhiteWeight700,
-            ),
-          ],
+              20.verticalSpace,
+              Text(
+                "SCHEDULE",
+                style: AppFonts.font16BlackWeight400.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              5.verticalSpace,
+              Text(
+                bookingCubit.selectedDate != null
+                    ? DateFormat('EEEE, MMM dd, yyyy @ h:mm a')
+                        .format(bookingCubit.selectedDate!)
+                    : "No date selected",
+                style: AppFonts.font20BlackWeight700.copyWith(fontSize: 16.sp),
+              ),
+              40.verticalSpace,
+              Container(
+                width: double.infinity,
+                height: 2.h,
+                color: Colors.grey.shade200,
+              ),
+              20.verticalSpace,
+              CustomButton(
+                borderRadius: 15.r,
+                height: 50.h,
+                width: 300.w,
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RouteName.homeLayout,
+                    (route) => false,
+                  );
+                },
+                text: "Go to Homepage",
+                color: ColorsManager.yellow,
+                textStyle: AppFonts.font14BWhiteWeight700,
+              ),
+            ],
+          ),
         ),
       ),
     );

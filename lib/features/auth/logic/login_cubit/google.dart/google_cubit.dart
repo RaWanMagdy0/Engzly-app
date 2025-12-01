@@ -11,7 +11,7 @@ import 'package:injectable/injectable.dart';
 @injectable
 class GoogleLoginCubit extends BaseViewModel<GoogleLoginState> {
   final GoogleLoginRepo _googleLoginRepo;
-  final GoogleAuthService _googleAuthService;
+  final AuthService _googleAuthService;
 
   GoogleLoginCubit(
     this._googleLoginRepo,
@@ -22,16 +22,17 @@ class GoogleLoginCubit extends BaseViewModel<GoogleLoginState> {
     emit(GoogleLoginLoading());
 
     try {
-      final googleToken = await _googleAuthService.signInWithGoogle();
+      final firebaseToken = await _googleAuthService.signInWithGoogle();
 
-      if (googleToken == null) {
+      if (firebaseToken == null) {
         emit(GoogleLoginError('تم إلغاء تسجيل الدخول'));
         return;
       }
 
-      await SecureStorageFactory.writeData(key: 'googleIdToken', value: googleToken);
+      await SecureStorageFactory.writeData(
+          key: 'googleIdToken', value: firebaseToken);
 
-      final result = await _googleLoginRepo.googleLogin(googleToken);
+      final result = await _googleLoginRepo.googleLogin(firebaseToken);
 
       if (result is Success<GoogleLoginResposeModel>) {
         final response = result.data;
@@ -43,31 +44,26 @@ class GoogleLoginCubit extends BaseViewModel<GoogleLoginState> {
 
         await TokenManager.setToken(token: response.token ?? "");
         await TokenManager.setRefreshToken(token: response.refreshToken ?? "");
-        await SecureStorageFactory.writeData(key: 'token', value: response.token ?? "");
+
+        await SecureStorageFactory.writeData(
+            key: 'token', value: response.token ?? "");
 
         if (response.email != null) {
-          await SecureStorageFactory.writeData(key: 'userEmail', value: response.email!);
+          await SecureStorageFactory.writeData(
+              key: 'userEmail', value: response.email!);
         }
         if (response.username != null) {
-          await SecureStorageFactory.writeData(key: 'username', value: response.username!);
+          await SecureStorageFactory.writeData(
+              key: 'username', value: response.username!);
         }
 
         emit(GoogleLoginSuccess(response.username ?? 'تم تسجيل الدخول بنجاح!'));
       } else if (result is Fail) {
-        final failResult = result as Fail;
-        final errorMessage = getErrorMessageFromException(failResult.exception);
-        emit(GoogleLoginError(errorMessage));
+        emit(GoogleLoginError(
+            getErrorMessageFromException((result as Fail).exception)));
       }
     } catch (error) {
       emit(GoogleLoginError('حدث خطأ أثناء تسجيل الدخول: $error'));
-    }
-  }
-
-  Future<void> signOutFromGoogle() async {
-    try {
-      await _googleAuthService.signOut();
-    } catch (error) {
-      print('❌ Sign Out Error: $error');
     }
   }
 }

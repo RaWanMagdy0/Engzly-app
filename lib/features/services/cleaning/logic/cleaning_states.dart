@@ -1,24 +1,23 @@
-import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
-import 'package:engzly/features/services/cleaning/data/models/cleaning_booking_response.dart';
-import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
-import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
+
+import 'package:engzly/features/services/cleaning/data/models/response/cleaning_response_model.dart/cleaning_booking_response.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/house_size_model.dart/house_size_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/location_response/location_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/promo_code.dart/promo_code_response.dart';
 
 abstract class CleaningStates {}
 
+
 class CleaningInitial extends CleaningStates {}
 
+///     Selections
 class CleaningHouseSizeSelected extends CleaningStates {
   final HouseSizeModel selected;
   CleaningHouseSizeSelected(this.selected);
 }
 
-
-class  CleaningBookingServiceSelected extends CleaningStates {
+class CleaningBookingServiceSelected extends CleaningStates {
   final int serviceId;
-
-  CleaningBookingServiceSelected( {
-    required this.serviceId,
-  });
+  CleaningBookingServiceSelected({required this.serviceId});
 }
 
 class CleaningDateSelected extends CleaningStates {
@@ -28,13 +27,13 @@ class CleaningDateSelected extends CleaningStates {
 
 class CleaningLocationSelected extends CleaningStates {
   final String address;
-
-  CleaningLocationSelected({
-    required this.address,
-  });
+  CleaningLocationSelected({required this.address});
 }
 
 class CleaningUpdated extends CleaningStates {}
+
+
+///     Checkout States
 
 class CleaningCheckOutOrderLoading extends CleaningStates {}
 
@@ -49,6 +48,8 @@ class CleaningCheckOutOrderError extends CleaningStates {
 }
 
 
+///     House Size States
+
 class GetHouseSizeLoading extends CleaningStates {}
 
 class GetHouseSizeSuccess extends CleaningStates {
@@ -60,6 +61,10 @@ class GetHouseSizeError extends CleaningStates {
   final String error;
   GetHouseSizeError(this.error);
 }
+
+
+///     Promo Code States
+
 class CleaningPromoCodeLoading extends CleaningStates {}
 
 class CleaningPromoCodeSuccess extends CleaningStates {
@@ -73,6 +78,9 @@ class CleaningPromoCodeError extends CleaningStates {
 }
 
 class CleaningPromoCodeRemoved extends CleaningStates {}
+
+///     Locations States
+
 class CleaningLocationsLoading extends CleaningStates {}
 
 class CleaningLocationsSuccess extends CleaningStates {

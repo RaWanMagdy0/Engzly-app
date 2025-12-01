@@ -1,8 +1,8 @@
-import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/location_response/location_model.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/third_screen/widgets/cleaning_location_bottom_sheet.dart';
+import 'package:engzly/features/services/cleaning/ui/ui/location_screen/widgets/cleaning_location_bottom_sheet.dart';
+import 'package:engzly/features/services/cleaning/ui/ui/location_screen/widgets/empty_locatiom_bottom_sheet.dart' show CleaningEmptyLocationSheet;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,7 +84,10 @@ class _CleaningChooseLocationState extends State<CleaningChooseLocation> {
               if (state is! CleaningLocationsLoading)
                 (locations.isNotEmpty
                     ? _buildLocationsBottomSheet(cubit, locations)
-                    : _buildEmptyLocationSheet(cubit)),
+                    : CleaningEmptyLocationSheet(
+                        selectedAddress: selectedAddress,
+                        cleaningCubit: cubit,
+                      )),
               if (state is CleaningLocationsLoading)
                 const Center(
                   child: CircularProgressIndicator(color: ColorsManager.green),
@@ -180,73 +183,6 @@ class _CleaningChooseLocationState extends State<CleaningChooseLocation> {
       locations: locations,
       onTypeChanged: (type) => setState(() => selectedType = type),
       onSelectAddress: (address) => setState(() => selectedAddress = address),
-    );
-  }
-
-  Widget _buildEmptyLocationSheet(CleaningCubit cubit) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.25,
-      minChildSize: 0.25,
-      maxChildSize: 0.35,
-      builder: (context, scrollController) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
-              ),
-            ],
-          ),
-          child: ListView(
-            controller: scrollController,
-            children: [
-              const Center(
-                child: Text(
-                  "No saved addresses",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Center(
-                child: Text(
-                  "Move the marker or tap the map to choose a new location.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              24.verticalSpace,
-              ElevatedButton(
-                onPressed: () {
-                  cubit.selectLocation(selectedAddress);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => MultiBlocProvider(
-                        providers: [BlocProvider.value(value: cubit)],
-                        child: const CleaningOrderDetails(),
-                      ),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.green,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-                child: const Text("Proceed"),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

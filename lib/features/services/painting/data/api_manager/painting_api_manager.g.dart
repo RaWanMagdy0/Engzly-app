@@ -41,7 +41,7 @@ class _PaintingApiManager implements PaintingApiManager {
     )
         .compose(
           _dio.options,
-          'Painting/paintingBooking',
+          'Booking/paintingBooking',
           queryParameters: queryParameters,
           data: _data,
         )

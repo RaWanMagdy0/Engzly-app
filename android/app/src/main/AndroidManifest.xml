@@ -17,7 +17,14 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/NormalTheme">
 
+        <!-- ✨ مهم جدًا للـ Maps -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableFragmmentEmbedding"
+            android:value="true"/>
 
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableFlutterEngineRestart"
+            android:value="true"/>
 
         <activity
             android:name=".MainActivity"
@@ -28,26 +35,29 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            
 
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
-                android:resource="@style/NormalTheme"
-                />
+                android:resource="@style/NormalTheme"/>
+
+            <meta-data
+                android:name="com.google.android.gms.wallet.api.enabled"
+                android:value="true"/>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBA7Un_K8kYshyK1rVBhJPuQfVUzUha6lQ"/>
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
     </application>
 
     <queries>

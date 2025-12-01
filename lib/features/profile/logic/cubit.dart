@@ -230,12 +230,18 @@ class ProfileCubit extends BaseViewModel<ProfileState> {
   }
 
   static String fixImageUrl(String? url) {
-    if (url == null || url.isEmpty) return "";
-    return url.replaceFirst(
-      "http://engezly.runasp.net/http://engezly.runasp.net/",
-      "http://engezly.runasp.net/",
-    );
+  if (url == null || url.isEmpty) return "";
+
+  final domain = "http://engezly.runasp.net/";
+  String fixed = url;
+
+  while (fixed.contains("$domain$domain")) {
+    fixed = fixed.replaceAll("$domain$domain", domain);
   }
+
+  return fixed;
+}
+
 
   void setImage(File file) {
     selectedImage = file;

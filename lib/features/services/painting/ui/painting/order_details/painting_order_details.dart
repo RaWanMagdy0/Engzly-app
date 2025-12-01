@@ -128,11 +128,14 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      PaintingOrderMap(location: cubit.address ?? '',   onDistanceCalculated: (distance) {
+                      PaintingOrderMap(
+                        location: cubit.address ?? '',
+                        onDistanceCalculated: (distance) {
                           setState(() {
                             distanceInMeters = distance;
                           });
-                        },),
+                        },
+                      ),
                       10.verticalSpace,
                       PaintingOrderItem(
                         icon: '🏠',
@@ -152,23 +155,25 @@ class _PaintingOrderDetails extends State<PaintingOrderDetails>
                         backgroundColor: const Color(0xFFFFE0B2),
                       ),
                       PaintingOrderItem(
-                        icon: '🎨',
-                        title: '',
-                        subtitleWidget: Image.network(
-                          cubit.selectedColor?.colorIcon ?? '',
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.error, color: Colors.red),
+                        iconWidget: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: Image.network(
+                            cubit.selectedColor?.colorIcon ?? '',
+                            width: 40.w,
+                            height: 40.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.color_lens,
+                                    color: Colors.grey, size: 30),
+                          ),
                         ),
-                        subtitle: '',
+                        title: 'Color',
                         price: "100",
                         backgroundColor: const Color(0xFFFFE0B2),
                       ),
                       PaintingOrderSummry(
                         label: 'Service Charge',
-                       value: '\$${serviceCharge.toStringAsFixed(2)}',
+                        value: '\$${serviceCharge.toStringAsFixed(2)}',
                       ),
                       PaintingPromoCode(
                         appliedPromoCode: cubit.appliedPromoCode,

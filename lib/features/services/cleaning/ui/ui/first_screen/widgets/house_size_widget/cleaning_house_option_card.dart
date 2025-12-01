@@ -1,11 +1,11 @@
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/house_size_model.dart/house_size_model.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 
 class CleaningHouseOptionCard extends StatelessWidget {
   final HouseSizeModel houseSize;

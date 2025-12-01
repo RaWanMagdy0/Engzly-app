@@ -1,29 +1,26 @@
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
-import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
-import 'package:engzly/features/profile/data/repo/get_locations_repo.dart';
-import 'package:engzly/features/services/cleaning/data/models/cleaning_booking_request_model.dart';
-import 'package:engzly/features/services/cleaning/data/models/cleaning_booking_response.dart';
+import 'package:engzly/features/services/cleaning/data/models/request/cleaning_booking_request_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/cleaning_response_model.dart/cleaning_booking_response.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/house_size_model.dart/house_size_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/location_response/location_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/promo_code.dart/promo_code_response.dart';
 import 'package:engzly/features/services/cleaning/data/repo/cleaning_repo.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_states.dart';
-import 'package:engzly/features/services/house_shifting/data/models/promo_code_response.dart';
-import 'package:engzly/features/services/house_shifting/data/repo/house_shifting_repo.dart';
-import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'package:injectable/injectable.dart';
-import 'package:dio/dio.dart';
 
 @injectable
 class CleaningCubit extends BaseViewModel<CleaningStates> {
-  final HouseShiftingRepo _houseShiftingRepo;
   final CleaningRepo _cleaningRepo;
-  final GetLocationsRepo _getLocationsRepo;
 
   CleaningCubit(
-      this._houseShiftingRepo, this._cleaningRepo, this._getLocationsRepo)
+       this._cleaningRepo, )
       : super(CleaningInitial());
 
   List<HouseSizeModel> houseSizeResponse = [];
   List<LocationModel> locations = [];
+  List<LocationModel> homeLocations = [];
+  List<LocationModel> workLocations = [];
 
   HouseSizeModel? selectedHouseSize;
   int? selectedHouseSizePrice;
@@ -38,9 +35,9 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
   int workingHours = 2;
   String? selectedPaymentType;
 
-  List<LocationModel> homeLocations = [];
-  List<LocationModel> workLocations = [];
   CleaningBookingRequestModel? lastRequest;
+
+////////Select house Size ////////////
 
   void selectHouseSize(HouseSizeModel size, int houseSizePrice) {
     selectedHouseSize = size;
@@ -48,6 +45,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     emit(CleaningHouseSizeSelected(size));
   }
 
+////////Select nom of person////////////
   void increasePersons() {
     requiredPersons++;
     emit(CleaningUpdated());
@@ -57,6 +55,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     if (requiredPersons > 0) requiredPersons--;
     emit(CleaningUpdated());
   }
+////////Select Working Hours ////////////
 
   void increaseWorkingHours() {
     workingHours++;
@@ -67,29 +66,31 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     if (workingHours > 1) workingHours--;
     emit(CleaningUpdated());
   }
+////////Select date ////////////
 
   void selectDate(DateTime date) {
     selectedDate = date;
     emit(CleaningDateSelected(date));
   }
 
+////////Select location ////////////
   void selectLocation(String newAddress) {
     address = newAddress;
     emit(CleaningLocationSelected(address: newAddress));
   }
+////////Select ServiceId ////////////
 
   void selectService(int serviceId) {
     selectedServiceId = serviceId;
-
-
     emit(CleaningBookingServiceSelected(serviceId: serviceId));
   }
 
-  // ================= FETCH HOUSE SIZE ==================
+  ///////////////FETCH HOUSE SIZE ///////////////
+
   Future<void> getHouseSize() async {
     emit(GetHouseSizeLoading());
 
-    final result = await _houseShiftingRepo.getHouseSize();
+    final result = await _cleaningRepo.getHouseSize();
 
     if (result is Success<List<HouseSizeModel>>) {
       houseSizeResponse = result.data ?? [];
@@ -101,11 +102,11 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     }
   }
 
-  // ================= FETCH LOCATIONS ==================
+  ///////////////FETCH LOCATIONS///////////////
   Future<void> getLocations() async {
     emit(CleaningLocationsLoading());
 
-    final result = await _getLocationsRepo.getLocations();
+    final result = await _cleaningRepo.getLocations();
 
     if (result is Success<List<LocationModel>>) {
       locations = result.data!;
@@ -121,7 +122,7 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     }
   }
 
-  // ================= CHECKOUT ==================
+  ///////////////CHECKOUT////////////////
   Future<void> checkOut({
     required DateTime schedule,
     required double totalPrice,
@@ -153,17 +154,6 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
       } else if (result is Fail) {
         final failResult = result as Fail;
 
-        // LOGGING THE REAL API ERROR (IMPORTANT!)
-        if (failResult.exception is DioException) {
-          final error = failResult.exception as DioException;
-
-          print("═══════════ CLEANING CHECKOUT ERROR ═══════════");
-          print("Status Code: ${error.response?.statusCode}");
-          print("API Response: ${error.response?.data}");
-          print("Request Sent: ${bookingRequest.toJson()}");
-          print("════════════════════════════════════════════════");
-        }
-
         final errorMessage = getErrorMessageFromException(failResult.exception);
         emit(CleaningCheckOutOrderError(errorMessage));
       }
@@ -172,15 +162,15 @@ class CleaningCubit extends BaseViewModel<CleaningStates> {
     }
   }
 
-  // ================= PROMO CODE ==================
+  ////////////////// PROMO CODE////////////////
   Future<void> checkPromoCode(String code) async {
     emit(CleaningPromoCodeLoading());
 
-    final result = await _houseShiftingRepo.checkPromoCode(code);
+    final result = await _cleaningRepo.checkPromoCode(code);
 
     if (result is Success<PromoCodeResponse>) {
       appliedPromoCode = code;
-      discountPercentage = result.data!.discountPercentage.toDouble();
+      discountPercentage = result.data?.discountPercentage.toDouble();
       emit(CleaningPromoCodeSuccess(result.data!));
     } else if (result is Fail) {
       final failResult = result as Fail;

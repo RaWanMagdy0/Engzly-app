@@ -37,7 +37,7 @@ class _HouseShiftingApiManager implements HouseShiftingApiManager {
     )
         .compose(
           _dio.options,
-          'HouseShifting/HouseSize',
+          'SharedServices/HouseSize',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -111,7 +111,7 @@ class _HouseShiftingApiManager implements HouseShiftingApiManager {
     )
         .compose(
           _dio.options,
-          'HouseShifting/Vehicles',
+          'SharedServices/Vehicles',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -150,7 +150,7 @@ class _HouseShiftingApiManager implements HouseShiftingApiManager {
     )
         .compose(
           _dio.options,
-          'HouseShifting/check-promocode',
+          'SharedServices/check-promocode',
           queryParameters: queryParameters,
           data: _data,
         )

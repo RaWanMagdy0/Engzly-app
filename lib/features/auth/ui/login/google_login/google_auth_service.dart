@@ -1,32 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-
 @injectable
-class GoogleAuthService {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: ['email', 'profile'],
-    serverClientId:
-        '425658170400-3suhj4nc6k8r8u5vbtorl7q16a0qkmff.apps.googleusercontent.com',
-  );
+
+class AuthService {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<String?> signInWithGoogle() async {
     try {
-      await _googleSignIn.signOut();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
       if (googleUser == null) return null;
+
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      print("🔹 Google ID Token: ${googleAuth.idToken}");
-      return googleAuth.idToken;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
+
+      return await userCredential.user?.getIdToken();
     } catch (e) {
-      print('❌ Google Sign-In Error: $e');
-      rethrow;
+      print('Google sign in error: $e');
+      return null;
     }
   }
 
-  Future<void> signOut() => _googleSignIn.signOut();
-
-  GoogleSignInAccount? get currentUser => _googleSignIn.currentUser;
+  Future<void> signOut() async {
+    await _googleSignIn.signOut();
+    await _firebaseAuth.signOut();
+  }
 }

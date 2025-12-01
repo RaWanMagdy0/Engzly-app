@@ -1,6 +1,6 @@
+import 'package:engzly/features/services/cleaning/data/models/response/house_size_model.dart/house_size_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:engzly/features/services/house_shifting/data/models/house_size_model.dart';
 import 'cleaning_house_option_card.dart';
 
 class CleaningHouseOptionSection extends StatelessWidget {

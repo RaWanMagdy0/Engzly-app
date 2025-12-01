@@ -41,7 +41,7 @@ class _VehicleApiManager implements VehicleApiManager {
     )
         .compose(
           _dio.options,
-          'Vehicles/VehiclesBooking',
+          'Booking/VehiclesBooking',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -7,14 +7,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:337921898654:android:8d927d15f82a465a66a38f",
+        "mobilesdk_app_id": "1:337921898654:android:5440a25f902d7f7a66a38f",
         "android_client_info": {
           "package_name": "com.example.engzly"
         }
       },
       "oauth_client": [
         {
-          "client_id": "337921898654-6nngdfccdb05r94bq8p4u3na1rqkr55a.apps.googleusercontent.com",
+          "client_id": "337921898654-id4ujlh87s92ep0rljj7gh8kqn4j5bf7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

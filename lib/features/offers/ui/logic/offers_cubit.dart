@@ -1,7 +1,6 @@
 import 'package:engzly/features/home/data/repo/home_repo.dart';
 import 'package:engzly/features/offers/ui/logic/offers_states.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:engzly/core/networking/api/api_result.dart';
 import 'package:engzly/core/networking/base_view_model.dart';
 import 'package:engzly/features/home/data/models/offers/offers_response_model.dart';
@@ -22,7 +21,19 @@ class OffersCubit extends BaseViewModel<OffersState> {
     if (isClosed) return;
 
     if (result is Success<List<OffersResponseModel>>) {
-      offersList = result.data ?? [];
+      final allGroups = result.data ?? [];
+
+      final filteredGroups = allGroups.map((group) {
+        final activeOffers = group.offers.where((o) => o.isActive).toList();
+
+        return OffersResponseModel(
+          type: group.type,
+          offers: activeOffers,
+        );
+      }).toList();
+
+      offersList = filteredGroups.where((g) => g.offers.isNotEmpty).toList();
+
       emit(OffersSuccess(offersList));
     } else if (result is Fail) {
       final failResult = result as Fail;

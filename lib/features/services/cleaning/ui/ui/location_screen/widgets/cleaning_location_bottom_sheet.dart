@@ -1,6 +1,6 @@
-import 'package:engzly/features/profile/data/models/get_address/location_model.dart';
+import 'package:engzly/features/services/cleaning/data/models/response/location_response/location_model.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
-import 'package:engzly/features/services/cleaning/ui/cleaning/order_details/cleaning_order_details.dart';
+import 'package:engzly/features/services/cleaning/ui/ui/order_details/cleaning_order_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

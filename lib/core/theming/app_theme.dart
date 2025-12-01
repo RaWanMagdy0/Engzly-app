@@ -9,7 +9,6 @@ class AppTheme {
       centerTitle: false,
       elevation: 0.0,
       backgroundColor: ColorsManager.white,
-      // Ensure app bar title and icons are black across the app
       titleTextStyle: AppFonts.font20BlackWeight700,
       toolbarTextStyle: AppFonts.font16BlackWeight400,
       iconTheme: const IconThemeData(color: ColorsManager.black),
