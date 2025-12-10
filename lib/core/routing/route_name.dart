@@ -38,4 +38,9 @@ class RouteName {
   static const String questions = "questions";
   static const String paintingOrderConfirmation = "paintingOrderConfirmation";
   static const String payMob = "payMob";
+
+    static const String carWasher = "CarWasher";
+        static const String carWasherScheuleScreen = "CarWasherScheuleScreen";
+
+
 }

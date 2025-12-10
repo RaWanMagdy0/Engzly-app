@@ -26,6 +26,8 @@ import 'package:engzly/features/profile/ui/location/add_location/add_location_sc
 import 'package:engzly/features/profile/ui/location/my_location/my_location.dart'
     show MyLocation;
 import 'package:engzly/features/profile/ui/main_profile_screen/profile_screen.dart';
+import 'package:engzly/features/services/car_washer/ui/car_washer_schedule/car_washer_scheule_screen.dart';
+import 'package:engzly/features/services/car_washer/ui/first_screen/car_washer.dart';
 import 'package:engzly/features/services/cleaning/logic/cleaning_cubit.dart';
 import 'package:engzly/features/services/cleaning/ui/ui/first_screen/cleaning_screen.dart';
 import 'package:engzly/features/services/cleaning/ui/ui/order_details/cleaning_order_details.dart';
@@ -281,6 +283,15 @@ class AppRouter {
             child: const CleaningOrderDetails(),
           ),
         );
+
+
+      case RouteName.carWasher:
+        return MaterialPageRoute(builder: (_) => const CarWasher());
+              case RouteName.carWasherScheuleScreen:
+        return MaterialPageRoute(builder: (_) => const CarWasherScheuleScreen());
+
+
+
 /***************
  *       case RouteName.cleaningOrderConfirmation:
         return MaterialPageRoute(

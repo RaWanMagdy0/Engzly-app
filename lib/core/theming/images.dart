@@ -27,9 +27,8 @@ abstract class AppImages {
       "assets/animations/house_shifting_success.json";
   static const String cleaningSubmitCheck =
       "assets/animations/cleaning_success.json";
-        static const String paintingSubmitCheck =
+  static const String paintingSubmitCheck =
       "assets/animations/yellow_success_anim.json";
-
 
   static const String cleaningIcon = "assets/icons/cleaning_icon.png";
   static const String labourIcon = "assets/icons/labour_icon.png";
@@ -43,4 +42,6 @@ abstract class AppImages {
   static const String offers = "assets/images/offers.svg";
   static const String logo = "assets/icons/logo.svg";
   static const String paintign = "assets/icons/painting.svg";
+
+  static const String car = "assets/images/car.png";
 }

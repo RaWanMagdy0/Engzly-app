@@ -49,12 +49,20 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
       notificationIcon: Image.asset(AppImages.notificationIcon,
           width: 28.w, height: 28.h, color: ColorsManager.black),
       child: BlocConsumer<ProfileCubit, ProfileState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is SelectLocationSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(state.message),
-              backgroundColor: ColorsManager.green,
-            ));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Location added successfully!'),
+                backgroundColor: ColorsManager.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            await Future.delayed(const Duration(milliseconds: 200));
+
+            if (mounted) {
+              Navigator.pop(context, true);
+            }
           } else if (state is SelectLocationError) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));

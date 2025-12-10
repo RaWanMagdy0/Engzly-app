@@ -1,5 +1,6 @@
 import 'package:engzly/core/helper/functions/dialogs/app_dialogs.dart';
 import 'package:engzly/core/routing/route_name.dart';
+import 'package:engzly/core/shared_widgets/snackbar.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
@@ -39,7 +40,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    50.verticalSpace,
+                    70.verticalSpace,
                     /******8
                      *          Image.asset(
                       'assets/icons/unlock.png',
@@ -60,13 +61,13 @@ class _LogInScreenState extends State<LogInScreen> {
                       passwordController: _passwordController,
                     ),
                     _buildRememberAndForgetPasswordRow(),
-                    10.verticalSpace,
+                    30.verticalSpace,
                     _buildBottomSection(state),
-                    10.verticalSpace,
+                    /********  10.verticalSpace,
                     _buildDividerWithOr(),
                     14.verticalSpace,
-                    _buildGoogleLoginSection(),
-                    18.verticalSpace,
+                    _buildGoogleLoginSection(),*/
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -159,13 +160,10 @@ class _LogInScreenState extends State<LogInScreen> {
                 }
               });
             } else if (state is GoogleLoginError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error),
-                  backgroundColor: Colors.red,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              SnackBarManager().showErrorSnackBar(state.message);
+
+            
+              
             }
           },
           child: const SizedBox.shrink(),
@@ -186,10 +184,13 @@ class _LogInScreenState extends State<LogInScreen> {
                 side: BorderSide(color: Colors.grey[300]!),
               ),
               icon: isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: ColorsManager.orange,
+                      ),
                     )
                   : Image.network(
                       'https://www.google.com/favicon.ico',

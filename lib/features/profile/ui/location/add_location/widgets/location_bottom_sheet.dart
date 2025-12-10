@@ -34,7 +34,8 @@ class _LocationTypeBottomSheetState extends State<LocationBottomSheet> {
               Expanded(
                 child: Text(
                   widget.address,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 14),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -50,7 +51,7 @@ class _LocationTypeBottomSheetState extends State<LocationBottomSheet> {
             children: [
               _buildLocationTypeIcon(Icons.home, "Home"),
               _buildLocationTypeIcon(Icons.work, "Work"),
-              _buildLocationTypeIcon(Icons.add_location_alt, "Other"),
+              //     _buildLocationTypeIcon(Icons.add_location_alt, "Other"),
             ],
           ),
           24.verticalSpace,
@@ -62,7 +63,10 @@ class _LocationTypeBottomSheetState extends State<LocationBottomSheet> {
             },
             child: const Text(
               "Proceed",
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -78,8 +82,10 @@ class _LocationTypeBottomSheetState extends State<LocationBottomSheet> {
         children: [
           CircleAvatar(
             radius: 28,
-            backgroundColor: isSelected ? ColorsManager.green : Colors.grey.shade200,
-            child: Icon(icon, color: isSelected ? Colors.white : Colors.black, size: 28),
+            backgroundColor:
+                isSelected ? ColorsManager.green : Colors.grey.shade200,
+            child: Icon(icon,
+                color: isSelected ? Colors.white : Colors.black, size: 28),
           ),
           8.verticalSpace,
           Text(label,

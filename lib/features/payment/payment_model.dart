@@ -1,3 +1,4 @@
+import 'package:engzly/core/shared_widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -48,12 +49,9 @@ class _PaymobPaymentState extends State<PaymobPayment> {
           onWebResourceError: (error) {
             print('🔴 Error: ${error.description}');
             if (!paymentHandled && context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Payment error: ${error.description}'),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              SnackBarManager().showErrorSnackBar('Payment error: ${error.description}');
+
+             
             }
           },
         ),

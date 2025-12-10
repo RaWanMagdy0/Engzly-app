@@ -52,8 +52,8 @@ class EngzlyApp extends StatelessWidget {
               actionsIconTheme: const IconThemeData(color: Colors.black),
             ),
           ),
-
           initialRoute: initialRoute,
+        //  initialRoute: RouteName.carWasher,
           onGenerateRoute: AppRouter.generateRoute,
         );
       },

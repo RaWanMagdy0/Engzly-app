@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:engzly/core/helper/image_helper.dart';
 import 'package:engzly/core/shared_widgets/custom_scaffold.dart';
+import 'package:engzly/core/shared_widgets/snackbar.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/images.dart';
 import 'package:engzly/features/profile/logic/cubit.dart';
@@ -34,12 +35,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {
         if (state is UpdateUserDataSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text(state.message),
-            ),
-          );
+          SnackBarManager().showSuccessSnackBar(state.message);
         } else if (state is UpdateUserDataError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.error)),
@@ -86,8 +82,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   fit: BoxFit.cover,
                                 )
                               : CachedNetworkImage(
-                                  imageUrl:
-                                      viewModel.imageUrl , // fixed
+                                  imageUrl: viewModel.imageUrl,
                                   width: 120.w,
                                   height: 120.h,
                                   fit: BoxFit.cover,

@@ -30,8 +30,8 @@ class OtherServiceCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w500,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w700,
               color: Colors.black87,
             ),
           ),

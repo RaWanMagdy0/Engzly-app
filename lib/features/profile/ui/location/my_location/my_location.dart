@@ -12,8 +12,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class MyLocation extends StatelessWidget {
+class MyLocation extends StatefulWidget {
   const MyLocation({super.key});
+
+  @override
+  State<MyLocation> createState() => _MyLocationState();
+}
+
+class _MyLocationState extends State<MyLocation> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileCubit>().getLocations();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +50,12 @@ class MyLocation extends StatelessWidget {
               20.verticalSpace,
               Expanded(child: _buildBody(state, cubit)),
               CustomButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, RouteName.addLocation);
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(context, RouteName.addLocation);
+                  
+                  if (result == true && mounted) {
+                    cubit.getLocations();
+                  }
                 },
                 color: ColorsManager.orange,
                 textStyle: AppFonts.font14BWhiteWeight700,

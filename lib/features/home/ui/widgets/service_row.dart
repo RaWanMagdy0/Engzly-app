@@ -1,4 +1,5 @@
 import 'package:engzly/core/di/di.dart';
+import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/features/services/house_shifting/logic/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,16 +92,13 @@ class _ServiceRowState extends State<ServiceRow> {
             12.horizontalSpace,
             Expanded(
               child: ServiceCard(
-                icon: Icons.apartment,
-                backgroundColor: ColorsManager.babyOrange,
-                iconBackgroundColor: ColorsManager.ovalOrangeColor,
-                iconColor: Colors.orange,
-                title: "Office\nShifting",
+                icon: Icons.local_car_wash,
+                backgroundColor: const Color.fromARGB(255, 201, 234, 203),
+                iconBackgroundColor: const Color.fromARGB(255, 227, 246, 233),
+                iconColor: Colors.green,
+                title: "Car Wash\nService",
                 onTab: () {
-                  AppDialogs.showErrorDialog(
-                    context: context,
-                    errorMassage: "This service is coming soon",
-                  );
+                  Navigator.pushNamed(context, RouteName.carWasher);
                 },
               ),
             ),

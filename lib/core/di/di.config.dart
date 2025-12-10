@@ -124,10 +124,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i834.ConfirmEmailRepo(gh<_i1060.AuthApiManager>()));
     gh.factory<_i109.RegisterRepo>(
         () => _i109.RegisterRepo(gh<_i1060.AuthApiManager>()));
-    gh.factory<_i282.GoogleLoginCubit>(() => _i282.GoogleLoginCubit(
-          gh<_i832.GoogleLoginRepo>(),
-          gh<_i873.AuthService>(),
-        ));
     gh.factory<_i1003.ResetPasswordCubit>(
         () => _i1003.ResetPasswordCubit(gh<_i688.ResetPasswordRepo>()));
     gh.factory<_i791.VehicleRepo>(
@@ -171,6 +167,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i173.LoginCubit(gh<_i1003.LoginRepo>()));
     gh.factory<_i37.HouseShiftingBookingCubit>(
         () => _i37.HouseShiftingBookingCubit(gh<_i650.HouseShiftingRepo>()));
+    gh.factory<_i282.GoogleLoginCubit>(() => _i282.GoogleLoginCubit(
+          gh<_i873.AuthService>(),
+          gh<_i832.GoogleLoginRepo>(),
+        ));
     gh.factory<_i13.ForgetPasswordCubit>(
         () => _i13.ForgetPasswordCubit(gh<_i896.ForgetPasswordRepo>()));
     gh.factory<_i773.ProfileCubit>(() => _i773.ProfileCubit(

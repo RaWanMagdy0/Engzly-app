@@ -148,10 +148,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   void _handelStateChange(VerifyEmailState state, VerifyEmailCubit cubit) {
     if (state is VerifyEmailSuccess) {
-      AppDialogs.showSuccessDialog(
+      /***
+       * AppDialogs.showSuccessDialog(
         context: context,
         message: state.message,
-      );
+       */
 
       Future.delayed(Duration(seconds: 2), () {
         Navigator.pushReplacementNamed(context, RouteName.resetPassword);

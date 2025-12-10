@@ -1,5 +1,6 @@
 import 'package:engzly/core/routing/route_name.dart';
 import 'package:engzly/core/shared_widgets/custom_botton.dart';
+import 'package:engzly/core/shared_widgets/snackbar.dart';
 import 'package:engzly/core/theming/colors.dart';
 import 'package:engzly/core/theming/fonts.dart';
 import 'package:engzly/features/auth/logic/register_cubit/cubit.dart';
@@ -123,7 +124,6 @@ class _EmailConfirmationState extends State<EmailConfirmation> {
             ),
             if (state is RegisterLoading)
               CircularProgressIndicator(
-                
                 color: ColorsManager.orange,
               )
           ],
@@ -134,29 +134,18 @@ class _EmailConfirmationState extends State<EmailConfirmation> {
 
   void _handelStateChange(RegisterState state, RegisterCubit cubit) {
     if (state is ConfirmEmailSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.message),
-        ),
-      );
+      SnackBarManager().showSuccessSnackBar(state.message);
+
       Navigator.pushReplacementNamed(context, RouteName.login);
     } else if (state is ConfirmEmailError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.error)),
-      );
+      SnackBarManager().showErrorSnackBar(state.error);
     } else if (state is ResendSuccessState) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Resend OTP to your email.\n Please check your Email",
-          ),
-        ),
-      );
+      SnackBarManager().showSuccessSnackBar(
+          'Resend OTP to your email.\n Please check your Email');
+
       cubit.startResendTimer();
     } else if (state is ResendErrorState) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please Try Again")),
-      );
+      SnackBarManager().showErrorSnackBar("please try again later");
     }
   }
 }
