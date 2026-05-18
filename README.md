@@ -2,7 +2,7 @@
 
 A home services mobile application that connects users with trusted service providers for a wide range of household needs.
 
-⚠️ This project was built in collaboration with a Backend team and UI/UX Design team.
+⚠️ This project was built in collaboration with a Backend team.
 
 ## Demo
 [Watch the App Demo](#)
